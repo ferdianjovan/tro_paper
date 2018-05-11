@@ -1,0 +1,63 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+The problems addressed in thesis are motivated by an autonomous mobile robot which must adapt and learn dynamic behaviours from its unreliable perception to be able to work alongside humans in human-centered environments. The dynamic changes come from human activities which typically follow predictable, repeating patterns that generate corresponding changes in space. However, the robot's inability to see everywhere at once makes the learning process difficult due to incomplete information about its surroundings. Its perception algorithms, which are prone to systematic errors, introduce bias to its statistical inferences, aggravating the problem even further.   
+
+This thesis has been concerned with developing practical estimators for count data with regularities, collected by an autonomous mobile robot, with unreliable perception algorithms, on extended temporal scales. These count data represent the level of human activity in particular locations. It studies two problems: drawing inferences from 1) incomplete time series of count data and 2) unreliable count data. Several contributions have been made.
+
+\begin{itemize}
+    \item A framework which allows us to sensibly retrieve and represent temporally recurring patterns of count data on extended temporal scales from temporally sparse observations has been developed. The approach (Spectral-FOPP), based on a time-varying Poisson process in combination with spectral analysis, efficiently retrieves recurring patterns of count data. It is shown how to use these patterns to predict the aggregate human activity level at particular times and places. The framework has been extensively tested, both on simulated periodic count data and robot-gathered observations. The experiment also showed that the periodic patterns can be used to categorize locations. These categories are similar to the semantic categories given by humans. 
+    \item A set of inference methods for the partially observable Poisson process (POPP) has been formulated. The POPP is a Poisson process which takes into account the unreliability of the sensors that count events. Unlike Bayesian estimation for a fully observable Poisson process (FOPP), obtaining the posterior is non-trivial, since there is no conjugate density for a POPP and the posterior has a number of elements that grow exponentially in the number of observed intervals. Two simple, tractable, approximations have been presented. These two approximations are combined in a switching filter, which enables efficient and accurate estimation of the posterior. A simulation study shows that these POPP filters correct the over- and under-counts produced by sensors.  
+    \item Variations of the POPP filter are presented. The POPP-Beta filter extends the POPP filter in which the unreliability of the observation model is accounted for when estimations are built. The N-POPP filter extends the POPP filter by modelling the case when sensors are uncorrelated. The POPP-Dirichlet combines the POPP-Beta filter and the N-POPP filter to have the benefits of each correction. A simulation and observations taken by a robot, on a series of long deployments, show that each extension provides progressively more accurate estimates than the POPP filter.  
+    \item Both posteriors from the Spectral-FOPP and two Spectral-POPP processes are used to drive exploration by a mobile robot for a series of two week deployments. An upper bound interval exploration method was used to solve the exploration-exploitation problem. After labelling by humans, this resulted in a labelled data set of six weeks of human activity levels. A simulated study has shown that the Spectral-FOPP and the Spectral-POPP filter improve on-point observation time significantly if strong periodic patterns underlying the human activities are present. 
+\end{itemize}
+        
+        % Finally, the various POPP filters are compared to one another and to a FOPP estimator on this data set.
+
+% which capture the regular structures of dynamic behaviours, especially humans,    
+% 
+% 
+% Hence, any learning algorithm requires practical estimation which capture temporal structures of human activities.   
+% 
+% The adaptation requires practical estimation which capture the structure 
+% 
+% The robot will be able to demonstrate that it can recognise activities at various
+% temporal scales, and infer or predict future activities based on its temporal model (e.g. it
+% might go to the lounge because it has just seen the residents finishing their lunch). It
+% will also be able to detect anomalies as sequences of very low likelihood data.
+% 
+% The robot only observes a limited portion of the space at any time, and so must actively plan to go to places to observe events.
+% 
+% learns dynamic behaviours of its surrounding while patroling around perimeters of a large area. 
+% 
+% Human activities follow predictable, repeating patterns that generate corresponding
+% changes in space.
+% 
+% Our
+% work will allow a robot to create a map of a building and its contents: not just walls but people,
+% furniture and objects, all in a unified spatial-temporal representation that will allow a robot to
+% respond robustly to the dynamics of its environment. In order to reason about the structure
+% and purpose of these dynamics we will employ the spatial-temporal representations in support of
+% activity recognition. This will allow the robot to detect, and exploit, patterns of human behaviour.
+% 
+% In our care scenario we will explore how a robot can support staff working with a small group of
+% elderly patients in a nursing facility. The robot will learn about the patients’ regular activities. It
+% will use this knowledge to perform support tasks for the care staff and serve as an early warning
+% system when patients vary from regular behaviour (e.g. wandering the corridors at night, falling
+% over). In our security scenario we will explore how a robot can act as a security guard, performing
+% patrols to learn the typical spatial-temporal structures in a building and notifying a human guard
+% of suspicious variations from these.
+
+% \section{Limitations and Further Work}
+% 
+% Two basic statistical models: Spectral-FOPP and POPP  have been proposed and evaluated. The combination of these two is able to extract temporal dynamics in the aggregate level of human activities from unreliable sensors, along with the ability to exploit this understanding for better exploration by an autonomous mobile robot. However, the spectral-POPP model could still be improved in the following two ways:
+% \begin{enumerate}
+%     \item In Chapter \ref{chap:popp_independent}, The Gamma filter approximates a sum of Gamma distributions with a single Gamma distribution assuming that the sensor performs rather reliable. Instead of using a single Gamma distribution to approximate a sum of $m$ Gamma distributions, $n$ gamma distributions, where $n$ is much smaller than $m$, could be used to improve the accuracy of the approximation to the posterior. This would promise to be more accurate than a single gamma, but more efficient than a histogram filter. Thus, it might be faster than the switching filter.
+% 
+%     \item The spectral-Poisson model (Spectral-FOPP) in Chapter \ref{chap:spectral_poisson} is a statistical model which is able, and only able, to capture the periodic structure of count data. It indirectly assumes that there is an underlying pattern governing the evolution of the parameter $\lambda$ of a Poisson process. The spectral-Poisson might not be able to capture other non-periodic structures governing the parameter $\lambda$, such as trends. 
+% 
+%         A Gaussian process modulated Poisson process might provide a better model for different structures which govern $\lambda$ overtime. Work from \cite{lloyd2015variational} presents a fully variational Bayesian inference scheme for continuous Gaussian-process modulated Poisson process. It provides a good estimators and is fast in estimating $\lambda$ of a Poisson process. An extension to this statistical model which embeds both trends and periodicity in the model might provide a solution to the limitations of Spectral-Poisson while being fully Bayesian. 
+% \end{enumerate}
+
+% Listing all limitations which have been mentioned in previous sections.
+% Listing all further work which can extend this thesis.

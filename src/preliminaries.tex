@@ -1,0 +1,43 @@
+\section{Preliminaries - the Spectral-FOPP}
+\label{sec:preliminaries}
+
+Our work is built on top of the work in \cite{jovan_iros16} which is able to extract temporal dynamics in the aggregate level of human activities to predict human activity level at particular times and places. Hence, this section is dedicated to briefly explain the technique employed in \cite{jovan_iros16}.
+
+\subsection{the FOPP}
+
+A fully observable Poisson process (FOPP) is a counting process $N(t_1, t_2)$ where a counter tells, with perfect accuracy, the number of events that occurred during a specified interval ($t_1,t_2$). $N(t_1,t_2) = x_i$ states that in the $i$-th observation of interval ($t_1, t_2)$, there are $x_i$ events. The number of events $N(t_1, t_2)$ in a finite interval of length $t = t_2 - t_1$ follows the Poisson distribution, 
+\begin{equation}
+    \label{eq:pmf_poisson}
+	Poi(N(t_1, t_2) = x \mid \lambda) = \frac{e ^{-\lambda} \lambda ^{x}}{x!}
+\end{equation}
+\noindent where $\lambda$ represents the {\em arrival rate, mean count, intensity}, or {\em expected number of events} in a fixed interval $(t_1,~ t_2)$. Here we refer to $\mathcal{N}(t_1, t_2)$ as a measurement of the number of individuals or objects detected over the time interval $[t_1, t_2)$. $\lambda$ is thus transformed into a function of time, i.e. $\lambda(t_1, t_2)$. Hence, (\ref{eq:pmf_poisson}) becomes a non-homogeneous Poisson process, in which the degree of heterogeneity depends on the function $\lambda(t_1, t_2)$. As we use a fixed time interval at any point in time, we define $\lambda(t_i, t_{i+\delta})$ for $i \in \{1,\ldots,T\}$ and $\delta \in \mathbb{N}$.
+
+Bayesian estimation for fully observable Poisson processes relies on the conjugacy between the Poisson and a Gamma density
+\[
+\begin{tabular}{rcl}
+$Gam(\lambda \mid \alpha, \beta)$ & = & $\displaystyle\frac{\beta ^{\alpha}}{\Gamma (\alpha)} \lambda ^{\alpha - 1} e^{-\beta \lambda}$ \\ [1ex]
+\end{tabular}
+\]
+%\noindent where $\Gamma (\alpha)$ is the Gamma function ($(\alpha -1)!$ for integers and $\int_{0}^{\infty} x^{\alpha-1} e^{-x} dx$ for non-integers), 
+where $\alpha, \beta$ are the shape and the rate parameters. The posterior is thus also Gamma:
+\begin{equation}
+\label{eq:bayes_poisson}
+    \begin{array}{lll}
+    P(\lambda \mid x_1, \ldots, x_n) & \varpropto Poi(x_1, \ldots, x_n \mid \lambda) ~ Gam(\lambda \mid \alpha, \beta) \\
+     & = Gam \Bigg(\lambda \mid \displaystyle\sum_{i=1}^{n} x_i + \alpha, n + \beta \Bigg)
+\end{array}
+\end{equation}
+
+On each posterior update, we choose the \textit{Maximum a Posteriori (MAP hypothesis) $\lambda_{map}(t_i, t_j)$} to be the point estimate of $\lambda(t_i, t_j)$. A collection of MAP estimates ordered from $\lambda_{map}(t_0, t_0 + \delta)$ to $\lambda_{map}(t_{\delta-1}, t_{\delta-1} + \delta)$ creates a MAP time series. 
+
+\subsection{Fourier Representation of the FOPP}
+
+To capture the periodic structures over the $\lambda$ function, i.e. $\lambda(t_i, t_j)$ of a Poisson process, the Fourier transformation is proposed which offers a fast transformation and re-transformation. The periodic structures are believed governing aggregated human activities such as daily, weekly, or even hourly and exploiting these structures improve the prediction accuracy of where and when the aggregate human activities tend to happen \cite{jovan_iros16}.
+
+The \textit{Fourier transform} is a reversible, linear transformation that decomposes a function of time $f(t)$ into the frequencies $F(\omega)$ that make it up. $F(\omega)$ is formed of \textit{complex exponentials}. A complex exponential is a complex number in the form of 
+\begin{equation*}
+    e^{i\theta} = cos(\theta) + i~sin(\theta)
+\end{equation*}
+which is a point on the unit circle at an angle of $\theta$. For any given complex exponential $e^{i\theta} = cos(x) + i~sin(x)$, the \textit{absolute value} and \textit{argument} which correspond to the amplitudes and phase shifts of the frequency components $\omega$ can be obtained.
+
+As the parameter $\lambda$ of a Poisson process was defined as a function of time, i.e. $\lambda(t_1, t_2)$, the periodic patterns of parameter $\lambda(t_1, t_2)$ can be extracted using the Fourier transform by calculating the frequency spectrum $F(\omega)$ of $\lambda(t_i, t_j)$, i.e. $F(\omega) = \mathcal F(\lambda(t_i, t_j))$. Once $\lambda(t_i, t_j)$ is in frequency domain, a spectral analysis on $F(\omega)$ can be carried out. One simple spectral analysis is to select $l$ frequency components $\omega_k$ (for $k=1,\ldots,l$) with the highest absolute value creating a new frequency spectrum $F'(\omega)$. Then the inverse Fourier transformation is performed on $F'(\omega)$ to reconstruct a smooth periodic function of $\lambda(t_i, t_j)$, i.e. $\lambda'(t_i, t_j) = \mathcal F^{-1}(F'(\omega))$.
