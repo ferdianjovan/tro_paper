@@ -1,11 +1,7 @@
 \begin{abstract}
-    This thesis develops practical Bayesian estimators and exploration methods for count data collected by autonomous robots with unreliable sensors for long periods of time. It addresses the problems of drawing inferences from temporally incomplete and unreliable count data. 
-
-    This thesis contributes statistical models which are able to capture the periodic structure of count data on extended temporal scales from temporally sparse observations. It is shown how to use these patterns to i) predict the human activity level at particular times and places and ii) categorize locations based on their periodic patterns.
-
-    The second main contribution is a set of inference methods for a Poisson process which take into account the unreliability of the detection algorithms used to count events. Two tractable approximations to the posterior of such Poisson processes are presented to cope with the absence of a conjugate density. Variations of these processes are presented, in which (i) sensors are uncorrelated, (ii) sensors are correlated, (iii) the unreliability of the observation model, when built from data, is accounted for. A simulation study shows that these POPP filters correct the over- and under-counts produced by sensors. The resulting posterior is used to drive exploration by a mobile robot for a series of two week deployments. This resulted in a labelled data set.
+    The Poisson assumption is a popular choice when data arises in the form of counts. In many applications such as in mobile robotics, such counts are prone to a systematic error due to unreliable sensor algorithms and the data set that result can not be trusted. Only limited works have been done on the Poisson model when a full observability of the data is in question. We present practical Bayesian estimators in this paper for a partially observable Poisson process (POPP). Variations of these processes are presented, in which (i) sensors are uncorrelated, (ii) sensors are correlated, (iii) the unreliability of the observation model, when built from data, is accounted for. The actual posterior distributions are estimated via two tractable approximations, which we combined in a switching filter. The filter enables efficient and accurate estimation of the posterior. A detailed empirical analysis is performed on both simulated and real-world data, and an application of the resulting posterior to drive exploration of a mobile robot with unreliable sensors is presented. 
 \end{abstract}
 
 \begin{IEEEkeywords}
-Poisson processes, partial observability, exploration-exploitation, misclassified counts 
+Poisson processes, partial observability, misclassified counts, robot exploration
 \end{IEEEkeywords}
