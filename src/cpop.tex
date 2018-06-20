@@ -1,0 +1,83 @@
+\section{The POPP Extensions}
+\label{sec:popp_extensions}
+
+Jovan et al., have shown that the POPP model is able to efficiently corrects miscounts made by multiple unreliable counting devices observing a single Poisson process \cite{jovan18a} . However, it was mentioned that the model is limited by two assumptions:
+\begin{enumerate}
+    \item sensors are uncorrelated from one to another given the true count. 
+    \item the degree of the unreliability of a sensor is precisely known, and
+\end{enumerate}
+In this paper, we propose three gradual extensions to the POPP model to tackle the aforementioned assumptions. The first extension (C-POPP) modifies the POPP model to accomodate any correlation among sensors, i.e. tackling the first assumption. The second extension (POPP-Beta) is built on top of the POPP model to have an observation model which can show its unreliability, i.e. tackling the second assumption. The third extension (POPP-Dirichlet) is built on top of the C-POPP model to tackle both assumptions together. 
+
+\subsection{The C-POPP}
+\label{subsec:cpop}
+
+Recall that Eqn. \ref{eq:occurrences_likelihood} is defined under the assumption that each sensor's count is conditionally independent from all the others given the true count. In other words, they are uncorrelated to one another. This assumption ignores the correlations between sensors. Consequently, $P(\overrightarrow{s_i} ; c_i)$ is defined as a simple product across the sensors. 
+
+\begin{equation}
+	\label{eq:independent_sensor_likelihood}
+	\begin{tabular}{r@{=}l}
+	$P(\overrightarrow{s_i} ; c_i)$ & $\displaystyle\prod_{j=1}^{m} P(s_{ji} ; c_i)$ \\ 
+	\end{tabular}
+\end{equation}
+
+\noindent with $1 \leq i \leq n$, $\overrightarrow{s_i} = (s_{1i}, \ldots, s_{mi})$ and $P(s_{ji} ; c_i)$ defined in Equation \ref{eq:joint_binomial_distribution}.
+
+By removing the assumption, the model gives the possibility that there are correlations among sensors. An alteration to the POPP model accomodating this relaxation involves:
+\begin{enumerate}
+    \item Equation \ref{eq:independent_sensor_likelihood} which only holds for the independent sensor assumption, and
+    \item Equation \ref{eq:joint_binomial_distribution} which only involves an independent observation model.
+\end{enumerate}
+
+Similar to the derivation of Equation \ref{eq:joint_binomial_distribution}, an arbitrarily close approximation to the probability $P(\overrightarrow{s_i} ; c_i)$ is defined by assuming there exists a small enough finite subinterval of length $\delta$ for which the probability of more than one event occurring is less than some small value $ \epsilon$. Once again, the interval $[0, t)$, where the true count $c_i$ occurred, is split into $l$ smaller subintervals $I_1, \ldots, I_l$ of equal size with the condition that $l > \lambda$. Consequently, for the event $e_k$, the whole interval $[0, t) = I_1, \ldots, I_l$ follows the Bernoulli distribution, where the $k^{th}$ trial corresponds to whether an event $e_k$ happens with probability $\lambda / l$ at the subinterval $I_k$. For the detections, however, the whole interval $[0, t) = I_1, \ldots, I_l$ does not follow the Bernoulli distribution anymore, but rather follows the categorical distribution, where the $k^{th}$ trial corresponds to whether a particular combination of binary detections $d_{1k}, \ldots, d_{mk}$ happens in subinterval $I_k$.
+Hence, instead of having an independent observation model for each sensor $j$:
+\begin{equation*}
+    \textrm{\textit{tpr}}_j = P_j(d_k = 1 ; e_k = 1) \textrm{, } \textrm{\textit{fpr}}_j = P_j(d_k=1 ; e_k=0)
+\end{equation*}
+\noindent with $i \leq j \leq m$, we proposed a joint observation model:
+\begin{equation}
+    \label{eq:joint_sensor_model}
+    P_{jnt}(d_{1k}, \ldots, d_{mk} ; e_k)
+\end{equation}    
+\noindent with $d_{jk}$ being a detection by sensor $j$ at subinterval $I_k$ and $d_{jk}, e_k \in [0, 1]$. The variation of $P_{jnt}(d_{1k}, \ldots, d_{mk} ; e_k)$ grows by a factor of 2 with the number of sensors involved. Regardless the number of sensors, $P_{jnt}(d_{1k}, \ldots, d_{mk} ; e_k)$ can be split into two:
+\begin{enumerate}
+    \item $P_{jnt}(d_{1k}, \ldots, d_{mk} ; e_k = 1)$ for the probability of a combination of binary detections $d_{1k}, \ldots, d_{mk}$ given that the event $e_k$ happened at subinterval $k$. Let $\mathcal E^+$ be a set of probabilities $P_{jnt}(d_{1k}, \ldots, d_{mk} ; e_k = 1)$, then $\mathcal E^+$ includes all possible combinations of binary detections $d_{1k}, \ldots, d_{mk}$ given $e_k = 1$. Let $E^+_0 = P_{jnt}(d_{1k} = 0, \ldots, d_{mk} = 0 ; e_k = 1), \ldots, E^+_{(m^2)-1} = P_{jnt}(d_{1k} = 1, \ldots, d_{mk} = 1 ; e_k = 1)$, then $\mathcal E^+ = \big \{ E^+_0, \ldots, E^+_{(m^2)-1} \big \}$ is called the \textit{true joint positive rate}. \\
+    \item $P_{jnt}(d_{1k}, \ldots, d_{mk} ; e_k = 0)$ for the probability of a combination of binary detections $d_{1k}, \ldots, d_{mk}$ given that the event $e_k$ did not happened at subinterval $k$. Let $\mathcal E^-$ be a set of probabilities $P_{jnt}(d_{1k}, \ldots, d_{mk} ; e_k = 0)$, then $\mathcal E^-$ includes all possible combinations of binary detections $d_{1k}, \ldots, d_{mk}$ given $e_k = 0$. Let $E^-_0 = P_{jnt}(d_{1k} = 0, \ldots, d_{mk} = 0 ; e_k = 1), \ldots, E^-_{(m^2)-1} = P_{jnt}(d_{1k} = 1, \ldots, d_{mk} = 1 ; e_k = 1)$, then $\mathcal E^- = \big \{ E^-_0, \ldots, E^-_{(m^2)-1} \big \}$ is called the \textit{true joint negative rate}.
+\end{enumerate}
+
+Recall that the set of detections $\overrightarrow{s_i}$ was defined as:
+\begin{equation*}
+    \overrightarrow{s_i} = (s_{1i}, \ldots, s_{mi})
+\end{equation*}
+with $s_{ji} \in \mathbb N$. $s_{ji}$ is the sensed count of sensor $j$ from the $i$-th observation. Since the joint observation model is defined under a combination of binary detections of sensors, each $s_{ji}$ is split into $l$ subintervals such that in each sub interval $I_k$ there is only one detection $d_{jk}$. If the binary detections from all sensors at subinterval $I_k$ are grouped together, then for the interval $i$, $\overrightarrow{s_i}$ can be seen as a collection of $l$ groups of binary detections
+\begin{equation}
+    \label{eq:s_i_definition}
+    \overrightarrow{s_i} = ((d_{11}, \ldots, d_{m1}), \ldots, (d_{1l}, \ldots, d_{ml}))
+\end{equation}
+\noindent with $d_{jk}$ being a detection by sensor $j$ at subinterval $I_k$ and $d_{jk} \in [0, 1]$.
+
+$\overrightarrow{s_i}$ may contain groups with similar binary detections $d_{jk}, 1 \leq j \leq m, 1 \leq k \leq l$. Let $D_0$ represent $(d_{1k} = 0, \ldots, d_{mk} = 0)$ (all $d_{jk} = 0$), $D_1$ represent $(d_{1k} = 0, \ldots, d_{mk} = 1)$ (all $d_{jk} = 0$ except $d_{mk}$), $\ldots$, $D_{(m^2) - 1}$ represent $(d_{1k} = 1, \ldots, d_{mk} = 1)$. It is straight forward to say that for each $\overrightarrow{s_i}$, each group $(d_{1k}, \ldots, d_{mk}) \in \big \{D_0, \ldots, D_{(m^2)-1} \big \}$ for $1 \leq k \leq l$. With this, $\overrightarrow{s_i}$ definition from \ref{eq:s_i_definition} can be redefined as
+\begin{equation}
+    \label{eq:si_definition_npopp}
+    \overrightarrow{s_i} = (D_0 = g_0, \ldots, D_{(m^2) - 1} = g_{(m^2) - 1})
+\end{equation}
+\noindent with $g_0, \ldots, g_{(m^2) - 1} \in \mathbb{N}$. With the definition in \ref{eq:si_definition_npopp}, $\overrightarrow{s_i}$ groups a detection of each sensor from the same subinterval as a joint detection, represented by $D_q, 0 \leq q \leq (m^2) -1$, and displays the number of joint events, represented by $g_q, 0 \leq q \leq (m^2) -1$, within the interval $[0, t)$. We further define:
+\begin{equation}
+    \label{eq:abs_si_definition_npopp}
+    \begin{tabular}{rcl}
+        $\parallel \overrightarrow{s_i} \parallel$ & = & $\parallel (D_0 = g_0, \ldots, D_{(m^2) - 1} = g_{(m^2) - 1}) \parallel$ \\ [1ex]
+                                                   & = & $\displaystyle\sum_{h=0}^{(m^2)-1} g_h$
+    \end{tabular}
+\end{equation}
+with $\overrightarrow{s_i}$ as in definition \ref{eq:si_definition_npopp}, and $g_0, \ldots, g_{(m^2) - 1} \in \mathbb{N}$. One should see clearly that $\parallel \overrightarrow{s_i} \parallel = l$ given that the interval is split into $l$ subintervals.
+
+The probability of $\overrightarrow{s_i}$ given $c_i$ events happened is now the aggregate of joint detections given the positive event $P_{jnt}(d_{1k}, \ldots, d_{mk} ; e_k=1)$ in $c_i$ sub-intervals, and joint detections given the negative event $P_{jnt}(d_{1k}, \ldots, d_{mk} ; e_k=0)$ in $l-c_i$ sub-intervals. Given the probability of $P_{jnt}(d_{1k}, \ldots, d_{mk} ; e_k)$ for all possible combinations of $d_{jk}$ and $e_k$, equation \ref{eq:independent_sensor_likelihood} is redefined as:
+
+\begin{equation}
+	\label{eq:codependent_sensor_likelihood}
+	\begin{tabular}{r@{=}l}
+		$P(\overrightarrow{s_i} ; c_i)$ & $\displaystyle\sum_{\overrightarrow{s^+} \subseteq \overrightarrow{s_i}} Multi(\overrightarrow{s^+} ; c_i, \mathcal E^+) ~ Multi(\overrightarrow{s^-} ; (l - c_i), \mathcal E^-)$
+	\end{tabular}
+\end{equation}
+\noindent with $\parallel \overrightarrow{s^+} \parallel = c_i$, $\parallel \overrightarrow{s_i} \parallel = \parallel \overrightarrow{s^+} \parallel + \parallel \overrightarrow{s^-} \parallel$.
+
+One should note that Eqn. \ref{eq:codependent_sensor_likelihood} mainly aims for estimating the sensed count likelihood on multiple sensors to utilise the correlation among sensors in detections. If there is only one sensor counting events, then the POPP model is more computationally efficient due to equation \ref{eq:joint_binomial_distribution}.

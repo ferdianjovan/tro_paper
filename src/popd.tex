@@ -1,0 +1,58 @@
+\subsection{The POPP-Dirichlet}
+\label{subsec:popd}
+
+The C-POPP model uses a joint observation model in estimating the parameter $\lambda$ of a Poisson process. A joint observation model is an extension of an observation model where the model provides a probability for a particular combination of binary detections coming from each sensor given the true event as show in Eqn. \ref{eq:joint_sensor_model}
+
+To construct a joint observation model, one needs to have both detections and the corresponding actual (non)-event as ground truth. Pre-processing involving expert interventions is typically required before the detections and their corresponding ground truth can be further used. Similar to the POPP model, the C-POPP model requires the joint observation model to be accurate to avoid the posterior over $\lambda$ to drift away from the true posterior. If attaining an accurate observation model for the POPP model is a problem, then this becomes more prominent in the case of a joint observation model. This is because the training data needed to construct a joint observation model grows by a factor of two for each sensor involved.       
+
+Similar to the transformation from the POPP model to the POPP-Beta model, the joint observation model is transformed into a Bayesian estimation problem, where $P_{jnt}(d_{1k}, \ldots, d_{mk} ; e_k = 1)$ and $P_{jnt}(d_{1k}, \ldots, d_{mk} ; e_k = 0)$ of a joint observation model follow Dirichlet distributions. The Dirichlet distribution is an appropriate distribution since $P_{jnt}(d_{1k}, \ldots, d_{mk} ; e_k = 1)$ and $P_{jnt}(d_{1k}, \ldots, d_{mk} ; e_k = 0)$ set the probabilities of multinomial distributions in Eqn. \ref{eq:codependent_sensor_likelihood} and Dirichlet distributions provide a family of prior probability distributions for the multinomial distributions. The dirichlet-multinomial conjugacy leads to an analytically tractable compound distribution which is called the Dirichlet-multinomial distribution, where the $\overrightarrow{p} = (p_1, \ldots, p_r)$ parameter in the multinomial distribution $Multi(\overrightarrow{d} ; c, \overrightarrow{p})$ is randomly drawn from a Dirichlet distribution $Dir(\overrightarrow{p} ; \overrightarrow{\zeta})$. 
+
+\begin{equation}
+	\label{eq:beta_binomial_revisit}
+	\begin{tabular}{r@{ = }l}
+        $P(\overrightarrow{d} ; c, \overrightarrow{\zeta})$ & $\displaystyle\int P(\overrightarrow{d} ; c, \overrightarrow{p}) ~ P(\overrightarrow{p} ; \overrightarrow{\zeta}) ~d\mathbb S_r$ \\ [2ex]
+        & $\displaystyle\int Multi(\overrightarrow{d} ; c, \overrightarrow{p}) ~ Dir(\overrightarrow{p} ; \overrightarrow{\zeta}) ~d\mathbb S_r$ \\ [2ex]
+        & $DM((d_1, \ldots, d_r) ; c, (\zeta_1, \ldots, \zeta_r))$
+	\end{tabular}
+\end{equation}
+\noindent with $\overrightarrow{d} = (d_1, \ldots, d_r)$, $\overrightarrow{\zeta} = (\zeta_1, \ldots, \zeta_r)$, and $d\mathbb S_r$ denotes integrating $\overrightarrow{p}$ with respect to the $(r - 1)$ simplex\footnote{The support of the Dirichlet distribution is the $(r - 1)$-dimensional simplex $\mathbb S_r$; that is, all $r$ dimensional vectors which form a valid probability distribution}.
+
+Given $m$ sensors, a joint observation model is now represented as two Dirichlet distributions: $Dir(\mathcal{E^+} ; \overrightarrow{\zeta^+})$, and $Dir(\mathcal{E^-} ; \overrightarrow{\zeta^-})$ with $\overrightarrow{\zeta^+} = (\zeta^+_0, \ldots, \zeta^+_{(m^2)-1})$ and $\overrightarrow{\zeta^-} = (\zeta^-_0, \ldots, \zeta^-_{(m^2)-1})$. $\overrightarrow{\zeta^+}$ and $\overrightarrow{\zeta^-}$set the overall shape of the Dirichlet priors. $\overrightarrow{\zeta^+}$ can loosely be interpreted as the number of times combination $\zeta^+_q$ of $m$-sensor detection, $1 \leq q \leq (m^2-1)$, has been made given the positive detection $e$ ($e=1$). $\overrightarrow{\zeta^-}$ can loosely be interpreted as the number of times combination $\zeta^-_q$ of $m$-sensor detection, $1 \leq q \leq (m^2-1)$, has been made given the negative detection $e$ ($e=0$).
+
+Given a joint sensor model where the elements of it follow a Dirichlet density and several Dirichlet-multinomial distributions, which provide an unconditional distribution of $(d_1, \ldots, d_r)$, we replace Eqn. \ref{eq:codependent_sensor_likelihood} with:  
+
+\begin{equation}
+	\label{eq:joint_dirichlet_multinomial_distribution}
+    \begin{tabular}{r@{=}l}
+		$P(\overrightarrow{s_i} ; c_i)$ & $\displaystyle\sum_{\overrightarrow{s^+} \subseteq \overrightarrow{s_i}} DM(\overrightarrow{s^+} ; c_i, \overrightarrow{\zeta^+}) ~ DM(\overrightarrow{s^-} ; (l - c_i), \overrightarrow{\zeta^-})$
+	\end{tabular}
+\end{equation}
+\noindent with $\parallel \overrightarrow{s^+} \parallel = c_i$, $\parallel \overrightarrow{s_i} \parallel = \parallel \overrightarrow{s^+} \parallel + \parallel \overrightarrow{s^-} \parallel$, $\overrightarrow{\zeta^+} = (\zeta^+_0, \ldots, \zeta^+_{(m^2)-1})$, $\overrightarrow{\zeta^-} = (\zeta^-_0, \ldots, \zeta^-_{(m^2)-1})$, $\zeta^+_0 = \#(d_{1k} = 0, \ldots, d_{mk} = 0, e_k = 1), \ldots, \zeta^+_{(m^2)-1} = \#(d_{1k} = 1, \ldots, d_{mk} = 1, e_k = 1)$, and $\zeta^-_0 = \#(d_{1k} = 0, \ldots, d_{mk} = 0, e_k = 0), \ldots, \zeta^-_{(m^2)-1} = \#(d_{1k} = 1, \ldots, d_{mk} = 1, e_k = 0)$.
+
+% With a joint sensor model following the Dirichlet density, which is conjugated with multinomial distributions into a posterior predictive distribution shown in Eqn. \ref{eq:joint_dirichlet_multinomial_distribution}, a graphical model is shown in Figure \ref{fig:gm_popp_dirichlet}.
+
+The difference between the C-POPP model and the POPP-Dirichlet lies only in Eqn. \ref{eq:codependent_sensor_likelihood} and \ref{eq:joint_dirichlet_multinomial_distribution}. However, given a certain Dirichlet prior, and a little training data for the sensor model, the POPP-Dirichlet is expected to be more conservative in estimating the posterior $P(\lambda \mid \overrightarrow{s})$ over $\lambda$ than the C-POPP model.
+
+% \begin{figure}[t!]
+% 	\centering
+% 	\begin{tikzpicture}
+% 	\tikzstyle{place}=[rectangle,draw=blue,thick,minimum size=5 mm]
+% 	\tikzstyle{every label}=[black]
+% 	\begin{scope}
+%     \node[place](51)[xshift=30mm]{$(\zeta^+_0, \ldots, \zeta^+_{(m^2)-1})$};
+%     \node[place](52)[right of=51, xshift=30mm]{$(\zeta^-_0, \ldots, \zeta^-_{(m^2)-1})$};
+%     \node[place](41)[above of=51, yshift=3mm]{$(E^+_0, \ldots, E^+_{(m^2)-1})$} edge[pre](51);
+%     \node[place](42)[above of=52, yshift=3mm]{$(E^-_0, \ldots, E^-_{(m^2)-1})$} edge[pre](52);
+%     \node[place](31)[above of=41, xshift=-30mm, yshift=3mm]{$S_{1i}$} edge[pre](41) edge[pre](42);
+% 	\node[place](32)[right of=31, xshift=20mm]{$S_{2i}$} edge[pre](41) edge[pre](42);
+% 	\node[place](33)[right of=32, xshift=10mm]{$\ldots$} edge[pre](41) edge[pre](42);
+% 	\node[place](34)[right of=33, xshift=15mm]{$S_{(m-1)i}$} edge[pre](41) edge[pre](42);
+% 	\node[place](35)[right of=34, xshift=22mm]{$S_{mi}$} edge[pre](41) edge[pre](42);
+% 	\node[place](21)[above of=33]{$X_i$} edge[post](31) edge[post](32) edge[post](33) edge[post](34) edge[post](35);
+% 	\node[place](11)[above of=21]{$\lambda$} edge[post](21);
+% 	% \node[place](01)[above of=11]{$\alpha, \beta$} edge[post](11);
+% 	\end{scope}
+% 	\end{tikzpicture}
+% 	\caption{Graphical representation of the POPP-Dirichlet.}
+% 	\label{fig:gm_popp_dirichlet}
+% \end{figure}

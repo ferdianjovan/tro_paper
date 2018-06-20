@@ -1,0 +1,59 @@
+\subsection{The POPP-Beta}
+\label{subsec:popb}
+
+In the POPP model, an observation model is represented as a confusion matrix which specifies the true positive rate (sensitivity)--along with its false negative rate--and the true negative rate (specificity)--along with its false positive rate. To construct a confusion matrix, one needs to have both sensed counts and the ground truth, i.e. the true counts. Typically, the sensed counts and their true counts need expert labelling to pre-process them before they can be used to train an observation model. As expected, the POPP model requires the observation model to be accurate to prevent posteriors over $\lambda$ to infer incorrect inferences. However, attaining an accurate observation model requires a lot of training data and this puts a lot of burden on the experts who need to label the data.   
+
+Here, we extended the POPP model in a different direction than the one shown in the C-POPP model. The observation model is transformed into a Bayesian estimation problem where each element in the confusion matrix, (true positive rate ($\tpr$) and false positive rate ($\fpr$)), follows a beta distribution. Beta distributions are chosen for $\tpr$ and $\fpr$ because Beta distributions act as a conjugate to Binomial distributions and provide a family of prior probability distributions for the parameter of a binomial distribution. The beta-binomial conjugacy leads to an analytically tractable compound distribution called the beta-binomial distribution, where the $p$ parameter in the binomial distribution $B(d ; x, p)$ is randomly drawn from a beta distribution $Be(p ; \zeta, \eta)$.
+
+\begin{equation}
+	\label{eq:beta_binomial}
+	\begin{tabular}{r@{ = }l}
+		$P(d ; c, \zeta, \eta)$ & $\displaystyle\int_{0}^{1} P(d ; c, p) ~ P(p ; \zeta, \eta) ~dp$ \\ [2ex]
+		& $\displaystyle\int_{0}^{1} B(d ; c, p) ~ Be(p ; \zeta, \eta) ~dp$ \\ [2ex]
+        & $\displaystyle\int_{0}^{1} \binom{c}{d} p^d (1-p)^{(c-d)} ~ \displaystyle\frac{p^{(\zeta - 1)} (1-p)^{(\eta-1)}}{\pi(\zeta, \eta)}$ \\ [2ex]
+        & $\displaystyle\binom cd \displaystyle\frac{1}{\pi(\zeta, \eta)} \displaystyle\int_{0}^{1} p^{(d+\zeta-1)} (1-p)^{(c-d+\eta-1)} dp$ \\ [2ex]
+        & $\displaystyle\binom cd \displaystyle\frac{\pi(d+\zeta, c-d+\eta)}{\pi(\zeta, \eta)}$ \\ [2ex]
+        & $BB(d ; c, \zeta, \eta)$
+	\end{tabular}
+\end{equation}
+
+As the confusion matrix is now in the form of two beta distributions $Be(\tpr ; \zeta_{\tpr}, \eta_{\tpr})$ and $Be(\fpr ; \zeta_{\fpr}, \eta_{\fpr})$, $\zeta_{\tpr}$ can be thought as the number of true positive detections $\#(d=1, e=1)$, $\eta_{\tpr}$ as the number of false negative detections $\#(d=0, e=1)$, $\zeta_{\fpr}$ as the number of false positive detection $\#(d=1, e=0)$, and $\eta_{\fpr}$ as the number of true negative detections $\#(d=0, e=0)$ that the sensor has made. Given a confusion matrix where the elements of it follow beta density, and beta-binomial distributions which provide an unconditional distribution of $d$, Eqn. \ref{eq:joint_binomial_distribution} is now replaced with:  
+
+\begin{equation}
+	\label{eq:joint_beta_binomial_distribution}
+    P(s_{ji} ; c_i) \! = \! \! \! \displaystyle\sum_{\tp_{ji} = 0}^{x_{i}} \! \! ~ BB\Big(\tp_{ji} ; c_i, \Phi_j \Big) BB\Big(\fp_{ji} ; \Delta c_i, \Psi_j \Big)
+\end{equation}
+\noindent where $s_{ji}= \tp_{ji} + \fp_{ji},~\Phi_j = (\tpr_{j}, \fnr_{j}),~\Psi_j = (\fpr_j, \tnr_j),~\tpr_j = \#_j(d=1, e=1),~ \fnr_j = \#_j(d=0, e=1),~\fpr_j = \#_j(d=1, e=0),~\tnr_j = \#_j(d=0, e=0)$, and $\Delta c_i = (l - c_i)$.
+
+% With a sensor model which follows beta densities and is fully integrated, as a distribution, in the sensed count likelihood $P(s_{ji} ; c_i)$ as shown in Equation \ref{eq:joint_beta_binomial_distribution}, we obtain a graphical model with the structure shown in Figure \ref{fig:gm_popp_beta}.
+
+One should note that the difference between the POPP model and this variation, which we call the POPP-Beta model, lies only on Eqn. \ref{eq:joint_binomial_distribution} and \ref{eq:joint_beta_binomial_distribution}. However, given little training data for the observation model, the POPP-Beta model is expected to be more conservative in estimating the posterior $P(\lambda ; \overrightarrow{s})$ over $\lambda$ than the POPP model. 
+
+% \begin{figure*}[t!]
+% 	\centering
+% 	\begin{tikzpicture}
+% 	\tikzstyle{place}=[rectangle,draw=blue,thick,minimum size=5 mm]
+% 	\tikzstyle{empty}=[rectangle,draw=white,thick,minimum size=5 mm]
+% 	\tikzstyle{every label}=[black]
+% 	\begin{scope}
+% 	\node[place](31)[xshift=0mm]{$S_{1i}$};
+% 	\node[place](32)[right of=31, xshift=20mm]{$S_{2i}$};
+% 	\node[place](33)[right of=32, xshift=20mm]{$\ldots$};
+% 	\node[place](34)[right of=33, xshift=20mm]{$S_{(m-1)i}$};
+% 	\node[place](35)[right of=34, xshift=22mm]{$S_{mi}$};
+% 	\node[place](21)[above of=33]{$X_i$} edge[post](31) edge[post](32) edge[post](33) edge[post](34) edge[post](35);
+% 	\node[place](11)[above of=21]{$\lambda$} edge[post](21);
+%     \node[place](12)[right of=11, xshift=20mm]{$\textrm{tpr}_{(m-1)}, \textrm{fpr}_{(m-1)}$} edge[post](34);
+%     \node[place](13)[left of=11, xshift=-20mm]{$\textrm{tpr}_{2}, \textrm{fpr}_{2}$} edge[post](32);
+%     \node[place](14)[right of=12, xshift=22mm]{$\textrm{tpr}_{m}, \textrm{fpr}_{m}$} edge[post](35);
+%     \node[place](15)[left of=13, xshift=-20mm]{$\textrm{tpr}_{1}, \textrm{fpr}_{1}$} edge[post](31);
+% 	\node[empty](01)[above of=11]{};
+%     \node[place](02)[above of=12]{$(\zeta, \eta)_{\textrm{tpr}}, (\zeta, \eta)_{\textrm{fpr}}$} edge[post](12);
+%     \node[place](03)[above of=13]{$(\zeta, \eta)_{\textrm{tpr}}, (\zeta, \eta)_{\textrm{fpr}}$} edge[post](13);
+%     \node[place](04)[above of=14]{$(\zeta, \eta)_{\textrm{tpr}}, (\zeta, \eta)_{\textrm{fpr}}$} edge[post](14);
+%     \node[place](05)[above of=15]{$(\zeta, \eta)_{\textrm{tpr}}, (\zeta, \eta)_{\textrm{fpr}}$} edge[post](15);
+% 	\end{scope}
+% 	\end{tikzpicture}
+%     \caption{Graphical representation of the POPP-Beta.}
+% 	\label{fig:gm_popp_beta}
+% \end{figure*}
