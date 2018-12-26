@@ -5,20 +5,7 @@ The partially observable Poisson process (POPP) is a counting process $N(t)$ wit
 
 \begin{figure}[t!]
 	\centering
-	\begin{tikzpicture}
-	\tikzstyle{place}=[rectangle,draw=blue,thick,minimum size=5 mm]
-	\tikzstyle{every label}=[black]
-	\begin{scope}
-	\node[place](31)[xshift=15mm]{$S_{1i}$};
-	\node[place](32)[right of=31, xshift=7mm]{$S_{2i}$};
-	\node[place](33)[right of=32, xshift=5mm]{$\ldots$};
-	\node[place](34)[right of=33, xshift=7mm]{$S_{(m-1)i}$};
-	\node[place](35)[right of=34, xshift=12mm]{$S_{mi}$};
-	\node[place](21)[above of=33]{$C_i$} edge[post](31) edge[post](32) edge[post](33) edge[post](34) edge[post](35);
-	\node[place](11)[above of=21]{$\lambda$} edge[post](21);
-	% \node[place](01)[above of=11]{$\alpha, \beta$} edge[post](11);
-	\end{scope}
-	\end{tikzpicture}
+	\includegraphics[width=0.5\textwidth]{./figures/gm_popp.jpg}
     \caption{Graphical representation of the partially observable Poisson process.}
 	\label{fig:gm_popp}
 \end{figure}
@@ -66,11 +53,11 @@ $P(c_i ; \overrightarrow{c_{-1}})$ and $P(s_{ji} ; c_i)$ are defined to complete
 
 The Poisson limit theorem states that the Poisson distribution may be used as an approximation to the binomial distribution \cite{papoulis2002probability}. Using this theorem as the foundation, an arbitrarily close approximation to the probability $P(s_{ji} ; c_i)$ is defined by assuming there exists a small enough finite subinterval of length $\delta$ for which the probability of more than one event occurring is less than some small value $ \epsilon$. With this assumption, interval $[0, t)$ is splitted into $l$ smaller subintervals $I_1, \ldots, I_l$ of equal size, with the condition that $l > \lambda$ (the condition is crucial since we focus on very small portions of the interval). Consequently, the whole interval $[0, t) = I_1, \ldots, I_l$ becomes a series of Bernoulli trials, where the $k^{th}$ trial corresponds to whether (1) an event $e_k$ happens with probability $\lambda / l$ and (2) a sensor $j$ captures the event $e_k$ as the detection $d_k$ at the subinterval $I_k$.
 
-$P(s_{ji} ; c_i)$ is defined as the aggregate of the true positives $tp_{ji}$ in $c_i$ subintervals, and the false positives $fp_{ji}$ in $l-c_i$ subintervals. The probability of a \textit{true positive detection} (TP) for sensor $j$ in a subinterval is $tpr_j = P_j(d = 1 ; e=1)$, and the probability of a \textit{false positive detection} (FP) is $fpr_j = P_j(d = 1 ; e=0)$. Thus $P(s_{ji} \mid c_i)$ is defined as a sum of two binomial distributions $B(r ; n,\pi)$, where the aggregate is constrained to be $s_{ji}$: 
+$P(s_{ji} ; c_i)$ is defined as the aggregate of the true positives $tp_{ji}$ in $c_i$ subintervals, and the false positives $fp_{ji}$ in $l-c_i$ subintervals. The probability of a \textit{true positive detection} (TP) for sensor $j$ in a subinterval is $tpr_j = P_j(d = 1 ; e=1)$, and the probability of a \textit{false positive detection} (FP) is $fpr_j = P_j(d = 1 ; e=0)$. Thus $P(s_{ji} ; c_i)$ is defined as a sum of two binomial distributions $B(r ; n,\pi)$, where the aggregate is constrained to be $s_{ji}$: 
 
 \begin{equation}
 	\label{eq:joint_binomial_distribution}
-    P(s_{ji} ; c_i) \! = \! \! \! \displaystyle\sum_{\textrm{tp}_{ji} = 0}^{c_{i}} \! \! B\Big(\textrm{tp}_{ji} ; c_i, \textrm{tpr}_j\Big) B\Big(\textrm{fp}_{ji} \mid \Delta c_i, \textrm{fpr}_j \Big)
+    P(s_{ji} ; c_i) \! = \! \! \! \displaystyle\sum_{\textrm{tp}_{ji} = 0}^{c_{i}} \! \! B\Big(\textrm{tp}_{ji} ; c_i, \textrm{tpr}_j\Big) B\Big(\textrm{fp}_{ji} ; \Delta c_i, \textrm{fpr}_j \Big)
 \end{equation}
 \noindent where $s_{ji} = \textrm{tp}_{ji} + \textrm{fp}_{ji}$, $\textrm{tpr}_j = P_j(d=1 ; e=1)$, $\textrm{fpr}_j = P_j(d=1 ; e=0)$, and $\Delta c_i = (l - c_i)$.
 

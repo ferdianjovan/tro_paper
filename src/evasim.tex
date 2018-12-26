@@ -12,14 +12,14 @@ Different correlations between two sensors were tested: positive correlation, ne
 \begin{figure}[t!]
 	\centering
 	\includegraphics[width=0.5\textwidth]{./figures/tjpr_comparison_120.png}
-    \caption{The RMSE of posterior estimates of $\lambda$ for the POPP-Dirichlet and other POPP models with 120 sample data used to build the (joint) sensor model with variation on $\mathcal{E^+}$. Each trial consisted of a stream of $\protect\overrightarrow{s_1} \ldots \protect\overrightarrow{s_{144}}$ samples to update $P_G(\lambda ; \overrightarrow{s_i})$. Accuracies of MAP estimates are shown in the top panel, accuracies of expectation of the posterior in the bottom panel. Each data point is an average of 30 trials. Standard errors are shown.} 
+    \caption{The RMSE of posterior estimates of $\lambda$ for the POPP-Dirichlet and other POPP models with 120 sample data used to build the (joint) sensor model with variation on $\mathcal{E^+}$. Each trial consisted of a stream of $\protect\overrightarrow{s_1} \ldots \protect\overrightarrow{s_{144}}$ samples to update $P(\lambda ; \protect\overrightarrow{s_i})$. Accuracies of MAP estimates are shown in the top panel, accuracies of expectation of the posterior in the bottom panel. Each data point is an average of 30 trials. Standard errors are shown.} 
 	\label{fig:tjpr_comparison_120}
 \end{figure}
 
 \begin{figure}[t!]
 	\centering
 	\includegraphics[width=0.5\textwidth]{./figures/tjpr_comparison_2880.png}
-    \caption{The RMSE of posterior estimates of $\lambda$ for the POPP-Dirichlet and other POPP models with 2880 sample data used to build the (joint) sensor model with variation on $\mathcal{E^+}$. Each trial consisted of a stream of $\protect\overrightarrow{s_1} \ldots \protect\overrightarrow{s_{144}}$ samples to update $P_G(\lambda ; \overrightarrow{s_i})$. Accuracies of MAP estimates are in the top panel, accuracies of expectation of the posterior in the bottom panel. Each data point is an average of 30 trials. Standard errors are shown.} 
+    \caption{The RMSE of posterior estimates of $\lambda$ for the POPP-Dirichlet and other POPP models with 2880 sample data used to build the (joint) sensor model with variation on $\mathcal{E^+}$. Each trial consisted of a stream of $\protect\overrightarrow{s_1} \ldots \protect\overrightarrow{s_{144}}$ samples to update $P(\lambda ; \protect\overrightarrow{s_i})$. Accuracies of MAP estimates are in the top panel, accuracies of expectation of the posterior in the bottom panel. Each data point is an average of 30 trials. Standard errors are shown.} 
 	\label{fig:tjpr_comparison_2880}
 \end{figure}
 
@@ -46,13 +46,43 @@ Second, two variations to the true joint negative rate $\mathcal{E^-}$ (TJNR), w
 \begin{figure}[t!]
 	\centering
 	\includegraphics[width=0.5\textwidth]{./figures/tjnr_comparison_120.png}
-    \caption{The RMSE of posterior estimates of $\lambda$ for the POPP-Dirichlet and other POPP models with 120 sample data used to build the (joint) sensor model with variation in $\mathcal{E^-}$. Each trial consisted of a stream of $\protect\overrightarrow{s_1} \ldots \protect\overrightarrow{s_{144}}$ samples to update $P(\lambda ; \overrightarrow{s_i})$. Accuracies of MAP estimates are  in the top panel, accuracies of the expectation of the posterior in the bottom panel. Each data point is an average of 30 trials. Standard errors are shown.} 
+    \caption{The RMSE of posterior estimates of $\lambda$ for the POPP-Dirichlet and other POPP models with 120 sample data used to build the (joint) sensor model with variation in $\mathcal{E^-}$. Each trial consisted of a stream of $\protect\overrightarrow{s_1} \ldots \protect\overrightarrow{s_{144}}$ samples to update $P(\lambda ; \protect\overrightarrow{s_i})$. Accuracies of MAP estimates are  in the top panel, accuracies of the expectation of the posterior in the bottom panel. Each data point is an average of 30 trials. Standard errors are shown.} 
 	\label{fig:tjnr_comparison_120}
 \end{figure}
 
 \begin{figure}[t!]
 	\centering
 	\includegraphics[width=0.5\textwidth]{./figures/tjnr_comparison_2880.png}
-    \caption{The RMSE of posterior estimates of $\lambda$ for the POPP-Dirichlet and other POPP models with 2880 sample data used to build the (joint) sensor model with variation in $\mathcal{E^-}$. Each trial consisted of a stream of $\protect\overrightarrow{s_1} \ldots \protect\overrightarrow{s_{144}}$ samples to update $P_G(\lambda ; \overrightarrow{s_i})$. Accuracies of MAP estimates are in the top panel, accuracies of the expectation of the posterior in the bottom panel. Each data point is an average of 30 trials. Standard errors are shown.} 
+    \caption{The RMSE of posterior estimates of $\lambda$ for the POPP-Dirichlet and other POPP models with 2880 sample data used to build the (joint) sensor model with variation in $\mathcal{E^-}$. Each trial consisted of a stream of $\protect\overrightarrow{s_1} \ldots \protect\overrightarrow{s_{144}}$ samples to update $P(\lambda ; \protect\overrightarrow{s_i})$. Accuracies of MAP estimates are in the top panel, accuracies of the expectation of the posterior in the bottom panel. Each data point is an average of 30 trials. Standard errors are shown.} 
 	\label{fig:tjnr_comparison_2880}
+\end{figure}
+
+The performance of all POPP models and the FOPP model were also assessed by comparing the Jensen-Shannon distance. Jensen-Shannon distance is a unit of measurement used in Jensen-Shannon divergence. The Jensen-Shannon divergence is a method of measuring the similarity between two probability distributions. Unlike KL-divergence, Jensen-Shannon divergence is a symmetrized divergence where $D_{JS}(P \parallel Q)$ is equal to $D_{JS}(Q \parallel P)$.
+
+\begin{figure}[t!]
+	\centering
+	\includegraphics[width=0.5\textwidth]{./figures/tjpr_comparison_120_kl.png}
+	\caption{The Jensen-Shannon distance of posterior estimates of $\lambda$ for the POPP-Dirichlet and other POPP models with 120 sample data used to build the (joint) sensor model with variation on $\mathcal{E^+}$. Each trial consisted of a stream of $\protect\overrightarrow{s_1} \ldots \protect\overrightarrow{s_{144}}$ samples to update $P_G(\lambda \mid \protect\overrightarrow{s_i})$. Each data point is an average of 30 trials. Standard errors are shown.} 
+	\label{fig:tjpr_comparison_120_kl}
+\end{figure}
+
+\begin{figure}[t!]
+	\centering
+	\includegraphics[width=0.5\textwidth]{./figures/tjpr_comparison_2880_kl.png}
+	\caption{The Jensen-Shannon distance of posterior estimates of $\lambda$ for the POPP-Dirichlet and other POPP models with 2880 sample data used to build the (joint) sensor model with variation on $\mathcal{E^+}$. Each trial consisted of a stream of $\protect\overrightarrow{s_1} \ldots \protect\overrightarrow{s_{144}}$ samples to update $P_G(\lambda \mid \protect\overrightarrow{s_i})$. Each data point is an average of 30 trials. Standard errors are shown.} 
+	\label{fig:tpjr_comparison_2880_kl}
+\end{figure}
+
+\begin{figure}[t!]
+	\centering
+	\includegraphics[width=0.5\textwidth]{./figures/tjnr_comparison_120_kl.png}
+	\caption{The Jensen-Shannon distance of posterior estimates of $\lambda$ for the POPP-Dirichlet and other POPP models with 120 sample data used to build the (joint) sensor model with variation on $\mathcal{E^-}$. Each trial consisted of a stream of $\protect\overrightarrow{s_1} \ldots \protect\overrightarrow{s_{144}}$ samples to update $P_G(\lambda \mid \protect\overrightarrow{s_i})$. Each data point is an average of 30 trials. Standard errors are shown.} 
+	\label{fig:tjnr_comparison_120_kl}
+\end{figure}
+
+\begin{figure}[t!]
+	\centering
+	\includegraphics[width=0.5\textwidth]{./figures/tjnr_comparison_2880_kl.png}
+	\caption{The Jensen-Shannon distance of posterior estimates of $\lambda$ for the POPP-Dirichlet and other POPP models with 2880 sample data used to build the (joint) sensor model with variation on $\mathcal{E^-}$. Each trial consisted of a stream of $\protect\overrightarrow{s_1} \ldots \protect\overrightarrow{s_{144}}$ samples to update $P_G(\lambda \mid \protect\overrightarrow{s_i})$. Each data point is an average of 30 trials. Standard errors are shown.} 
+	\label{fig:tjnr_comparison_2880_kl}
 \end{figure}

@@ -3,15 +3,15 @@
 
 Jovan et al., have shown that the POPP model is able to efficiently corrects miscounts made by multiple unreliable counting devices observing a single Poisson process \cite{jovan18a} . However, it was mentioned that the model is limited by two assumptions:
 \begin{enumerate}
-    \item sensors are uncorrelated from one to another given the true count. 
-    \item the degree of the unreliability of a sensor is precisely known, and
+    \item sensors are uncorrelated from one to another given the true count, and 
+    \item the degree of the unreliability of a sensor is precisely known.
 \end{enumerate}
 In this paper, we propose three gradual extensions to the POPP model to tackle the aforementioned assumptions. The first extension (C-POPP) modifies the POPP model to accomodate any correlation among sensors, i.e. tackling the first assumption. The second extension (POPP-Beta) is built on top of the POPP model to have an observation model which can show its unreliability, i.e. tackling the second assumption. The third extension (POPP-Dirichlet) is built on top of the C-POPP model to tackle both assumptions together. 
 
 \subsection{The C-POPP}
 \label{subsec:cpop}
 
-Recall that Eqn. \ref{eq:occurrences_likelihood} is defined under the assumption that each sensor's count is conditionally independent from all the others given the true count. In other words, they are uncorrelated to one another. This assumption ignores the correlations between sensors. Consequently, $P(\overrightarrow{s_i} ; c_i)$ is defined as a simple product across the sensors. 
+Recall that Eqn. \ref{eq:occurrences_likelihood} is defined under the assumption that each sensor count is conditionally independent from all the others given the true count. In other words, they are uncorrelated to one another. This assumption ignores the correlations between sensors. Consequently, $P(\overrightarrow{s_i} ; c_i)$ is defined as a simple product across the sensors. 
 
 \begin{equation}
 	\label{eq:independent_sensor_likelihood}
