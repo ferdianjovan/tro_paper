@@ -19,7 +19,7 @@ This dataset was gathered from an office building in which a mobile robot counts
 	\label{fig:single_sensor_rate_transformation}
 \end{figure}
 
-By comparing the ground truth with the detections made by sensors, we calculated a sensor unreliability model for each region. An example of such a sensor model can be seen in Table \ref{table:sensor_model_popp_beta}. Although the robot operated 24/7, the sensor models were built using the data collected from 10am-8pm, there being negligible detections outside these times. From a 69-day deployment of the mobile robot, we obtained 48 days of usable observations. We specified a time interval for the Poisson of 10 minutes, and recorded both the true counts and the detections made by each sensor in each interval. We estimated the parameter $\lambda$ of the Poisson distribution by running a FOPP model on the true counts. 
+By comparing the ground truth with the detections made by sensors, we calculated a sensor unreliability model for each region. An average of a sensor model across different regions can be seen in Table \ref{table:sensor_model_popp_beta}. Although the robot operated 24/7, the sensor models were built using the data collected from 10am-8pm, there being negligible detections outside these times. From a 69-day deployment of the mobile robot, we obtained 48 days of usable observations. We specified a time interval for each Poisson distribution of 10 minutes, and recorded both the true counts and the detections made by each sensor in each interval. We assumed that the underlying process on each region to be a periodic Poisson process in which there is a one-day periodicity cycle, i.e. $\lambda(t) = \lambda(t + \Delta)$ with $\Delta = 24 * 60$(minutes), on the process. This means that the expected number of people turning up on each day in particular time of the day is the same across the 48 days of observations. We then estimated the true parameter $\lambda(t)$ of the Poisson distribution at $t$ interval by running a FOPP model on the true counts within the $t$ interval.
 
 The different POPP models rely on sensor models that must be calculated from a confusion matrix relating true counts and the different sensor counts. To separate the training and testing data we performed four fold cross-validation with the unit being whole days, i.e., we used 12-days of data as a training set for a sensor model and then used the remaining 36-days of data as a test set on which to test the inferences made by each model from the sensor counts.
 
@@ -38,61 +38,12 @@ The different POPP models rely on sensor models that must be calculated from a c
 	\end{tabular}
 \end{table}
 
-For the 36 days of test data the different models each made predictions of the $\lambda$ parameter of the Poisson. Given this, we recorded (1) a distance metric method using the RMSE of the MAP hypothesis of each model posterior distribution over $\lambda$ to the true $\lambda'$ and (2) a free-distance metric method using the Jensen-Shannon distance between the posterior distribution $P(\lambda ; \overrightarrow{s_i})$ and the distribution of the true $\lambda'$ generated from the FOPP model on true counts. Using these metrics, we compared the performance of all POPP models, using the switching filter, to the standard Bayes' filter arising from the FOPP model. The uncorrected estimate $\lambda$ according to the FOPP model was estimated only from the change detector count data since the change detector is the most reliable detector among three detectors available in the robot as shown in Table \ref{table:sensor_model_popp_beta}.
+For the 36 days of test data the different models each made predictions of the $\lambda(t)$ parameter of the Poisson. Given this, we recorded (1) a distance metric method using the RMSE of the MAP hypothesis of each model posterior distribution over $\lambda(t)$ to the true $\lambda'(t)$ and (2) a free-distance metric method using the Jensen-Shannon distance between the posterior distribution $P(\lambda(t) ; \overrightarrow{s_i})$ and the distribution of the true $\lambda'(t)$ generated from the FOPP model on true counts. Using these metrics, we compared the performance of all POPP models, using the switching filter, to the standard Bayes' filter arising from the FOPP model. The uncorrected estimate $\lambda(t)$ according to the FOPP model was estimated only from the change detector count data since the change detector is the most reliable detector among three detectors available in the robot as shown in Table \ref{table:sensor_model_popp_beta}.
 
-\begin{figure}[t!]
-	\centering
-	\includegraphics[width=0.95\columnwidth]{./figures/rmse_across_region_popp_dirichlet.png}
-	\caption{The RMSE of the FOPP, POPP, POPP-Beta, C-POPP, and POPP-Dirichlet estimators of $\lambda$ as it varies across areas (regions) of the environment. Standard error is shown.}
-	\label{fig:rmse_across_region_popp_dirichlet}
-\end{figure}
+Figure \ref{fig:fopp_popp_popb_npop_popd_rmse_evo} and \ref{fig:fopp_popp_popb_npop_popd_kl_evo} show the accuracy comparison between all POPP models and the standard FOPP model over time in a distance metric method, i.e., RMSE, and a free-distance metric method, i.e., the Jensen-Shannon distance. It can be seen that all models became more and more accurate towards the true $\lambda'(t)$ as days pass by. All POPP models show more accuracy over the standard FOPP model. The $\lambda(t)$ estimate produced by the POPP-Dirichlet model is more accurate than the ones produced by the standard POPP model and the POPP-Beta model. However, the estimate is not always more accurate compared to the one produced by the C-POPP model. 
 
-\begin{figure}[t!]
-	\centering
-	\includegraphics[width=0.95\columnwidth]{./figures/fopp_popp_popb_npop_popd_homo_kl.png}
-	\caption{The Jensen-Shannon distance of the FOPP, the POPP, the POPP-Beta, the C-POPP, and the POPP-Dirichlet model distributions of $\lambda$ as it varies across areas (regions) of the environment. Standard error is shown.}
-	\label{fig:fopp_popp_popb_npop_popd_homo_kl}
-\end{figure}
-
-\begin{figure}[t!]
-	\centering
-	\includegraphics[width=0.95\columnwidth]{./figures/rmse_evolution_popp_dirichlet.png}
-	\caption{The RMSE evolution from day 3 to day 36 with 3 day interval, averaged across all regions. Standard error is shown.}
-	\label{fig:rmse_evolution_popp_dirichlet}
-\end{figure}
-
-\begin{figure}[t!]
-	\centering
-	\includegraphics[width=0.95\columnwidth]{./figures/fopp_popp_popb_npop_popd_homo_kl_evo.png}
-	\caption{The Jensen-Shannon distance evolution of the FOPP, the POPP, the POPP-Beta, the C-POPP, and the POPP-Dirichlet model distributions of $\lambda$ from day 3 to day 36 with 3 day interval, averaged across all regions. Standard error is shown.}
-	\label{fig:fopp_popp_popb_npop_popd_homo_kl_evo}
-\end{figure}
-
-The results are shown in Figure \ref{fig:rmse_across_region_popp_dirichlet} for the RMSE and \ref{fig:fopp_popp_popb_npop_popd_homo_kl} for the Jensen-Shannon distance. In terms of RMSE, the $\lambda$ estimate produced by the POPP-Dirichlet model is more accurate than the ones produced by the standard POPP filter and the POPP-Beta filter. However, the estimate is not always more accurate compared to the one produced by the C-POPP filter. As the POPP-Dirichlet is more conservative in estimating the parameter $\lambda$, the estimate moves rather slowly towards the true $\lambda'$ and the distribution produced by the POPP-Dirichlet tends to be wider than the C-POPP model. This argument is showcased in Figure \ref{fig:fopp_popp_popb_npop_popd_homo_kl} where the Jensen-Shannon distance shows that the C-POPP model produced more similar distributions to the true $\lambda'$ than the POPP-Dirichlet. 
-
-An evaluation on how the POPP models evolved with time was also conducted both in terms of RMSE and Jensen-Shannon distance, since it is expected to gradually get closer to the true $\lambda'$. Figures~\ref{fig:rmse_evolution_popp_dirichlet} and \ref{fig:fopp_popp_popb_npop_popd_homo_kl_evo} show that as time passes the performance of the POPP estimators become better. The POPP-Dirichlet estimator in particular slowly outperforms other estimators including the C-POPP estimator.
-
-\subsection*{Evaluation on Non-Homogeneous Poisson Processes}
-
-In the previous section, we assumed that there is a single Poisson distribution on each region which tells the expected number of people turning up within 10 minute interval in any particular time of a day across the 48 days of observations. It has been shown that the POPP models give advantages in estimating a single $\lambda$ of a Poisson distribution over the standard Bayes' filter arising from the FOPP model. For this evaluation, non-homogeneous Poisson processes are used as a showcase comparison whether the non-homogeneous Poisson processes are also benefited by the POPP models.
-
-In this evaluation, the underlying process on each region was assumed to be a periodic Poisson process in which there is a one-day periodicity cycle, i.e. $\lambda(t_i, t_j) = \lambda(t_{i + \Delta}, t_{j + \Delta})$ with $\Delta = 24 * 60$(minutes), on the process. This means that the expected number of people turning up on each day in particular time of the day is the same across the 48 days of observations.
-
-The true $\lambda(t_i, t_j)$ of the periodic Poisson processes for each region is estimated by running a FOPP model on the true counts. The uncorrected estimate $\lambda(t_i, t_j)$ according to the FOPP model was estimated only from the change detector count data. The results are shown in Figure \ref{fig:fopp_popp_popb_npop_popd_rmse} for the RMSE and \ref{fig:fopp_popp_popb_npop_popd_kl} for the Jensen-Shannon distance.
-
-\begin{figure}[t!]
-	\centering
-	\includegraphics[width=0.95\columnwidth]{./figures/fopp_popp_popb_npop_popd_rmse.png}
-	\caption{The RMSE of the FOPP, POPP, POPP-Beta, C-POPP, and POPP-Dirichlet estimators of $\lambda(t_i, t_j)$ as it varies across areas (regions) of the environment. Standard error is shown.}
-	\label{fig:fopp_popp_popb_npop_popd_rmse}
-\end{figure}
-
-\begin{figure}[t!]
-	\centering
-	\includegraphics[width=0.95\columnwidth]{./figures/fopp_popp_popb_npop_popd_kl.png}
-	\caption{The Jensen-Shannon distance of the FOPP, POPP, POPP-Beta, C-POPP, and POPP-Dirichlet model distributions of $\lambda(t_i, t_j)$ as it varies across areas (regions) of the environment. Standard error is shown.}
-	\label{fig:fopp_popp_popb_npop_popd_kl}
-\end{figure}
+As the POPP-Dirichlet model is more conservative in estimating the parameter $\lambda(t)$ than the C-POPP model, the estimate moves rather slowly towards the true $\lambda'(t)$. This is showcased by figure \ref{fig:fopp_popp_popb_npop_popd_kl_evo}.
+By the third day, the POPP-Dirichlet model outperformed the POPP and the POPP-Beta, and the C-POPP models in terms of accuracy. However, the accuracy gap between the C-POPP model and the POPP-Dirichlet model became smaller and by the 36th day, the C-POPP model outperformed the POPP-Dirichlet by a small margin.
 
 \begin{figure}[t!]
 	\centering
@@ -108,6 +59,4 @@ The true $\lambda(t_i, t_j)$ of the periodic Poisson processes for each region i
 	\label{fig:fopp_popp_popb_npop_popd_kl_evo}
 \end{figure}
 
-Similar to the C-POPP model, the POPP-Dirichlet model is able to cope and overcome the problems with limited sample data both for building the joint sensor model and estimating the $\lambda(t_i, t_j)$. In many regions, the POPP-Dirichlet managed to show better estimates as well as more similar distributions than the POPP, the POPP-Beta, and the FOPP models. However, the POPP-Dirichlet filter falls behind both in accuracy (RMSE) and distribution similarity compared to the C-POPP model. This is attributed to the POPP-Dirichlet conservative way in estimating the parameter $\lambda(t_i, t_j)$ compared to the C-POPP model.
-
-Once again, a side evaluation on how the models evolved with time was evaluated. Figures~\ref{fig:fopp_popp_popb_npop_popd_rmse_evo} and \ref{fig:fopp_popp_popb_npop_popd_kl_evo} show the evolution of each model overtime in terms of RMSE and Jensen-Shannon distance across regions. The POPP-Dirichlet model gradually increased its accuracy in estimating $\lambda(t_i, t_j)$ overtime. The model outperformed the POPP and the POPP-Beta models in terms of accuracy. Unlike what is shown in Figure~\ref{fig:rmse_evolution_popp_dirichlet}, the POPP-Dirichlet model here was a bit outperformed by the C-POPP model in terms of RMSE accuracy.
+%Similar to the C-POPP model, the POPP-Dirichlet model is able to cope and overcome the problems with limited sample data both for building the joint sensor model and estimating the $\lambda(t_i, t_j)$. In many regions, the POPP-Dirichlet managed to show better estimates as well as more similar distributions than the POPP, the POPP-Beta, and the FOPP models. However, the POPP-Dirichlet filter falls behind both in accuracy (RMSE) and distribution similarity compared to the C-POPP model. This is attributed to the POPP-Dirichlet conservative way in estimating the parameter $\lambda(t_i, t_j)$ compared to the C-POPP model.
