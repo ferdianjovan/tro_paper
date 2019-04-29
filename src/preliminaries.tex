@@ -1,20 +1,22 @@
+%!TEX root = ../bare_jrnl.tex
+
 \section{Fully Observable Poisson Process}
 \label{sec:preliminaries}
 
-A fully observable Poisson process (FOPP) is a counting process $N(t)$ with \textit{arrival rates} $\lambda$ which counts accurately the number of events appearing up to time $t$ in which the number of events follows the Poisson distribution,
+A \emph{fully observable} Poisson process (FOPP) is a counting process $N(t)$ which \emph{accurately} measures (i.e.~counts) the number of events appearing over the time interval $[0, t)$, with this count controlled by an \textit{arrival rate}, $\lambda$. The probability of a particular count $c$ in a FOPP follows the Poisson distribution:
 \begin{equation}
     \label{eq:pmf_poisson}
 	Poi(N(t) = c ; \lambda) = \frac{e ^{-\lambda} \lambda ^{c}}{c!}
 \end{equation}
-The counting process $N(t) = c_i$ is referred as a measurement of the number of events, as a count, captured over the time interval $[0, t)$ during the $i$-th observation.
-Given a Gamma density 
+We use $N(t) = c_i$ to refer to a count captured during the $i$-th observation of the process.
+Given a Gamma density
 \begin{equation}
     \label{eq:pdf_gamma}
     \begin{tabular}{rcl}
         $Gam(\lambda ; \alpha, \beta)$ & = & $\displaystyle\frac{\beta ^{\alpha}}{\Gamma (\alpha)} \lambda ^{\alpha - 1} e^{-\beta \lambda}$ \\ [1ex]
     \end{tabular}
 \end{equation}
-as a prior distribution over the parameter $\lambda$ where $\alpha, \beta$ are the shape and the rate parameters, the posterior over $\lambda$ for fully observable Poisson processes can be analytically calculated via Bayesian inference with
+as a prior distribution over the parameter $\lambda$, where $\alpha, \beta$ are the shape and the rate parameters, the posterior over $\lambda$ for a FOPP can be analytically calculated via Bayesian inference with
 \begin{equation}
     \label{eq:posterior_fopp}
     \begin{array}{lll}
@@ -22,4 +24,4 @@ as a prior distribution over the parameter $\lambda$ where $\alpha, \beta$ are t
          & = Gam \Bigg(\lambda ; \displaystyle\sum_{i=1}^{n} c_i + \alpha, n + \beta \Bigg)
     \end{array}
 \end{equation}
-which involves adding the sample counts $\sum_{i=1}^{n} c_i$ to the (hyper)-parameter $\alpha$ of the gamma prior and adding the number of observations $n$ to the (hyper)-parameter $\beta$ of the gamma prior distribution.
+This adds the sample counts $\sum_{i=1}^{n} c_i$ to the hyper-parameter $\alpha$ of the gamma prior, and adds the number of observations $n$ to the hyper-parameter $\beta$ of the gamma prior.
