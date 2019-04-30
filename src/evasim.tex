@@ -1,9 +1,9 @@
+%!TEX root = ../bare_jrnl.tex
+
 \section{Evaluation on Synthetic Data}
 \label{sec:evasim}
 
-Evaluation on synthetic data is used to establish the benefit of POPP and its variations over the The uncorrected estimate according to the FOPP model in estimating the arrival rate $\lambda$ of a Poisson process. With synthetic data, sensor reliability can be controlled, and the true $\lambda$ and the true counts $c_i$ are known in advance for each sample.
-
-Here, an evaluation and a comparison of the POPP models to the FOPP model are conducted with two imaginary unreliable sensors and simulated datasets. The switching filter is chosen as a filter for all POPP models for this evaluation. 
+We first perform an evaluation on synthetic data  to establish the benefit of POPP and its variations over the FOPP when estimating the arrival rate $\lambda$ of a Poisson process. We use synthetic data since sensor reliability can be controlled, and the true $\lambda$ and counts $c_i$ are known in advance for each observation. Our evaluation simulates two unreliable sensors across a range of conditions. In order to perform the estimate we use the switching filter from~\cite{jovan18a} on all POPP models.
 
 In each experiment, the sensor model (for the POPP and POPP-Beta models) and joint sensor model (for the C-POPP and POPP-Dirichlet models) were first built based on the sampled counts $c_1, \ldots, c_n$ from a Poisson process $P(c ; \lambda'=3)$ and the corresponding sensor readings $\protect\overrightarrow{s_1} \ldots \protect\overrightarrow{s_{n}}$. $n$ was set to 120 to build an erroneous (joint) sensor model. An erroneous sensor model was compensated in the case of the POPP-Dirichlet and the POPP-Beta models since a small number of samples only creates a loose Dirichlet and beta densities. Another set of counts $c_1, \ldots, c_{144}$ was sampled from the same process. These counts were then fed to simulated sensors that counted unreliably, producing sensor readings $\protect\overrightarrow{s_1} \ldots \protect\overrightarrow{s_{144}}$. A recursive update, then, took place on $P(\lambda ; \overrightarrow{s_i})$ using the switching filter for POPP, POPP-Beta, C-POPP, and POPP-Dirichlet models.
 
