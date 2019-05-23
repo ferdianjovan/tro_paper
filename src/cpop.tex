@@ -3,10 +3,10 @@
 \section{The POPP Extensions}
 \label{sec:popp_extensions}
 
-In~\cite{jovan18a} demonstrated that the POPP model is able to efficiently correct miscounts made by multiple unreliable counting devices observing a single Poisson process. However, the POPP model is limited by two assumptions:
+In~\cite{jovan18a} we demonstrated that the POPP model is able to efficiently correct miscounts made by multiple unreliable counting devices observing a single Poisson process. However, the POPP model is limited by two assumptions:
 \begin{enumerate}
     \item the sensors are conditionally independent given the true count, and 
-    \item the degree of the unreliability of a sensor is precisely known.
+    \item the degree of the unreliability of a sensor (i.e. $\tau$ and $\xi$) is precisely known.
 \end{enumerate}
 In this paper, we propose three extensions to the POPP model to tackle these assumptions. The first extension (C-POPP) modifies the POPP model to accommodate correlation between sensors. The second extension (POPP-Beta) extends the POPP model with an observation model which captures uncertainty over the sensor reliability. The third extension (POPP-Dirichlet) combines these ideas to jointly address both assumptions. 
 
@@ -18,16 +18,16 @@ Recall that Eqn.~\ref{eq:occurrences_likelihood} is defined under the assumption
 To introduce correlations between sensors we must alter Eqn.~\ref{eq:independent_sensor_likelihood} and
 Eqn.~\ref{eq:joint_binomial_distribution} from the POPP model.
 
-\textbf{NOTE: I think we are mixing observation and detection a bit (and even capture earlier). Also sensor model and observation model are used for the same thing in different places.}
-For Eqn.~\ref{eq:joint_binomial_distribution}, recall that the probability of a particular sensed count was defined from the Poisson limit theorem as a sequence of Bernoulli trials over subintervals.
+
+To replace Eqn.~\ref{eq:joint_binomial_distribution}, recall that the probability of a particular sensed count was defined from the Poisson limit theorem as a sequence of Bernoulli trials over $l$ subintervals.
 % 
 With correlated sensors, the observation of an event $e_k$ in the 
-$k^th$ trial no longer follows the Bernoulli distribution. Instead it follows the categorical distribution, where the $k^{th}$ trial corresponds to whether a particular combination of binary detections $d_{1,k}, \ldots, d_{m,k}$ happens in subinterval $I_k$. Therefore, instead of having an independent sensor models for the detection of event $e_k$ we proposed a joint observation model:
+$k^{th}$ trial no longer follows the Bernoulli distribution. Instead it follows the categorical distribution, where the $k^{th}$ trial corresponds to whether a particular combination of binary detections $d_{1,k}, \ldots, d_{m,k}$ happens in subinterval $I_k$. Therefore, instead of having independent sensor models for the detection of event $e_k$ we propose the joint observation model:
 \begin{equation}
     \label{eq:joint_sensor_model}
     P_{jnt}(\vec{d_k} ; e_k)
 \end{equation}    
-\noindent where $ \vec{d_k} = (d_{1,k}, \ldots, d_{m,k})$, with $d_{j,k}$ being a detection by sensor $j$ in the $k^th$ subinterval (trial), and $d_{j,k}, e_k \in {0, 1}$. 
+\noindent where $ \vec{d_k} = (d_{1,k}, \ldots, d_{m,k})$, with $d_{j,k}$ being a detection by sensor $j$ in the $k^{th}$ subinterval, and $d_{j,k}, e_k \in {0, 1}$. 
 
 From this we define functions $\mathcal E^+, \mathcal E^- : \vec{d} \rightarrow [0,1]$ which provide the probability of a joint observation given that $e_k$ occurred or did not, respectively. 
 
@@ -39,28 +39,31 @@ From this we define functions $\mathcal E^+, \mathcal E^- : \vec{d} \rightarrow 
 \end{equation}
 
 
-\textbf{NOTE: Probably not needed but this implies that the value of each function over all $\vec{d_k}$ sums to 1. \emph{$\mathcal E^+$ and $\mathcal E^-$, each sums up to 1. These $\mathcal E^+$ and $\mathcal E^-$ are basically the TPR and TNR in these joint observation/sensor models}}
+% \textbf{NOTE: Probably not needed but this implies that the value of each function over all $\vec{d_k}$ sums to 1. \emph{$\mathcal E^+$ and $\mathcal E^-$, each sums up to 1. These $\mathcal E^+$ and $\mathcal E^-$ are basically the TPR and TNR in these joint observation/sensor models}}
 
 Recall that the set of detections for observation period $i$ was defined as:
 \begin{equation*}
     \vec{s_i} = (s_{1i}, \ldots, s_{mi})
 \end{equation*}
-with $s_{j,i} \in \mathbb N$ and $s_{j,i}$ the sensed count of sensor $j$ from the $i$-th observation period. Since the joint observation model is defined under a combination of binary detections of sensors, each $s_{j,i}$ can be split into $l$ subintervals such that in each sub interval $I_k$ there is only one detection $d_{j,k}$. If the binary detections from all sensors at subinterval $I_k$ are grouped together, then for the observation period $i$, $\vec{s_i}$ can be alternatively defined as a list of $l$ \emph{detection groups} of binary detections:
+with $s_{j,i} \in \mathbb N$, the sensed count of sensor $j$ from the $i$-th observation period. Since the joint observation model is defined under a combination of binary detections of sensors, each $s_{j,i}$ can be split into $l$ subintervals such that in each sub interval $I_k$ there is only one detection $d_{j,k}$. If the binary detections from all sensors at subinterval $I_k$ are grouped together, then for the observation period $i$, $\vec{s_i}$ can be alternatively defined as a list of $l$ \emph{detection groups} of binary detections:
 \begin{equation}
     \label{eq:s_i_definition}
     \vec{s'_i} = ((d_{1,1}, \ldots, d_{m,1}), \ldots, (d_{1,l}, \ldots, d_{m,l}))
 \end{equation}
-\noindent with $d_{j,k}$ being a detection by sensor $j$ at subinterval $I_k$ and $d_{j,k} \in \{0, 1\}$. Note that this is not a set since detection groups can be duplicated across subintervals.
+\noindent with $d_{j,k}$ being a detection by sensor $j$ at subinterval $I_k$ and $d_{j,k} \in \{0, 1\}$. 
+% Note that this is not a set since detection groups can be duplicated across subintervals.
 
 In order to define the joint probability of a particular count being yielded by a particular sequence of detection groups, we must consider all possible combinations of true positives and false positives that could be generated by that sequence. We do this in the following definition of $P(\vec{s_i} ; c_i)$, and define the probability of a given sequence of detection groups yielding count $c_i$ using the multinomial distribution.
 
 \begin{equation}
 \label{eq:codependent_sensor_likelihood}
-P(\vec{s_i} ; c_i) = \sum\limits_{s \in \mathcal{P}(\vec{s'_i})} Multi(s ; |s|, \mathcal E^+) ~ Multi(\vec{s'_i}\setminus s ; (c_i - |s|), \mathcal E^-)
+P(\vec{s_i} ; c_i) = \sum\limits_{\vec{s} \in \mathcal{P}(\vec{s'_i})} Multi(\vec{s} ; |\vec{s}|, \mathcal E^+) ~ Multi(\vec{s'_i}\setminus \vec{s} ; (c_i - |\vec{s}|), \mathcal E^-)
 \end{equation}
 
-\noindent where $\mathcal{P}(\vec{s'_i})$ is the powerset of $s'_i$ and $|s'_i| = c_i$. \textbf{NOTE: \emph{Is using powerset correct? How do we distinguish the total number of each $(d_{1,1}, \ldots, d_{m,1}$?}}
+\noindent where $\mathcal{P}(\vec{s'_i}) = 2^{\vec{s'_i}}$, i.e. the list all possible combinations of size $n$ from of elements of $s'_i$\footnote{We have used the powerset symbol, $\mathcal{P}$, since it provides an indication of the entity being created. However note that we are not working with sets since $\vec{s'_i}$ can contain multiple identical sequences of $d_{j,k}$.}. 
 
-Eqn.~\ref{eq:codependent_sensor_likelihood} can be understood by analogy to Eqn.~\ref{eq:joint_binomial_distribution}. In both equations all possible ways pairs of true and false positives counts which sum to $c_i$ are considered. In the conditionally independent case the binomial distribution is used to determine the probability of each count from the available trials given the true and false positive rates. In the correlated case the multinomial distribution is to determine the probability of each count from a possible sequence of joint observations and their probability of yielding an observation.
+% \textbf{NOTE: \emph{Is using powerset correct? How do we distinguish the total number of each $(d_{1,1}, \ldots, d_{m,1}$?}}
+
+Eqn.~\ref{eq:codependent_sensor_likelihood} can be understood by analogy to Eqn.~\ref{eq:joint_binomial_distribution}. In both equations all possible ways pairs of true and false positives counts which sum to $c_i$ are considered. In the conditionally independent case the binomial distribution is used to determine the probability of each count from the available trials given the true and false positive rates. In the correlated case the multinomial distribution is used to determine the probability of each count from a possible sequence of joint observations and their probability of yielding an observation.
 
 One should note that the benefit of C-POPP is that it exploits correlations among multiple sensors contributing to detection counts. If there is only one sensor counting events, then the POPP model is more computationally efficient.

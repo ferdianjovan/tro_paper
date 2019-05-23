@@ -19,7 +19,8 @@ The definition brings a distinction between the \emph{true count} (or simply \em
 
 Figure~\ref{fig:gm_popp} presents the graphical model derived from the definition of the POPP. This shows that the true count $c_i$ has become a latent variable which can only be inferred from the sensed count.
 % 
-The posterior of $\lambda$ is then inferred from the posterior of $c_i$ after $n$ observations, $i = 1 \ldots n$. \textbf{TODO: Fix figure to have \emph{multiple} $c_i$s not a single $X_i$. \emph{$c_i$ can not be multiple since it is the true count at time interval $i$, the sensed count can be multiple since they may come from different sensors.}	}
+The posterior of $\lambda$ is then inferred from the posterior of $c_i$ after $n$ observations, $i = 1 \ldots n$. 
+% \textbf{TODO: Fix figure to have \emph{multiple} $c_i$s not a single $X_i$. \emph{$c_i$ can not be multiple since it is the true count at time interval $i$, the sensed count can be multiple since they may come from different sensors.}	}
 
 The rate parameter $\lambda$ of the POPP model can be inferred by marginalising over all possible true count values $c_i$ in $P(\lambda ; c_i)$ and in the  distribution of true counts given sensed counts $P(c_i ; \vec{s_i})$. 
 % 
@@ -40,7 +41,7 @@ The posterior of $\lambda$ is then:
 \end{equation*}
 
 
-If we assume that the sensor counts for observation period $i$ are conditionally independent (i.e.~\textit{uncorrelated}) given the true count $c_i$, then the probability of a set of observations given the true count, can be defined as follows: 
+If we assume that the sensor counts for observation period $i$ are conditionally independent (i.e.~\textit{uncorrelated}) given the true count $c_i$, then the probability of a collection of observations given the true count, can be defined as follows: 
 
 \begin{equation}
 	\label{eq:independent_sensor_likelihood}
@@ -71,17 +72,19 @@ Using this, the probability of a particular sequence of $n$ counts, given a sequ
 	\end{tabular}
 \end{equation}
 
-To complete Eqn. \ref{eq:occurrences_likelihood} we must also define $P(s_{j,i} ; c_i)$. The Poisson limit theorem states that the Poisson distribution may be used as an approximation to the binomial distribution \cite{papoulis2002probability}. Using this theorem as the foundation, an arbitrarily close approximation to the probability $P(s_{j,i} ; c_i)$ is defined by assuming there exists a small enough finite subinterval of length $\delta$ for which the probability of more than one event occurring is less than some small value $ \epsilon$. With this assumption, interval $[0, t)$ is split into $l$ smaller subintervals $I_1, \ldots, I_l$ of equal size, with the condition that $l > \lambda$. Consequently, the whole interval $[0, t) = I_1, \ldots, I_l$ becomes a series of Bernoulli trials, where the $k^{th}$ trial corresponds to whether (1) an event $e_k$ happens with probability $\lambda / l$ and (2) a sensor $j$ captures the $e_k$ as the detection $d_k$ at the subinterval $I_k$.
+To complete Eqn. \ref{eq:occurrences_likelihood} we must also define $P(s_{j,i} ; c_i)$. The Poisson limit theorem states that the Poisson distribution may be used as an approximation to the binomial distribution \cite{papoulis2002probability}. Using this theorem as the foundation, an arbitrarily close approximation to the probability $P(s_{j,i} ; c_i)$ is defined by assuming there exists a small enough finite subinterval of length $\delta$ for which the probability of more than one event occurring is less than some small value $ \epsilon$. With this assumption, interval $[0, t)$ is split into $l$ smaller subintervals $I_1, \ldots, I_l$ of equal size, with the condition that $l > \lambda$. Consequently, the whole interval $[0, t) = I_1, \ldots, I_l$ becomes a series of Bernoulli trials, where the $k^{th}$ trial corresponds to whether (1) an event $e_k$ happens with probability $\lambda / l$ and (2) a sensor $j$ captures the event $e_k$ as the detection $d_k$ at the subinterval $I_k$.
 
 Following this, $P(s_{j,i} ; c_i)$ can be defined using of the count of true  positives over $c_i$ subintervals, and false positives over the remaining $l-c_i$ subintervals. 
 % 
-Let the probability of a \textit{true positive detection} (TP) for sensor $j$ in a single subinterval be $\tau_j = P_j(d;e=1)$, and the probability of a \textit{false positive detection} (FP) is $\xi_j = P_j(d;e=0)$. Thus $P(s_{j,i} ; c_i)$ is defined as a sum over all possible sensed counts of the product of two binomial distributions $B(r ; n,\pi)$: 
+Let the probability of a \textit{true positive detection} (TP) for sensor $j$ in a single subinterval be $\tau_j = P_j(d;e=1)$, and the probability of a \textit{false positive detection} (FP) be $\xi_j = P_j(d;e=0)$. Thus $P(s_{j,i} ; c_i)$ is defined as a sum over all possible sensed counts of the product of two binomial distributions $B(r ; n,\pi)$: 
 
 \begin{equation}
 	\label{eq:joint_binomial_distribution}
     P(s_{j,i} ; c_i) \! = \! \! \! \displaystyle\sum_{r = 0}^{c_{i}} \! \! B\Big(r ; c_i, \tau_j\Big) B\Big((s_{j,i} - r) ; (l - c_{i}), \xi_j \Big)
 \end{equation}
-\noindent where the first binomial provides the probability of getting some proportion of the count from  TP detections and the second binomial provides the probability of getting the remainder from FP detections. \textbf{NOTE: This constraints $s_{j,i} \leq c_i$, doesn't it? Is it worth commenting on this? If we don't want this then we need to introduce $l$ a little more formally than was done before. \emph{we do not constraint it, $s_{j, i}$ can be greater than $c_i$. if $s_{j, i}$ is greater than $c_i$ it means that some portion of $s_{j, i}$ contains false positive.}}
+\noindent where the first binomial provides the probability of getting some proportion of the count from  TP detections and the second binomial provides the probability of getting the remainder from FP detections. 
+
+% \textbf{NOTE: This constraints $s_{j,i} \leq c_i$, doesn't it? Is it worth commenting on this? If we don't want this then we need to introduce $l$ a little more formally than was done before. \emph{we do not constraint it, $s_{j, i}$ can be greater than $c_i$. if $s_{j, i}$ is greater than $c_i$ it means that some portion of $s_{j, i}$ contains false positive.}}
 
 Eqn.~\ref{eq:marginal_occurrences} shows the difficulty of estimation in the POPP model. Since no conjugate density provides an analytical solution for the posterior over $\lambda$, every sensed count $\vec{s_i}$ must be retained to calculate the posterior of $\lambda$. Therefore each of the $n$ observation periods adds a factor of a countably infinite number of elements, and therefore the posterior is a sum of countably infinite sums. Even with an upper bound $l$ on the maximum value of $c_i$, the number of elements in the posterior grows by $l$ with each observation period.
 % 

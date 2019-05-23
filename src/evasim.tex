@@ -1,31 +1,27 @@
-%!TEX root = ../bare_jrnl.tex
-
 \section{Evaluation on Synthetic Data}
 \label{sec:evasim}
 
-We first perform an evaluation on synthetic data  to establish the benefit of POPP and its variations over the FOPP when estimating the arrival rate $\lambda$ of a Poisson process. We use synthetic data since sensor reliability can be controlled, and the true $\lambda$ and counts $c_i$ are known in advance for each observation. Our evaluation simulates two unreliable sensors across a range of conditions. In order to perform the estimation we use the switching filter from~\cite{jovan18a} across all POPP models.
+Evaluation on synthetic data is used to establish the benefit of POPP and its variations over the The uncorrected estimate according to the FOPP model in estimating the arrival rate $\lambda$ of a Poisson process. With synthetic data, sensor reliability can be controlled, and the true $\lambda$ and the true counts $c_i$ are known in advance for each sample.
 
-In each experiment, true and false positive rates are computed based on the sampled counts $c_1, \ldots, c_n$ from a Poisson process $P(c ; \lambda'=3)$ and the corresponding sensor readings $\protect\vec{s_1} \ldots \protect\vec{s_{n}}$. 
-% 
-$n$ was set to 120 to limit the accuracy of the computed rates, resulting in loose Dirichlet and beta densities for the POPP-Dirichlet and the POPP-Beta models. 
-% 
-Another second set of counts $c_1, \ldots, c_{144}$ was sampled from the same process. These counts were then fed to simulated sensors that counted unreliably, producing sensor readings $\protect\vec{s_1} \ldots \protect\vec{s_{144}}$. A recursive update  was then performed on $P(\lambda ; \vec{s_i})$ for POPP, POPP-Beta, C-POPP, and POPP-Dirichlet models using the switching filter from~\cite{jovan18a}.
+Here, an evaluation and a comparison of the POPP models to the FOPP model are conducted with two imaginary unreliable sensors and simulated datasets. The switching filter is chosen as a filter for all POPP models for this evaluation. 
+
+In each experiment, the sensor model (for the POPP and POPP-Beta models) and joint sensor model (for the C-POPP and POPP-Dirichlet models) were first built based on the sampled counts $c_1, \ldots, c_n$ from a Poisson process $P(c ; \lambda'=3)$ and the corresponding sensor readings $\protect\overrightarrow{s_1} \ldots \protect\overrightarrow{s_{n}}$. $n$ was set to 120 to build an erroneous (joint) sensor model. An erroneous sensor model was compensated in the case of the POPP-Dirichlet and the POPP-Beta models since a small number of samples only creates a loose Dirichlet and beta densities. Another set of counts $c_1, \ldots, c_{144}$ was sampled from the same process. These counts were then fed to simulated sensors that counted unreliably, producing sensor readings $\protect\overrightarrow{s_1} \ldots \protect\overrightarrow{s_{144}}$. A recursive update, then, took place on $P(\lambda ; \overrightarrow{s_i})$ using the switching filter for POPP, POPP-Beta, C-POPP, and POPP-Dirichlet models.
 
 \begin{figure}[t!]
 	\centering
 	\includegraphics[width=0.5\textwidth]{./figures/tjpr_comparison_120.png}
-    \caption{The RMSE of posterior estimates of $\lambda$ for the POPP and its variation models with 120 sample data used to build the (joint) sensor model with variation on $\mathcal{E^+}$. All models are compared to the FOPP model. Each trial consisted of a stream of $\protect\vec{s_1} \ldots \protect\vec{s_{144}}$ samples to update $P(\lambda ; \protect\vec{s_i})$. Accuracies of MAP estimates are shown in the top panel, accuracies of expectation of the posterior in the bottom panel. Each data point is an average of 30 trials. Standard errors are shown.} 
+    \caption{The RMSE of posterior estimates of $\lambda$ for the POPP and its variation models with 120 sample data used to build the (joint) sensor model with variation on $\mathcal{E^+}$. All models are compared to the FOPP model. Each trial consisted of a stream of $\protect\overrightarrow{s_1} \ldots \protect\overrightarrow{s_{144}}$ samples to update $P(\lambda ; \protect\overrightarrow{s_i})$. Accuracies of MAP estimates are shown in the top panel, accuracies of expectation of the posterior in the bottom panel. Each data point is an average of 30 trials. Standard errors are shown.} 
 	\label{fig:tjpr_comparison_120}
 \end{figure}
 
 \begin{figure}[t!]
 	\centering
 	\includegraphics[width=0.5\textwidth]{./figures/tjpr_comparison_120_kl.png}
-	\caption{The Jensen-Shannon distance of posterior estimates of $\lambda$ for the POPP and its variation models with 120 sample data used to build the (joint) sensor model with variation on $\mathcal{E^+}$. All models are compared to the FOPP model. Each trial consisted of a stream of $\protect\vec{s_1} \ldots \protect\vec{s_{144}}$ samples to update $P_G(\lambda \mid \protect\vec{s_i})$. Each data point is an average of 30 trials. Standard errors are shown.} 
+	\caption{The Jensen-Shannon distance of posterior estimates of $\lambda$ for the POPP and its variation models with 120 sample data used to build the (joint) sensor model with variation on $\mathcal{E^+}$. All models are compared to the FOPP model. Each trial consisted of a stream of $\protect\overrightarrow{s_1} \ldots \protect\overrightarrow{s_{144}}$ samples to update $P_G(\lambda \mid \protect\overrightarrow{s_i})$. Each data point is an average of 30 trials. Standard errors are shown.} 
 	\label{fig:tjpr_comparison_120_kl}
 \end{figure}
 
-Different correlations between two sensors were tested: positive correlation, negative correlation, and no correlation. These correlations are designed to show the benefit of the C-POPP and POPP-Dirichlet models over the POPP and  POPP-Beta models (which assume sensors to be uncorrelated). For each correlation type, a further variation to different levels of sensor unreliability was considered. The true joint positive rate $\mathcal{E^+}$ (TJPR) and the true joint negative rate $\mathcal{E^-}$ (TJNR) were set as basis for varying sensor unreliability. For example, having TJPR configured with $P_{jnt}(d_{1k}=1, d_{2k}=1 ; e_k=1) = 0.1, P_{jnt}(d_{1k}=0, d_{2k}=0 ; e_k=1) = 0.9$ means that the true positive rate (TPR) for each sensor $j$ is $\textrm{\textit{tpr}}_j = P_j(d_k = 1; e_k=1) = 0.1$.
+Different correlations between two sensors were tested: positive correlation, negative correlation, and no correlation. These correlations are aimed to show the benefit of the C-POPP and POPP-Dirichlet models over the POPP and the POPP-Beta models. One should note that under the POPP and POPP-Beta models, sensors are assumed to be uncorrelated. For each correlation type, a further variation to different levels of sensor unreliability was considered. The true joint positive rate $\mathcal{E^+}$ (TJPR) and the true joint negative rate $\mathcal{E^-}$ (TJNR) were set as basis for varying sensor unreliability. For example, having TJPR configured with $P_{jnt}(d_{1k}=1, d_{2k}=1 ; e_k=1) = 0.1, P_{jnt}(d_{1k}=0, d_{2k}=0 ; e_k=1) = 0.9$ means that the true positive rate (TPR) for each sensor $j$ is $\textrm{\textit{tpr}}_j = P_j(d_k = 1; e_k=1) = 0.1$.
 
 First, two variations were made to the true joint positive rate $\mathcal{E^+}$ (TJPR), while fixing the true joint negative rate $\mathcal{E^-}$ (TJNR) on each type of correlation. This includes:
 \begin{itemize}
@@ -47,19 +43,19 @@ Second, two variations to the true joint negative rate $\mathcal{E^-}$ (TJNR), w
 	\item $P_{jnt}(d_{1k}=1, d_{2k}=0 ; e_k=0) = 0.3, P_{jnt}(d_{1k}=0, d_{2k}=1 ; e_k=0) = 0.3, P_{jnt}(d_{1k}=1, d_{2k}=1 ; e_k=0) = 0.3, P_{jnt}(d_{1k}=0, d_{2k}=0 ; e_k=1) = 0.1$ ($\mathcal{E^-}$ with no correlation -- Similar to a sensor model with moderate TNR).
 \end{itemize}
 
-The performance of all POPP models were assessed by comparing how accurate each model is in estimating the true $\lambda'$. Two options were used to do this: (1) a distance metric method using the RMSE of the expectation (mean) and the MAP hypothesis (mode) of each model posterior distribution over $\lambda$ to the true $\lambda'$ and (2) a free-distance metric method using the Jensen-Shannon distance between the posterior distribution $P(\lambda ; \vec{s_i})$ and the distribution of the true $\lambda'$. 
+The performance of all POPP models were assessed by comparing how accurate each model is in estimating the true $\lambda'$. Two options were used to do this: (1) a distance metric method using the RMSE of the expectation (mean) and the MAP hypothesis (mode) of each model posterior distribution over $\lambda$ to the true $\lambda'$ and (2) a free-distance metric method using the Jensen-Shannon distance between the posterior distribution $P(\lambda ; \overrightarrow{s_i})$ and the distribution of the true $\lambda'$. 
 
 \begin{figure}[t!]
 	\centering
 	\includegraphics[width=0.5\textwidth]{./figures/tjnr_comparison_120.png}
-    \caption{The RMSE of posterior estimates of $\lambda$ for the POPP and its variation models with 120 sample data used to build the (joint) sensor model with variation in $\mathcal{E^-}$. All models are compared to the FOPP model. Each trial consisted of a stream of $\protect\vec{s_1} \ldots \protect\vec{s_{144}}$ samples to update $P(\lambda ; \protect\vec{s_i})$. Accuracies of MAP estimates are  in the top panel, accuracies of the expectation of the posterior in the bottom panel. Each data point is an average of 30 trials. Standard errors are shown.} 
+    \caption{The RMSE of posterior estimates of $\lambda$ for the POPP and its variation models with 120 sample data used to build the (joint) sensor model with variation in $\mathcal{E^-}$. All models are compared to the FOPP model. Each trial consisted of a stream of $\protect\overrightarrow{s_1} \ldots \protect\overrightarrow{s_{144}}$ samples to update $P(\lambda ; \protect\overrightarrow{s_i})$. Accuracies of MAP estimates are  in the top panel, accuracies of the expectation of the posterior in the bottom panel. Each data point is an average of 30 trials. Standard errors are shown.} 
 	\label{fig:tjnr_comparison_120}
 \end{figure}
 
 \begin{figure}[t!]
 	\centering
 	\includegraphics[width=0.5\textwidth]{./figures/tjnr_comparison_120_kl.png}
-	\caption{The Jensen-Shannon distance of posterior estimates of $\lambda$ for the POPP and its variation models with 120 sample data used to build the (joint) sensor model with variation on $\mathcal{E^-}$. All models are compared to the FOPP model. Each trial consisted of a stream of $\protect\vec{s_1} \ldots \protect\vec{s_{144}}$ samples to update $P_G(\lambda \mid \protect\vec{s_i})$. Each data point is an average of 30 trials. Standard errors are shown.} 
+	\caption{The Jensen-Shannon distance of posterior estimates of $\lambda$ for the POPP and its variation models with 120 sample data used to build the (joint) sensor model with variation on $\mathcal{E^-}$. All models are compared to the FOPP model. Each trial consisted of a stream of $\protect\overrightarrow{s_1} \ldots \protect\overrightarrow{s_{144}}$ samples to update $P_G(\lambda \mid \protect\overrightarrow{s_i})$. Each data point is an average of 30 trials. Standard errors are shown.} 
 	\label{fig:tjnr_comparison_120_kl}
 \end{figure}
 
