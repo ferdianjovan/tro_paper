@@ -19,24 +19,42 @@ The 12 sensor configurations represent 12 different experimental conditions unde
 \begin{center}
  \begin{tabular}{| c | c || c | c | c | c || c | c | c | c|} 
  \hline
-     & $e_k$ &  \multicolumn{4}{|c||}{0} &  \multicolumn{4}{c|}{1} \\
+     & $e_k$ &  \multicolumn{4}{|c||}{1} &  \multicolumn{4}{c|}{0} \\
  \hline
  & $d_{1,k}, d_{2,k}$  & 0, 0 & 0, 1 & 1, 0 & 1, 1 & 0, 0 & 0, 1 & 1, 0  & 1, 1\\ [0.5ex] 
  \hline\hline
  \textbf{TJPR} & \textbf{TJNR} &  &  &  &  &  &  &  & \\ [0.5ex] 
  \hline
  \hline
-low positive correlation & fixed & 0.0 & 0.0 & 1.0 & 1.0 & 0.0 & 0.0 & 1.0 & 1.0\\ [0.5ex] 
+ low positive correlation & fixed & 0.1 & 0.0 & 0.0 & 0.9 & 1.0 & 0.0 & 0.0 & 0.0\\ [0.5ex] 
  \hline
-fixed & low positive correlation  & 0.0 & 0.0 & 1.0 & 1.0 & 0.0 & 0.0 & 1.0 & 1.0\\ [0.5ex] 
+ high positive correlation & fixed & 0.9 & 0.0 & 0.0 & 0.1 & 1.0 & 0.0 & 0.0 & 0.0\\ [0.5ex] 
+ \hline
+ low negative correlation & fixed & 0.0 & 0.05 & 0.05 & 0.9 & 1.0 & 0.0 & 0.0 & 0.0\\ [0.5ex] 
+ \hline
+ high negative correlation & fixed & 0.0 & 0.45 & 0.45 & 0.1 & 1.0 & 0.0 & 0.0 & 0.0\\ [0.5ex] 
+ \hline
+ no correlation & fixed & 0.033 & 0.033 & 0.033 & 0.901 & 1.0 & 0.0 & 0.0 & 0.0\\ [0.5ex] 
+ \hline
+ no correlation & fixed & 0.3 & 0.3 & 0.3 & 0.1 & 1.0 & 0.0 & 0.0 & 0.0\\ [0.5ex] 
+ \hline
+ fixed & low positive correlation  & 0.0 & 0.0 & 0.0 & 1.0 & 0.9 & 0.0 & 0.0 & 0.1\\ [0.5ex] 
+ \hline
+ fixed & high positive correlation  & 0.0 & 0.0 & 0.0 & 1.0 & 0.1 & 0.0 & 0.0 & 0.9\\ [0.5ex] 
+ \hline
+ fixed & low negative correlation  & 0.0 & 0.0 & 0.0 & 1.0 & 0.9 & 0.05 & 0.05 & 0.0\\ [0.5ex] 
+ \hline
+ fixed & high negative correlation  & 0.0 & 0.0 & 0.0 & 1.0 & 0.1 & 0.45 & 0.45 & 0.0\\ [0.5ex] 
+ \hline
+ fixed & no correlation  & 0.0 & 0.0 & 0.0 & 1.0 & 0.9 & 0.033 & 0.033 & 0.033\\ [0.5ex] 
+ \hline
+ fixed & no correlation  & 0.0 & 0.0 & 0.0 & 1.0 & 0.1 & 0.3 & 0.3 & 0.3\\ [0.5ex] 
  \hline
 \end{tabular}
 \end{center}
 \caption{The sensor configurations for the evaluation on synthetic data.}
 \label{tab:eval_sim}
 \end{table*}
-
-
 
 
 \begin{figure}[t!]

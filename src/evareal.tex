@@ -3,7 +3,7 @@
 \section{Evaluation on Aggregate Human Occupancy Behaviour Dataset}
 \label{sec:evareal}
 
-We also investigated the performance and practicality of the POPP model and its extensions using switching filters on a large, real world data set.
+We also investigated the performance and practicality of the POPP model and its extensions using switching filters on a large, real world data set\footnote{The dataset can be downloaded from https://github.com/ferdianjovan/spectral\_popp}.
  % Performance comparison against the FOPP model is now included in this evaluation.
 % 
 This dataset was gathered from an office building in which a mobile robot counts the number of people passing by, as it patrols (see Figure~\ref{fig:map_popp_independent_test} for the map). The data set contains a time series of counts from three different automated person detectors \cite{dondrup2015real}. These use laser, depth camera and RGB information. We refer to them respectively as the leg detector (LD), upper body detector (UBD), and change detector (CD). Each returns a sensed count of the number of people it detected in each 10 minute interval during the day. These detectors are unreliable, as can be seen from Figure~\ref{fig:single_sensor_rate_transformation}, which shows examples of correct and incorrect detections.
