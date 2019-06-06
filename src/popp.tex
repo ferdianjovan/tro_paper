@@ -108,7 +108,7 @@ Let the probability of a \textit{true positive detection} (TP) for sensor $j$ in
 
 Eqn.~\ref{eq:marginal_occurrences} shows the difficulty of estimation in the POPP model. Since no conjugate density provides an analytical solution for the posterior over $\lambda$, every sensed count $\vec{s_i}$ must be retained to calculate the posterior of $\lambda$. Therefore each of the $n$ observation periods adds a factor of a countably infinite number of elements, and therefore the posterior is a sum of countably infinite sums. Even with an upper bound $l$ on the maximum value of $c_i$, the number of elements in the posterior grows by $l$ with each observation period.
 % 
-\subsection*{$\lambda$ Estimators}
+\subsection*{$\lambda$ Estimators}\label{sec:estimators}
 
 To address this difficulty, in~\cite{jovan18a} we proposed three estimators, each of which offers an approximation to the true posterior $P(\lambda ; \vec{s})$. The estimators are: \\
 (1) a \textit{gamma filter}, which approximates Eqn.~\ref{eq:marginal_occurrences} with a single gamma minimising the KL-divergence $D_{KL}(P(\lambda ; \vec{s}) \mid \mid Gam(\lambda \mid \alpha, \beta))$ by gradient descent. The accuracy of this filter deteriorates as sensor reliability degrades; \\
