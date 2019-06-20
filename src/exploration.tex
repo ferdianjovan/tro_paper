@@ -34,13 +34,44 @@ While exploration-exploitation problems in reinforcement learning are typically 
 	\label{fig:map_vs_ub}
 \end{figure}
 
-These upper bounds $\lambda^{r}_{UB}(t_i, t_j)$ are used in three different exploration models: the spectral-FOPP, the spectral-POPP, and the spectral-POPP-Beta. The spectral-FOPP is an exploration model which follow a periodic Poisson model with Fourier transformation applied to the series of point estimates of the periodic model for getting a smoother model with the periodic set to a daily cycle. This exploration model combines the FOPP model and a spectral analysis, introduced in \cite{jovan_iros16}, together to cope with temporally incomplete data. In this particular case, for the spectral-FOPP exploration model, a series of upper bounds $\lambda_{UB}(t_i, t_j)$ are encoded and extracted via spectral analysis with $l$-AAM technique \cite{jovan_iros16} to produce a smoother series of upper bound estimates $\lambda'_{UB}(t_i, t_j)$. Algorithm 4 depicts the process of choosing the upper bound of $\lambda$ of a Poisson process and applying spectral analysis to it.
+These upper bounds $\lambda^{r}_{UB}(t_i, t_j)$ are used in three different exploration models: the spectral-FOPP, the spectral-POPP, and the spectral-POPP-Beta. The spectral-FOPP is an exploration model which follow a periodic Poisson model with Fourier transformation applied to the series of point estimates of the periodic model for getting a smoother model with the periodic set to a daily cycle. This exploration model combines the FOPP model and a spectral analysis, introduced in \cite{jovan_iros16}, together to cope with temporally incomplete data. In this particular case, for the spectral-FOPP exploration model, a series of upper bounds $\lambda_{UB}(t_i, t_j)$ are encoded and extracted via spectral analysis with $l$-AAM technique \cite{jovan_iros16} to produce a smoother series of upper bound estimates $\lambda'_{UB}(t_i, t_j)$. Algorithm 2 depicts the process of choosing the upper bound of $\lambda$ of a Poisson process and applying spectral analysis to it.
 
 \begin{figure}[t!]
 	\begin{center}
 		\begin{tabular*}{0.5\textwidth}{l @{\extracolsep{\fill}}}
 			\hline
-			\textbf{Algorithm 4} \textit{Spectral Upper Bound} \\
+			\textbf{l-AAM} \textrm{\cite{jovan_iros16}} \\
+			\hline
+			\textbf{Input:} $x_1, \ldots, x_n$: input signal, \\
+			\hspace{0.3cm} total: maximum total frequency \\
+			\textbf{Output:} $\mathcal S$: a collection of $(s, p, f)$ \\
+			\textbf{Procedure:}\\
+			\hspace{0.3cm} 1. Init. k $\leftarrow$ 0 \\
+			\hspace{0.3cm} // Get frequency $0$ with Discrete Fourier Transform \\
+			\hspace{0.3cm} 2. $[s, p, f] \leftarrow DFT(x_1, \ldots, x_n)[0]$\\
+			\hspace{0.3cm} 3. $\mathcal S[k] \leftarrow [s, p, f]$ \\
+			\hspace{0.3cm} 4. Repeat until k $>$ total \\
+			\hspace{0.7cm} $\bullet ~ k \leftarrow k + 1$ \\
+			\hspace{0.7cm} // Get the frequency with the highest amplitude \\
+			\hspace{0.7cm} $\bullet ~ [s, p, f] \leftarrow \argmax_s DFT(x_1, \ldots, x_n)$ \\
+			\hspace{0.7cm} // Update $\mathcal S$ with frequency $f$ \\
+			\hspace{0.7cm} $\bullet$ if $f \in \mathcal S$, $[s', p', f'] \leftarrow \mathcal S[k', f'=f]$ \\
+			\hspace{2.5cm} $s \leftarrow s + s'$; $p \leftarrow p + p'$ \\ 
+			\hspace{0.7cm} $\bullet$ $\mathcal S[k] \leftarrow [s, p, f]$ \\
+			\hspace{0.7cm} // Create a cosine signal from $f$ \\
+			\hspace{0.7cm} $\bullet ~ x'_1, \ldots, x'_n \leftarrow s * ~ cos(2 \pi * f + p)$ \\
+			\hspace{0.7cm} // Subtract current $x_1, \ldots, x_n$ with the cosine signal \\
+			\hspace{0.7cm} $\bullet ~ x_1, \ldots, x_n \leftarrow x_1, \ldots, x_n - x'_1, \ldots, x'_n$ \\
+			\hline
+		\end{tabular*}	
+	\end{center}
+\end{figure}
+
+\begin{figure}[t!]
+	\begin{center}
+		\begin{tabular*}{0.5\textwidth}{l @{\extracolsep{\fill}}}
+			\hline
+			\textbf{Algorithm 2} \textit{Spectral Upper Bound} \\
 			\hline
 			\textbf{Input:} $(\alpha_1, \beta_1), \ldots, (\alpha_n, \beta_n)$: Poisson process \\
 			\textbf{Output:} $\lambda^{ub}_1, \ldots, \lambda^{ub}_n$: spectral upper bound \\
@@ -51,12 +82,12 @@ These upper bounds $\lambda^{r}_{UB}(t_i, t_j)$ are used in three different expl
 			\hspace{0.7cm} // Get the upper bound of the confidence interval \\
 			\hspace{0.7cm} $\bullet ~ \lambda_k \leftarrow CDF(0.95, \alpha_k, \beta_k)$ \\
 			\hspace{0.3cm} // Transform $\lambda_1, \ldots, \lambda_n$ to spectrums with $l$-AAM \\
-			\hspace{0.3cm} 3. $\mathcal S$ $\leftarrow$ \textbf{Algorithm1}($\lambda_1, \ldots, \lambda_n$, l) \\
-			\hspace{0.3cm} 5. Init. k $\leftarrow$ 1,  $\lambda^{ub}_1, \ldots, \lambda^{ub}_n \leftarrow (0, \ldots, 0)$ \\
+			\hspace{0.3cm} 3. $\mathcal S$ $\leftarrow$ \textbf{l-AAM}($\lambda_1, \ldots, \lambda_n$, m) \\
+			\hspace{0.3cm} 5. Init. k $\leftarrow$ 0,  $\lambda^{ub}_1, \ldots, \lambda^{ub}_n \leftarrow (0, \ldots, 0)$ \\
 			\hspace{0.3cm} 4. Repeat until k $>$ m \\
 			\hspace{0.7cm} // Create a cosine signal from $\mathcal S[k]$ \\
-			\hspace{0.7cm} $[\mid \omega_k \mid, arg(\omega_k), \omega_k] \leftarrow \mathcal S[\omega_k]$ \\
-			\hspace{0.7cm} $\bullet ~ x_1, \ldots, x_n \leftarrow \mid \omega_k \mid * cos(2 \pi * \omega_k + arg(\omega_k))$ \\
+			\hspace{0.7cm} $\bullet ~ [s, p, f] \leftarrow \mathcal S[k]$ \\
+			\hspace{0.7cm} $\bullet ~ x_1, \ldots, x_n \leftarrow s * ~ cos(2 \pi * f + p)$ \\
 			\hspace{0.7cm} // Add current $\lambda^{ub}_1, \ldots, \lambda^{ub}_n$ with the cosine signal \\
 			\hspace{0.7cm} $\bullet ~ \lambda^{ub}_1, \ldots, \lambda^{ub}_n \leftarrow \lambda^{ub}_1, \ldots, \lambda^{ub}_n + x_1, \ldots, x_n$ \\
 			\hline
@@ -80,6 +111,13 @@ A comparison among different exploration policies is made, based on how many obs
 	\includegraphics[width=0.5\textwidth]{./figures/exploration_percentage_region.png}
 	\caption{The activity exploration percentage across areas of the environment using three different exploration models (spectral-FOPP, spectral-POPP, spectral-POPP-Beta). The percentage shows the portion of time that the robot was observing activities.}
 	\label{fig:exploration_percentage_region}
+\end{figure}
+
+\begin{figure}[t!]
+	\centering
+	\includegraphics[width=0.5\textwidth]{./figures/exploration_improvement_ratio.png}
+	\caption{The improvement evolution of activity observation (in ratio) using three different exploration models (spectral-FOPP, spectral-POPP, spectral-POPP-Beta). The average of the first three days of the number of observations on each exploration is used as the base (ratio 1.0).}
+	\label{fig:exploration_improvement_ratio}
 \end{figure}
 
 Figure \ref{fig:exploration_percentage_region} shows the portion of positive observations over the total duration the robot spent in each area of the environment. As can be seen, the exploration policy produced by spectral-POPP-Beta has the highest positive observations in many of the regions followed by the exploration policy according to the spectral-POPP model. Recall that some regions, such as 4, 5, 6, and 7, are not densely populated with humans across time compared to other regions (such as 1, 2, 3, and 10). The spectral-POPP and spectral-POPP-Beta models, however, still managed to improve the percentage of positive observations. This showed that the models correctly predicted that activities would take place in particular locations. One should note that region 6 is the place where there are vending machines. These are often detected as a person by the upper body detector attached to the robot. This might lead the spectral-FOPP model to plan a visit to this particular location when no activity takes place. As can be seen, the spectral-POPP and the spectral-POPP-Beta models were able to correct the miscounts occurring in region 6, and also giving a better estimate to the posterior over the arrival rate $\lambda$ and thus making the exploration-exploitation trade-off using better beliefs.
