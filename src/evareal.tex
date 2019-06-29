@@ -68,6 +68,14 @@ By the third day, the POPP-Dirichlet model outperformed the POPP, POPP-Beta, and
 	\label{fig:fopp_popp_popb_npop_popd_rmse}
 \end{figure}
 
-Figure \ref{fig:fopp_popp_popb_npop_popd_rmse} show the RMSE comparison between all POPP models and the FOPP across different regions by the end of the 36th day. It can be seen that the POPP-Dirichlet and the C-POPP once again outperformed other models. Some regions such as 1, 2, and 3 have much more data (resulting to much more training data to create the (joint) sensor models) than other regions. This makes the joint sensor model for the C-POPP filter which relies on point estimates sensor model more accurate. As a result, C-POPP filter estimates on those regions become more accurate than the POPP-Dirichlet which relies on a full distribution sensor model. 
+\begin{figure}[t!]
+	\centering
+	\includegraphics[width=0.95\columnwidth]{./figures/fopp_popp_popb_npop_popd_kl.png}
+	\caption{The Jensen-Shannon of the FOPP, POPP, POPP-Beta, C-POPP, and POPP-Dirichlet filters across regions. The Jensen-Shannon value(s) are taken at the 36th day. Standard error is shown.}
+	\label{fig:fopp_popp_popb_npop_popd_kl}
+\end{figure}
+
+
+Figure \ref{fig:fopp_popp_popb_npop_popd_rmse} and \ref{fig:fopp_popp_popb_npop_popd_kl} show the RMSE and Jensen-Shannon comparison between all POPP models and the FOPP across different regions by the end of the 36th day. It can be seen that the POPP-Dirichlet and the C-POPP once again outperformed other models. Some regions such as 1, 2, and 3 have much more data (resulting to much more training data to create the (joint) sensor models) than other regions. This makes the joint sensor model for the C-POPP filter which relies on point estimates sensor model more accurate. As a result, C-POPP filter estimates on those regions become more accurate than the POPP-Dirichlet which relies on a full distribution sensor model. 
 
 %Similar to the C-POPP model, the POPP-Dirichlet model is able to cope and overcome the problems with limited sample data both for building the joint sensor model and estimating the $\lambda(t_i, t_j)$. In many regions, the POPP-Dirichlet managed to show better estimates as well as more similar distributions than the POPP, the POPP-Beta, and the FOPP models. However, the POPP-Dirichlet filter falls behind both in accuracy (RMSE) and distribution similarity compared to the C-POPP model. This is attributed to the POPP-Dirichlet conservative way in estimating the parameter $\lambda(t_i, t_j)$ compared to the C-POPP model.

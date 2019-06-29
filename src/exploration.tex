@@ -71,17 +71,17 @@ These upper bounds $\lambda^{r}_{UB}(t_i, t_j)$ are used in three different expl
 	\begin{center}
 		\begin{tabular*}{0.5\textwidth}{l @{\extracolsep{\fill}}}
 			\hline
-			\textbf{Algorithm 2} \textit{Spectral Upper Bound} \\
+			\textbf{Algorithm 2} \textit{Upper Bound} \\
 			\hline
 			\textbf{Input:} $(\alpha_1, \beta_1), \ldots, (\alpha_n, \beta_n)$: Poisson process \\
-			\textbf{Output:} $\lambda^{ub}_1, \ldots, \lambda^{ub}_n$: spectral upper bound \\
+			\textbf{Output:} $\lambda^{ub}_1, \ldots, \lambda^{ub}_n$: upper bound \\
 			\textbf{Procedure:}\\
 			\hspace{0.3cm} 1. Init. k $\leftarrow$ 1, m $\leftarrow$ $\eta$ \\
 			\hspace{0.3cm} 2. Repeat until k $>$ n \\
 			\hspace{0.7cm} $\bullet ~ k \leftarrow k + 1$ \\
-			\hspace{0.7cm} // Get the upper bound of the confidence interval \\
+			\hspace{0.7cm} // Get the upper bound \\
 			\hspace{0.7cm} $\bullet ~ \lambda_k \leftarrow CDF(0.95, \alpha_k, \beta_k)$ \\
-			\hspace{0.3cm} // Transform $\lambda_1, \ldots, \lambda_n$ to spectrums with $l$-AAM \\
+			\hspace{0.3cm} // Transform $\lambda_1, \ldots, \lambda_n$ to with $l$-AAM \\
 			\hspace{0.3cm} 3. $\mathcal S$ $\leftarrow$ \textbf{l-AAM}($\lambda_1, \ldots, \lambda_n$, m) \\
 			\hspace{0.3cm} 5. Init. k $\leftarrow$ 0,  $\lambda^{ub}_1, \ldots, \lambda^{ub}_n \leftarrow (0, \ldots, 0)$ \\
 			\hspace{0.3cm} 4. Repeat until k $>$ m \\
@@ -116,8 +116,18 @@ A comparison among different exploration policies is made, based on how many obs
 \begin{figure}[t!]
 	\centering
 	\includegraphics[width=0.5\textwidth]{./figures/exploration_improvement_ratio.png}
-	\caption{The improvement evolution of activity observation (in ratio) using three different exploration models (spectral-FOPP, spectral-POPP, spectral-POPP-Beta). The average of the first three days of the number of observations on each exploration is used as the base (ratio 1.0).}
+	\caption{The improvement evolution of activity observation (in ratio) using three different exploration models. The average of the first three days of the number of observations on each exploration is used as the base (ratio 1.0). Black dots represent weekends the explorations were passing through.}
 	\label{fig:exploration_improvement_ratio}
 \end{figure}
 
+\begin{figure}[t!]
+	\centering
+	\includegraphics[width=0.5\textwidth]{./figures/exploration_number_people_across_days.png}
+	\caption{Average number of activities observed over days across regions. Black dots represent weekends the explorations were passing through.}
+	\label{fig:exploration_number_people_across_days}
+\end{figure}
+
 Figure \ref{fig:exploration_percentage_region} shows the portion of positive observations over the total duration the robot spent in each area of the environment. As can be seen, the exploration policy produced by spectral-POPP-Beta has the highest positive observations in many of the regions followed by the exploration policy according to the spectral-POPP model. Recall that some regions, such as 4, 5, 6, and 7, are not densely populated with humans across time compared to other regions (such as 1, 2, 3, and 10). The spectral-POPP and spectral-POPP-Beta models, however, still managed to improve the percentage of positive observations. This showed that the models correctly predicted that activities would take place in particular locations. One should note that region 6 is the place where there are vending machines. These are often detected as a person by the upper body detector attached to the robot. This might lead the spectral-FOPP model to plan a visit to this particular location when no activity takes place. As can be seen, the spectral-POPP and the spectral-POPP-Beta models were able to correct the miscounts occurring in region 6, and also giving a better estimate to the posterior over the arrival rate $\lambda$ and thus making the exploration-exploitation trade-off using better beliefs.
+
+As early days on each exploration, the spectral-FOPP, the spectral-POPP, and the spectral-POPP-Beta have just started learning on where and when people are, we can use these days as a comparator to later days to determine how good an exploration policy produced by each exploration model is. We used the average number of activities observed during first three days of explorations as a comparator (base) to other days. As shown in figure \ref{fig:exploration_improvement_ratio}, the spectral-POPP exploration did improve the number of activities observed over time since the ratio kept going further from the base (1.0). The Spectral-FOPP showed a stable ratio number around the base (1.0) with some spikes around 2.0, this means that the Spectral-FOPP might not be able to improve the number of activities observed over time. Unfortunately for the Spectral-POPP-Beta, by looking at figure \ref{fig:exploration_improvement_ratio}, we can not conclude whether the Spectral-POPP-Beta can improve the number of activities observed over time.
+We argue that this is because the exploration policy produced by the Specctral-POPP-Beta was running through several weekends. We assumed of daily periodicities for the non-homogeneous Poisson processes across regions, and the assumption was broken by running the exploration throughout weekends. This is because weekdays and weekend have different arrival rate $\lambda$. Figure \ref{fig:exploration_number_people_across_days} clearly shows how small the total activities observed during weekend compared to weekdays.
