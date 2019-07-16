@@ -104,7 +104,9 @@ Lets recall the dataset which had been used in the previous section to assess th
 Three different exploration models were applied separately during the 69-day of
 the deployment. All of these models used $\lambda_{UB}$ for their exploration policies. For the first 27 days of the deployment, the robot followed an exploration policy according to the spectral-FOPP model. This resulted in 18 days worth of data collected. From this 18 days data collected by following the spectral-FOPP exploration model, the last 3 days were used to train the sensor model needed for both the spectral-POPP and the spectral-POPP-Beta models. From day 28 to day 47, the robot followed an exploration policy according to the spectral-POPP model. This resulted in 15 days worth of data collected. Finally, from day 48 onwards, the robot followed an exploration policy according to the spectral-POPP-Beta model. This resulted to 15 days worth of data collected.
 
-A comparison among different exploration policies is made, based on how many observations the robot makes using a particular exploration model. For this comparison, the last 3 days which are part of the 18 days worth of data collected by following the spectral-FOPP exploration model are included in the spectral-POPP and the spectral-POPP-Beta exploration models. This is necessary to avoid the spectral-POPP and the spectral-POPP-Beta exploration models having an advantage over the spectral-FOPP exploration model since the spectral-POPP and the spectral-POPP-Beta need a training period to construct their sensor model. Moreover, due to the absence of information regarding activities happening in other places that the robot did not visit, only a comparison of the total duration of positive observations over the total duration of its visit can be compared and evaluated. As a note, a positive observation is a duration when the robot observes any activity during its visit to a particular area. 
+%For this comparison, the last 3 days which are part of the 18 days worth of data collected by following the spectral-FOPP exploration model are included in the spectral-POPP and the spectral-POPP-Beta exploration models. This is necessary to avoid the spectral-POPP and the spectral-POPP-Beta exploration models having an advantage over the spectral-FOPP exploration model since the spectral-POPP and the spectral-POPP-Beta need a training period to construct their sensor model. Moreover,
+
+A comparison among different exploration policies is made, based on how many observations the robot makes using a particular exploration model. Due to the absence of information regarding activities happening in other places that the robot did not visit, only a comparison of the total duration of positive observations over the total duration of its visit can be compared and evaluated. As a note, a positive observation is a duration when the robot observes any activity during its visit to a particular area. 
 
 \begin{figure}[t!]
 	\centering
@@ -113,21 +115,32 @@ A comparison among different exploration policies is made, based on how many obs
 	\label{fig:exploration_percentage_region}
 \end{figure}
 
-\begin{figure}[t!]
-	\centering
-	\includegraphics[width=0.5\textwidth]{./figures/exploration_improvement_ratio.png}
-	\caption{The improvement evolution of activity observation (in ratio) using three different exploration models. The average of the first three days of the number of observations on each exploration is used as the base (ratio 1.0). Black dots represent weekends the explorations were passing through.}
-	\label{fig:exploration_improvement_ratio}
-\end{figure}
+%\begin{figure}[t!]
+%	\centering
+%	\includegraphics[width=0.5\textwidth]{./figures/exploration_improvement_ratio.png}
+%	\caption{The improvement evolution of activity observation (in ratio) using three different exploration models. The average of the first three days of the number of observations on each exploration is used as the base (ratio 1.0). Black dots represent weekends the explorations were passing through.}
+%	\label{fig:exploration_improvement_ratio}
+%\end{figure}
+
+%\begin{figure}[t!]
+%	\centering
+%	\includegraphics[width=0.5\textwidth]{./figures/exploration_number_people_across_days.png}
+%	\caption{Average number of activities observed over days across regions. Black dots represent weekends the explorations were passing through.}
+%	\label{fig:exploration_number_people_across_days}
+%\end{figure}
 
 \begin{figure}[t!]
 	\centering
-	\includegraphics[width=0.5\textwidth]{./figures/exploration_number_people_across_days.png}
-	\caption{Average number of activities observed over days across regions. Black dots represent weekends the explorations were passing through.}
-	\label{fig:exploration_number_people_across_days}
+	\includegraphics[width=0.5\textwidth]{./figures/exploration_improvement_ratio_last_day.png}
+	\caption{The improvement ratio of activity observations during the last day of each exploration. Ratio 1.0 means that the exploration model gives no improvement over time in finding more people.}
+	\label{fig:exploration_improvement_ratio_last_day}
 \end{figure}
 
 Figure \ref{fig:exploration_percentage_region} shows the portion of positive observations over the total duration the robot spent in each area of the environment. As can be seen, the exploration policy produced by spectral-POPP-Beta has the highest positive observations in many of the regions followed by the exploration policy according to the spectral-POPP model. Recall that some regions, such as 4, 5, 6, and 7, are not densely populated with humans across time compared to other regions (such as 1, 2, 3, and 10). The spectral-POPP and spectral-POPP-Beta models, however, still managed to improve the percentage of positive observations. This showed that the models correctly predicted that activities would take place in particular locations. One should note that region 6 is the place where there are vending machines. These are often detected as a person by the upper body detector attached to the robot. This might lead the spectral-FOPP model to plan a visit to this particular location when no activity takes place. As can be seen, the spectral-POPP and the spectral-POPP-Beta models were able to correct the miscounts occurring in region 6, and also giving a better estimate to the posterior over the arrival rate $\lambda$ and thus making the exploration-exploitation trade-off using better beliefs.
 
-As early days on each exploration, the spectral-FOPP, the spectral-POPP, and the spectral-POPP-Beta have just started learning on where and when people are, we can use these days as a comparator to later days to determine how good an exploration policy produced by each exploration model is. We used the average number of activities observed during first three days of explorations as a comparator (base) to other days. As shown in figure \ref{fig:exploration_improvement_ratio}, the spectral-POPP exploration did improve the number of activities observed over time since the ratio kept going further from the base (1.0). The Spectral-FOPP showed a stable ratio number around the base (1.0) with some spikes around 2.0, this means that the Spectral-FOPP might not be able to improve the number of activities observed over time. Unfortunately for the Spectral-POPP-Beta, by looking at figure \ref{fig:exploration_improvement_ratio}, we can not conclude whether the Spectral-POPP-Beta can improve the number of activities observed over time.
-We argue that this is because the exploration policy produced by the Specctral-POPP-Beta was running through several weekends. We assumed of daily periodicities for the non-homogeneous Poisson processes across regions, and the assumption was broken by running the exploration throughout weekends. This is because weekdays and weekend have different arrival rate $\lambda$. Figure \ref{fig:exploration_number_people_across_days} clearly shows how small the total activities observed during weekend compared to weekdays.
+%Figure \ref{fig:exploration_number_people_across_days} shows the average number of activities observed across regions on each day. 
+
+On early days, each exploration policy typically starts learning on where and when people are, we can use these days as a comparator to later days to determine how good an exploration policy produced by each exploration model is. To do that, we normalised against this baseline, i.e. the rate of meeting people during the first three days on each exploration policy. The normalised value for each algorithm is the speedup factor for each exploration model. In other words, it is the increased rate at which the robot finds people on later days of its exploration versus at which the robot found people on early days of its exploration. As shown in figure \ref{fig:exploration_improvement_ratio_last_day}, the spectral-POPP and the spectral-POPP-Beta exploration did improve the number of activities observed by the end of their exploration day since the ratio is around 1.7. On the other hand, the Spectral-FOPP showed a stable ratio number around the base (1.0), this means that the Spectral-FOPP is not be able to improve the number of activities observed over time. 
+
+%Unfortunately for the Spectral-POPP-Beta, by looking at figure \ref{fig:exploration_improvement_ratio}, we can not conclude whether the Spectral-POPP-Beta can improve the number of activities observed over time.
+%We argue that this is because the exploration policy produced by the Specctral-POPP-Beta was running through several weekends. We assumed of daily periodicities for the non-homogeneous Poisson processes across regions, and the assumption was broken by running the exploration throughout weekends. This is because weekdays and weekend have different arrival rate $\lambda$. Figure \ref{fig:exploration_number_people_across_days} clearly shows how small the total activities observed during weekend compared to weekdays.
