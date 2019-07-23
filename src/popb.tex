@@ -3,8 +3,8 @@
 \subsection{The POPP-Beta}
 \label{subsec:popb}
 
-The POPP model requires the true positive and false positive rates to the specified for sensor $j$, i.e.  $\tau_j = P_j(d;e=1)$ and $\xi_j = P_j(d;e=0)$. 
-The POPP model requires these rates to be accurate in order to generate correct posteriors over $\lambda$. To accurately determine the rates in practice, one needs to have a large data set of both sensed counts and the ground truth. Given the ground truth is typically manually created, this places a lot of burden on experts who need to label the data.   
+The POPP model requires the true positive and false positive rates to be specified for sensor $j$, i.e.  $\tau_j = P_j(d;e{=}1)$ and $\xi_j = P_j(d;e{=}0)$. 
+The POPP model requires these rates to be accurate in order to generate correct posteriors over $\lambda$. To accurately determine the rates in practice, one needs to have a large data set of both sensed counts and the ground truth. Given the ground truth is typically manually created, this places a large burden on experts who need to label the data.   
 
 Here, we extend the original POPP model to take into account uncertainty in the true and false positive rates due to limited training data.
 % 
@@ -29,7 +29,7 @@ Our sensor rates are now estimated from two beta distributions: $Be(\tau ; \zeta
 % 
 $\zeta_{\tau}$ and $\zeta_{\xi}$ are the number of true positive and false positive detections in the ground truth data respectively.
 % 
-$\eta_{\tau}$ and $\eta_{\xi}$ are the number of false negative and true  negative detections in the ground truth data respectively. 
+$\eta_{\tau}$ and $\eta_{\xi}$ are the number of true negative and false  negative detections in the ground truth data respectively. 
 % 
 Given these parameters, we form the POPP-Beta model from POPP by replacing Eqn. \ref{eq:joint_binomial_distribution} with:  
 

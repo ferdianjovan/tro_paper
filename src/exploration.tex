@@ -3,14 +3,23 @@
 \section{Exploration on Human Occupancy Behaviour}
 \label{sec:exploration}
 
-Up to this point, this paper has been concerned with Bayesian methods for correctly estimating count data. The application to these methods is used to correctly estimate human occupancy behaviour in a certain place at a particular time given that available sensors in the robot are unreliable. In this part, we used the resulting predictions to drive exploration for human activities. In particular, the aim is to drive the robot to go where there are the most people performing activities, i.e. where the aggregate level of human occupancy is highest. 
+Up to this point, this paper has been concerned with Bayesian methods for estimating count data. We demonstrated the power of these methods by estimating human occupancy counts given unreliable robot sensors. In this section, we use the predictions made by our methods to drive robotic \emph{exploration} to detect humans. In particular, our aim is to create a policy which takes the robot to the regions where there are the most people present in the long run, i.e.\ where the aggregate level of human occupancy is highest. 
 
 \subsection*{Exploration Models}
 
-The problem to create a plan of a series of visits to specific areas which will give the highest number of human occupancy can be seen as an exploration-exploitation problem. This problem is well known in the reinforcement learning community, and it is known as the problem of optimising the exploration-exploitation trade-off. Exploration-exploitation problems arise when an agent, in this scenario the mobile robot acts as the agent, does not fully understand the process it is trying to control. In any time, the robot is given two options. It can either spend its time and resources to better understand the process (explore) for a
-better action later on, but sacrificing its short-term reward, or spend its time and resources to exploit what the robot already understands to gain reward and risk permanently following it policy that might be suboptimal. In each time the robot has a choice between many actions, each of which both explores and exploits a certain place, but to varying degrees. As its goal is to maximise the reward gathered–as in getting as much data on human activities (by seeing as many humans) as possible–given its limited operational life, it is preferable to have a policy that is as near optimal as possible.
 
-While exploration-exploitation problems in reinforcement learning are typically intractable, there are well known approximate answers that are very quick to compute \cite{wyatt1998exploration, 1413255, AUDIBERT20091876}. One such answer is to use the upper bound of the probability interval of the arrival rate ($\lambda$) of a Poisson process ($\lambda_{UB}$) to provide areas for the robot to visit. The upper bound of the probability interval of the arrival rate of a Poisson process is calculated as follows
+
+Planning to optimise a value estimated with a learnt model (e.g.~the expected number of people present estimated with a POPP filter), where the model is built from data gathered online, is an instance of an \emph{exploration-exploitation} problem.
+% 
+Exploration-exploitation problems arise when an agent, in this scenario a mobile robot, does not fully understand the process it is trying to control. At any time, the agent can choose to explore or to exploit its model of the process.
+Exploration allows the agent to better understand the process by gathering more data, leading to a better action later on, but sacrificing short-term reward.
+Exploitation allows the agent to  leverage what it already understands about the process to gain reward immediately, but risks following a policy that might be suboptimal. 
+% 
+In our problem, visiting a region both explores and exploits it. Our decision problem is a choice between which regions to visit next, as each region will offer the robot different exploration-exploitation opportunities.
+
+% In each time the robot has a choice between many actions, each of which both explores and exploits a certain place, but to varying degrees. As its goal is to maximise the reward gathered–as in getting as much data on human activities (by seeing as many humans) as possible–given its limited operational life, it is preferable to have a policy that is as near optimal as possible.
+
+While exploration-exploitation problems in reinforcement learning are typically intractable, there are well known approximate approaches that are quick to compute~\cite{wyatt1998exploration, 1413255, AUDIBERT20091876}. One such approach is to use the upper bound of a probability distribution over the quantity being maximised. This causes the decision-making agent to exploit high-scoring, certain estimates, and explore highly uncertain estimates. In our case we use an upper bound on the arrival rate ($\lambda$) of a Poisson process ($\lambda_{UB}$) to choose the region for the robot to visit next. The upper bound of the probability interval of the arrival rate of a Poisson process is calculated as follows:
 
 \begin{equation}
 	\label{eq:upper_bound_exploration}
@@ -19,22 +28,23 @@ While exploration-exploitation problems in reinforcement learning are typically 
 	\end{tabular}
 \end{equation}
 
-\noindent with $\lambda_{UB}(t_i, t_j)$ as the upper bound of $\lambda$ within time $t_i$ and $t_j$, $i, j \in \{1, \ldots, \Delta\}$, and $CDF^{-1}$ as the inverse of the cummulative density function of a gamma distribution. Given a series of upper bounds $\lambda^{r}_{UB}(t_i, t_j)$ for each place, places which will be visited between time $t_i$ and $t_j$ is chosen by
+\noindent with $\lambda_{UB}(t_i, t_j)$ as the upper bound of $\lambda$ within time $t_i$ and $t_j$, $i, j \in \{1, \ldots, \Delta\}$, and $CDF^{-1}$ as the inverse of the cumulative density function of a gamma distribution. Given the upper bounds $\lambda^{r}_{UB}(t_i, t_j)$ for each region $r$ from the set of all regions $R$, the region to be visited between time $t_i$ and $t_j$ is chosen by:
 
 \begin{equation}
 \label{eq:choosing_place}
 \underset{r \in \mathcal R}{\arg\max}~\lambda^{r}_{UB}(t_i, t_j)
 \end{equation}
-\noindent with $\mathcal R$ as a set of specified places. Figure~\ref{fig:map_vs_ub} depicts a comparison between the MAP hypothesis estimate and the upper bound estimate of a Poisson process.
+\noindent Figure~\ref{fig:map_vs_ub} depicts a comparison between the MAP hypothesis estimate and the upper bound estimate of a Poisson process.
 
 \begin{figure}[t!]
 	\centering
 	\includegraphics[width=0.5\textwidth]{./figures/map_vs_ub.png}
-	\caption{A periodic Poisson process of area 9 (see Figure \ref{fig:map_popp_independent_test}) represented by its MAP hypothesis (blue line) and its upper bound of the probability interval (red line).}
+	\caption{A periodic Poisson process of region 9 (see Figure \ref{fig:map_popp_independent_test}) represented by its MAP hypothesis (blue line) and its upper bound of the probability interval (red line).}
 	\label{fig:map_vs_ub}
 \end{figure}
 
-These upper bounds $\lambda^{r}_{UB}(t_i, t_j)$ are used in three different exploration models: the spectral-FOPP, the spectral-POPP, and the spectral-POPP-Beta. The spectral-FOPP is an exploration model which follow a periodic Poisson model with Fourier transformation applied to the series of point estimates of the periodic model for getting a smoother model with the periodic set to a daily cycle. This exploration model combines the FOPP model and a spectral analysis, introduced in \cite{jovan_iros16}, together to cope with temporally incomplete data. In this particular case, for the spectral-FOPP exploration model, a series of upper bounds $\lambda_{UB}(t_i, t_j)$ are encoded and extracted via spectral analysis with $l$-AAM technique \cite{jovan_iros16} to produce a smoother series of upper bound estimates $\lambda'_{UB}(t_i, t_j)$. Algorithm 2 depicts the process of choosing the upper bound of $\lambda$ of a Poisson process and applying spectral analysis to it.
+
+To tie the estimate of a particular Poisson process over a time interval to data collected previously, as in Section~\ref{sec:evareal} we assume that human presence in each region follows a \emph{periodic} Poisson process with daily periodicity. This allows us to regularise, and fill missing data, across the point estimates of upper bounds using methods based on the Fourier transform.  This exploits assumptions and algorithms introduced in our prior work. In particular, the series of upper bounds $\lambda_{UB}(t_i, t_j)$ are encoded and extracted via spectral analysis with the $l$-AAM technique described in~\cite{jovan_iros16}. Algorithm 2 depicts the process of computing the upper bound of $\lambda$ of a Poisson process and applying spectral analysis to it. The plot in Fig.~\ref{fig:map_vs_ub} shows the effects of the spectral processing. We use this approach with upper bounds produced by our previously presented estimators: FOPP, POPP, and POPP-Beta. 
 
 \begin{figure}[t!]
 	\begin{center}
@@ -95,23 +105,23 @@ These upper bounds $\lambda^{r}_{UB}(t_i, t_j)$ are used in three different expl
 	\end{center}
 \end{figure} 
 
-The spectral-POPP and the spectral-POPP-Beta are the spectral-FOPP exploration model with POPP (or POPP-Beta) estimators applied during the learning / updating process of the model for correcting any systematic error produced by sensors. The switching filter is used for the POPP and POPP-Beta estimators.
 
 \subsection*{Exploration Evaluation}
 
-Lets recall the dataset which had been used in the previous section to assess the accuracy and performance of the POPP model and its extensions. This dataset was, in fact, collected by the exploration models described earlier throughout 69-days of the robot deployment. Due to hardware failures, sensor malfunctions and other external issues related to the mobile robot, only 48 days from the dataset were deemed worth analysis.
+The dataset used in the previous section was collected by a mobile robot over 69 days of a real world deployment. This robot was controlled by the exploration models described above. Due to hardware failures, sensor malfunctions and other external issues, only 48 days from the dataset were usable.
 
-Three different exploration models were applied separately during the 69-day of
-the deployment. All of these models used $\lambda_{UB}$ for their exploration policies. For the first 27 days of the deployment, the robot followed an exploration policy according to the spectral-FOPP model. This resulted in 18 days worth of data collected. From this 18 days data collected by following the spectral-FOPP exploration model, the last 3 days were used to train the sensor model needed for both the spectral-POPP and the spectral-POPP-Beta models. From day 28 to day 47, the robot followed an exploration policy according to the spectral-POPP model. This resulted in 15 days worth of data collected. Finally, from day 48 onwards, the robot followed an exploration policy according to the spectral-POPP-Beta model. This resulted to 15 days worth of data collected.
+Three different exploration models were applied separately during three phases of the 69 days of the deployment. All of these models used Eqn.~\ref{eq:choosing_place} to create their exploration policies. For the first 27 day phase of the deployment, the robot followed an exploration policy based on the FOPP model. This resulted in 18 days of data. From this 18 days of data, the last 3 days were used to train the sensor model needed for both the POPP and the POPP-Beta models. From day 28 to day 47, the robot followed an exploration policy according to the POPP model. This resulted in 15 days of data. Finally, from day 48 onwards, the robot followed an exploration policy according to the POPP-Beta model. This resulted in 15 days of data.
+% 
+%For this comparison, the last 3 days which are part of the 18 days worth of data collected by following the FOPP exploration model are included in the POPP and the POPP-Beta exploration models. This is necessary to avoid the POPP and the POPP-Beta exploration models having an advantage over the FOPP exploration model since the POPP and the POPP-Beta need a training period to construct their sensor model. Moreover,
+% 
+We can compare the different exploration policies on the observations the robot made during the phase each policy was active. Due to the absence of information regarding occupancy in the places that the robot did not visit, only a comparison of the positive observations can be made. 
 
-%For this comparison, the last 3 days which are part of the 18 days worth of data collected by following the spectral-FOPP exploration model are included in the spectral-POPP and the spectral-POPP-Beta exploration models. This is necessary to avoid the spectral-POPP and the spectral-POPP-Beta exploration models having an advantage over the spectral-FOPP exploration model since the spectral-POPP and the spectral-POPP-Beta need a training period to construct their sensor model. Moreover,
-
-A comparison among different exploration policies is made, based on how many observations the robot makes using a particular exploration model. Due to the absence of information regarding activities happening in other places that the robot did not visit, only a comparison of the total duration of positive observations over the total duration of its visit can be compared and evaluated. As a note, a positive observation is a duration when the robot observes any activity during its visit to a particular area. 
+% As a note, a positive observation is a duration when the robot observes any activity during its visit to a particular area. 
 
 \begin{figure}[t!]
 	\centering
 	\includegraphics[width=0.5\textwidth]{./figures/exploration_percentage_region.png}
-	\caption{The activity exploration percentage across areas of the environment using three different exploration models (spectral-FOPP, spectral-POPP, spectral-POPP-Beta). The percentage shows the portion of time that the robot was observing activities.}
+	\caption{The activity exploration percentage across areas of the environment using three different exploration models (FOPP, POPP, POPP-Beta). The percentage shows the portion of time that the robot was observing activities.}
 	\label{fig:exploration_percentage_region}
 \end{figure}
 
@@ -131,16 +141,22 @@ A comparison among different exploration policies is made, based on how many obs
 
 \begin{figure}[t!]
 	\centering
-	\includegraphics[width=0.5\textwidth]{./figures/exploration_improvement_ratio_last_day.png}
-	\caption{The improvement ratio of activity observations during the last day of each exploration. Ratio 1.0 means that the exploration model gives no improvement over time in finding more people.}
-	\label{fig:exploration_improvement_ratio_last_day}
+	\includegraphics[width=0.5\textwidth]{./figures/exploration_number_people_across_days_normalised.png}
+	\caption{The improvement ratio of activity observations during each phase of the deployment. A ratio of 1.0 means that the exploration model gives no improvement over time in finding more people.}
+	\label{fig:exploration_improvement_ratio}
 \end{figure}
 
-Figure \ref{fig:exploration_percentage_region} shows the portion of positive observations over the total duration the robot spent in each area of the environment. As can be seen, the exploration policy produced by spectral-POPP-Beta has the highest positive observations in many of the regions followed by the exploration policy according to the spectral-POPP model. Recall that some regions, such as 4, 5, 6, and 7, are not densely populated with humans across time compared to other regions (such as 1, 2, 3, and 10). The spectral-POPP and spectral-POPP-Beta models, however, still managed to improve the percentage of positive observations. This showed that the models correctly predicted that activities would take place in particular locations. One should note that region 6 is the place where there are vending machines. These are often detected as a person by the upper body detector attached to the robot. This might lead the spectral-FOPP model to plan a visit to this particular location when no activity takes place. As can be seen, the spectral-POPP and the spectral-POPP-Beta models were able to correct the miscounts occurring in region 6, and also giving a better estimate to the posterior over the arrival rate $\lambda$ and thus making the exploration-exploitation trade-off using better beliefs.
+Figure \ref{fig:exploration_percentage_region} shows the percentage of visits to each region which yielded a non-zero true count. As can be seen, the exploration policy produced by POPP-Beta has the highest proportion of such visits in many of the regions, followed by the exploration policy according to the POPP model. Recall that some regions, such as 4, 5, 6, and 7, are not densely populated with humans across time compared to other regions (such as 1, 2, 3, and 10). The POPP and POPP-Beta models, however, still managed to improve the percentage of positive observations. This shows that the models correctly predicted that people would be present in particular locations at particular times. One should note that region 6 contains vending machines which are often detected as a person by the upper body detector. This leads to the FOPP model planning to visit this particular location when no activity is taking place. The POPP and the POPP-Beta models were able to correct the miscounts occurring in region 6, providing a better estimate of the posterior over the arrival rate $\lambda$. This leads to models that better capture the true underlying process and thus support more accurate exploration-exploitation trade-offs.
 
-%Figure \ref{fig:exploration_number_people_across_days} shows the average number of activities observed across regions on each day. 
+% Figure \ref{fig:exploration_number_people_across_days} shows the average number of activities observed across regions on each day. 
 
-On early days, each exploration policy typically starts learning on where and when people are, we can use these days as a comparator to later days to determine how good an exploration policy produced by each exploration model is. To do that, we normalised against this baseline, i.e. the rate of meeting people during the first three days on each exploration policy. The normalised value for each algorithm is the speedup factor for each exploration model. In other words, it is the increased rate at which the robot finds people on later days of its exploration versus at which the robot found people on early days of its exploration. As shown in figure \ref{fig:exploration_improvement_ratio_last_day}, the spectral-POPP and the spectral-POPP-Beta exploration did improve the number of activities observed by the end of their exploration day since the ratio is around 1.7. On the other hand, the Spectral-FOPP showed a stable ratio number around the base (1.0), this means that the Spectral-FOPP is not be able to improve the number of activities observed over time. 
+During the first few days of each phase the above models cause the robot to primarily explore since the estimates of $\lambda$ are initially highly uncertain. We use these initial days as a baseline against which later days (featuring greater exploitation) can be compared. To do this, we divide all true counts by the sum of the true counts over the first three days. Since we have 15 days of usable data for each phase we also divide the counts by 5 such that a score of 1.0 on day 15 represents continuing to observe people at the same rate as experienced in the first 3 days. A score above 1.0 on day 15 shows that exploitation has led to people being observed at a greater rate than in the first 3 days. This normalisation is necessary since there were large fluctuations in the total number of people present in the robot's environment over the 10 weeks of the deployment.
 
-%Unfortunately for the Spectral-POPP-Beta, by looking at figure \ref{fig:exploration_improvement_ratio}, we can not conclude whether the Spectral-POPP-Beta can improve the number of activities observed over time.
+
+% 
+Figure \ref{fig:exploration_improvement_ratio} presents the cumulative normalised true counts of people observed by the robot across the three phases. This shows that exploration driven by the POPP and the POPP-Beta models improves the number of people observed during these phases. By the end of each of these two phases, the ratio is around 1.7. On the other hand, the FOPP showed a stable ratio around the baseline (1.0 at day 15), this means that the FOPP is not be able to improve the number of people observed over time. 
+% 
+Also note the general trend observed earlier that the approaches which represent the uncertainty in the sensor models (POPP-Beta) initially out-perform less informed approaches (POPP) until the latter have observed enough of the underlying process to compensate for training inaccuracies. 
+
+%Unfortunately for the POPP-Beta, by looking at figure \ref{fig:exploration_improvement_ratio}, we can not conclude whether the POPP-Beta can improve the number of activities observed over time.
 %We argue that this is because the exploration policy produced by the Specctral-POPP-Beta was running through several weekends. We assumed of daily periodicities for the non-homogeneous Poisson processes across regions, and the assumption was broken by running the exploration throughout weekends. This is because weekdays and weekend have different arrival rate $\lambda$. Figure \ref{fig:exploration_number_people_across_days} clearly shows how small the total activities observed during weekend compared to weekdays.

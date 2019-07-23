@@ -1,13 +1,14 @@
+%!TEX root = ../bare_jrnl.tex
+
 \section{Conclusion}
 \label{sec:conclusion}
 
-This work has been concerned with developing practical estimators for count data collected by an autonomous mobile robot, with unreliable perception algorithms. These count data represent the level of human activity in particular locations. This work extends the work in \cite{jovan18a} with several contributions:
+This article has presented Bayesian estimators for count data observed by unreliable sensors. Our work was motivated by the application of counting people from an autonomous mobile robot using noisy sensors and perception algorithms. The work extends our prior work~\cite{jovan18a} with two main contributions.
+% 
+First, we presented variations of our previous POPP formulation: POPP-Beta extends POPP by accounting for the unreliability of the observation model; C-POPP extends POPP  by modelling the case when sensors are uncorrelated; and POPP-Dirichlet combines POPP-Beta and C-POPP to provide the benefits of each correction. Evaluations on synthetic data and observations taken by a robot show that each extension provides progressively more accurate estimates than the POPP filter.  
+% 
+Second, posteriors from FOPP, POPP and POPP-Beta were used to drive exploration by a mobile robot for a series of three exploration experiments. An upper bound interval exploration method was used to solve the exploration-exploitation problem. This resulted in a labelled data set of of human presence counts. Our evaluation demonstrated that POPP and POPP-Beta were able to drive the robot to observe more people over time than the FOPP-based method.
 
-\begin{itemize} 
-    % \item A set of inference methods for the partially observable Poisson process (POPP) has been formulated. The POPP is a Poisson process which takes into account the unreliability of the sensors that count events. Unlike Bayesian estimation for a fully observable Poisson process (FOPP), obtaining the posterior is non-trivial, since there is no conjugate density for a POPP and the posterior has a number of elements that grow exponentially in the number of observed intervals. Two simple, tractable, approximations have been presented. These two approximations are combined in a switching filter, which enables efficient and accurate estimation of the posterior. A simulation study shows that these POPP filters correct the over- and under-counts produced by sensors.  
-    \item Variations of the POPP filter are presented. The POPP-Beta filter extends the POPP filter in which the unreliability of the observation model is accounted for when estimations are built. The C-POPP filter extends the POPP filter by modelling the case when sensors are uncorrelated. The POPP-Dirichlet combines the POPP-Beta filter and the C-POPP filter to have the benefits of each correction. A simulation and observations taken by a robot, on a series of long deployments, show that each extension provides progressively more accurate estimates than the POPP filter.  
-    \item Both posteriors from the Spectral-FOPP and two Spectral-POPP processes are used to drive exploration by a mobile robot for a series of two week deployments. An upper bound interval exploration method was used to solve the exploration-exploitation problem. After labelling by humans, this resulted in a labelled data set of six weeks of human activity levels. A simulated study has shown that the Spectral-FOPP and the Spectral-POPP filter improve on-point observation time significantly if strong periodic patterns underlying the human activities are present. 
-\end{itemize}
         
         % Finally, the various POPP filters are compared to one another and to a FOPP estimator on this data set.
 

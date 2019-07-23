@@ -3,7 +3,7 @@
 \section{The Partially Observable Poisson Process}
 \label{sec:popp}
 
-The \emph{partially observable} Poisson process (POPP) is a counting process $N(t)$ with arrival rate $\lambda$ where the number of events appearing over the time interval $[0, t)$ are obtained by one or more \emph{unreliable} counters. 
+The \emph{partially observable} Poisson process (POPP) is a counting process $N(t)$ with arrival rate $\lambda$ where the number of events appearing over the time interval $[0, t)$ is observed by one or more \emph{unreliable} counters. 
 % 
 The definition brings a distinction between the \emph{true count} (or simply \emph{count}), which refers to the number of events that actually occurred, and the \emph{sensed count}, which refers to the count obtained by a counter (or sensor). Let $c_i$ represent the true count over the interval $[0, t)$ during the $i$-th observation. With $m$ counters unreliably observing $c_i$, we use  $s_{j,i}$ to represent the sensed count given by sensor $j$ in the $i$-th observation within the interval $[0, t)$ with $1 \leq j \leq m$. Let $\vec{s_i} = (s_{1,i}, \ldots, s_{m,i})$ represent a vector of sensed counts from $m$ sensors for the $i$-th observation of the process. 
 % 
@@ -96,7 +96,7 @@ To complete Eqn. \ref{eq:occurrences_likelihood} we must also define $P(s_{j,i} 
 
 Following this, $P(s_{j,i} ; c_i)$ can be defined using of the count of true  positives over $c_i$ subintervals, and false positives over the remaining $l-c_i$ subintervals. 
 % 
-Let the probability of a \textit{true positive detection} (TP) for sensor $j$ in a single subinterval be $\tau_j = P_j(d;e=1)$, and the probability of a \textit{false positive detection} (FP) be $\xi_j = P_j(d;e=0)$. Thus $P(s_{j,i} ; c_i)$ is defined as a sum over all possible sensed counts of the product of two binomial distributions $B(r ; n,\pi)$: 
+Let the probability of a \textit{true positive detection} (TP) for sensor $j$ in a single subinterval be $\tau_j=P_j(d;e{=}1)$, and the probability of a \textit{false positive detection} (FP) be $\xi_j = P_j(d;e{=}0)$. Thus $P(s_{j,i} ; c_i)$ is defined as a sum over all possible sensed counts of the product of two binomial distributions $B(r ; n,\pi)$: 
 
 \begin{equation}
 	\label{eq:joint_binomial_distribution}
