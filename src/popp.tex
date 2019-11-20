@@ -5,7 +5,7 @@
 
 The \emph{partially observable} Poisson process (POPP) is a counting process $N(t)$ with arrival rate $\lambda$ where the number of events appearing over the time interval $[0, t)$ is observed by one or more \emph{unreliable} counters. 
 % 
-The definition brings a distinction between the \emph{true count} (or simply \emph{count}), which refers to the number of events that actually occurred, and the \emph{sensed count}, which refers to the count obtained by a counter (or sensor). Let $c_i$ represent the true count over the interval $[0, t)$ during the $i$-th observation. With $m$ counters unreliably observing $c_i$, we use  $s_{j,i}$ to represent the sensed count given by sensor $j$ in the $i$-th observation within the interval $[0, t)$ with $1 \leq j \leq m$. Let $\vec{s_i} = (s_{1,i}, \ldots, s_{m,i})$ represent a vector of sensed counts from $m$ sensors for the $i$-th observation of the process. 
+The definition brings a distinction between the \emph{true count} (or simply \emph{count}), which refers to the number of events that actually occurred, and the \emph{sensed count}, which refers to the count obtained by a counter (or sensor). Let $c_i$ represent the true count over the interval $[0, t)$ during the $i$-th observation. With $m$ counters unreliably observing $c_i$, we use  $s_{j,i}$ to represent the sensed count given by sensor $j$ in the $i$-th observation within the interval $[0, t)$ with $1 \leq j \leq m$. Let $\mathbf{s_i} = (s_{1,i}, \ldots, s_{m,i})$ represent a vector of sensed counts from $m$ sensors for the $i$-th observation of the process. 
 % 
 
 \begin{figure}[t!]
@@ -42,21 +42,21 @@ Figure~\ref{fig:gm_popp} presents the graphical model derived from the definitio
 The posterior of $\lambda$ is then inferred from the posterior of $c_i$ after $n$ observations, $i = 1 \ldots n$. 
 % \textbf{TODO: Fix figure to have \emph{multiple} $c_i$s not a single $X_i$. \emph{$c_i$ can not be multiple since it is the true count at time interval $i$, the sensed count can be multiple since they may come from different sensors.}	}
 
-The rate parameter $\lambda$ of the POPP model can be inferred by marginalising over all possible true count values $c_i$ in $P(\lambda ; c_i)$ and in the  distribution of true counts given sensed counts $P(c_i ; \vec{s_i})$. 
+The rate parameter $\lambda$ of the POPP model can be inferred by marginalising over all possible true count values $c_i$ in $P(\lambda ; c_i)$ and in the  distribution of true counts given sensed counts $P(c_i ; \mathbf{s_i})$. 
 % 
-Given $n$ observations of the underlying process, let all observed true counts be represented by $\vec{c} = (c_1, \ldots, c_n)$, and all sensed counts by $\vec{s}=(\vec{s_1} \dots \vec{s_n})$, for $1 \leq i \leq n$ (recalling each $\vec{s_n}$ is produced by $m$ sensors). 
+Given $n$ observations of the underlying process, let all observed true counts be represented by $\mathbf{c} = (c_1, \ldots, c_n)$, and all sensed counts by $\mathbf{s}=(\mathbf{s_1} \dots \mathbf{s_n})$, for $1 \leq i \leq n$ (recalling each $\mathbf{s_n}$ is produced by $m$ sensors). 
 % 
 The posterior of $\lambda$ is then:
 \begin{equation}
 	\label{eq:marginal_occurrences}
 	\begin{tabular}{r@{=}l}
-		$P(\lambda ; \vec{s})$ &  $\displaystyle\sum_{c_1=0}^{\infty} \ldots \displaystyle\sum_{c_n=0}^{\infty} P(\lambda ; \vec{c}) ~ P(\vec{c} ; \vec{s})$ \\
+		$P(\lambda ; \mathbf{s})$ &  $\displaystyle\sum_{c_1=0}^{\infty} \ldots \displaystyle\sum_{c_n=0}^{\infty} P(\lambda ; \mathbf{c}) ~ P(\mathbf{c} ; \mathbf{s})$ \\
 	\end{tabular}
 \end{equation}
-\noindent where true count probabilities, $P(\lambda ; \vec{c})$, can be drawn from the original FOPP definition:
+\noindent where true count probabilities, $P(\lambda ; \mathbf{c})$, can be drawn from the original FOPP definition:
 \begin{equation*}
 	\begin{tabular}{r@{ = }l}
-		$P(\lambda ; \vec{c})$ & $Gam\Bigg(\lambda ; \displaystyle\sum_{i=1}^{n} c_i + \alpha, n + \beta \Bigg)$
+		$P(\lambda ; \mathbf{c})$ & $Gam\Bigg(\lambda ; \displaystyle\sum_{i=1}^{n} c_i + \alpha, n + \beta \Bigg)$
 	\end{tabular}
 \end{equation*}
 
@@ -66,27 +66,27 @@ If we assume that the sensor counts for observation period $i$ are conditionally
 \begin{equation}
 	\label{eq:independent_sensor_likelihood}
 	\begin{tabular}{r@{=}l}
-	$P(\vec{s_i} ; c_i)$ & $\displaystyle\prod_{j=1}^{m} P(s_{j,i} ; c_i)$ \\ 
+	$P(\mathbf{s_i} ; c_i)$ & $\displaystyle\prod_{j=1}^{m} P(s_{j,i} ; c_i)$ \\ 
 	\end{tabular}
 \end{equation}
 
-Using this, the probability of a particular sequence of $n$ counts, given a sequence of $n$ observations each from $m$ sensors, $P(\vec{c} ; \vec{s})$, can be defined as:
+Using this, the probability of a particular sequence of $n$ counts, given a sequence of $n$ observations each from $m$ sensors, $P(\mathbf{c} ; \mathbf{s})$, can be defined as:
 
 \begin{equation}
     \label{eq:occurrences_likelihood}
     \begin{tabular}{r@{ $\varpropto$ }l}
-        $P(\vec{c} ; \vec{s})$ & $P(\vec{s_1}, \ldots, \vec{s_n} ; \vec{c}) ~ P(\vec{c})$ \\ [1ex]
-        & $\displaystyle\prod_{i=1}^{n} P(\vec{s_i} ; c_i) ~ P(c_i)$ \\ [2ex]
-        & $\displaystyle\prod_{i=1}^{n} \displaystyle\prod_{j=1}^{m} P(s_{j,i} ; c_i) ~ P(c_i ; \vec{c_{-1}})$
+        $P(\mathbf{c} ; \mathbf{s})$ & $P(\mathbf{s_1}, \ldots, \mathbf{s_n} ; \mathbf{c}) ~ P(\mathbf{c})$ \\ [1ex]
+        & $\displaystyle\prod_{i=1}^{n} P(\mathbf{s_i} ; c_i) ~ P(c_i)$ \\ [2ex]
+        & $\displaystyle\prod_{i=1}^{n} \displaystyle\prod_{j=1}^{m} P(s_{j,i} ; c_i) ~ P(c_i ; \mathbf{c_{-1}})$
     \end{tabular}
 \end{equation}
 
-\noindent where $\vec{c_{-1}} = c_{i-1}, \ldots, c_1$, and $P(c_i ; \vec{c_{-1}})$ can be calculated using a negative binomial distribution:
+\noindent where $\mathbf{c_{-1}} = c_{i-1}, \ldots, c_1$, and $P(c_i ; \mathbf{c_{-1}})$ can be calculated using a negative binomial distribution:
 
 \begin{equation}
 	\label{eq:unconditional_xi}
 	\begin{tabular}{r@{=}l}
-		$P(c_i ; \vec{c_{-1}})$ & $\displaystyle\int_{\lambda=0}^{\infty} P(c_i ; \lambda) ~ P(\lambda ; \vec{c_{-1}}) ~d\lambda$ \\ [2ex]
+		$P(c_i ; \mathbf{c_{-1}})$ & $\displaystyle\int_{\lambda=0}^{\infty} P(c_i ; \lambda) ~ P(\lambda ; \mathbf{c_{-1}}) ~d\lambda$ \\ [2ex]
 		& $\displaystyle\int_{\lambda=0}^{\infty} Poi(c_i ; \lambda) ~ Gam(\lambda ; \alpha, \beta) ~d\lambda$ \\ [2ex]
 		& $NB\Bigg(c_i ; \alpha, \displaystyle\frac{\beta}{\beta + 1}\Bigg)$.
 	\end{tabular}
@@ -106,20 +106,20 @@ Let the probability of a \textit{true positive detection} (TP) for sensor $j$ in
 
 % \textbf{NOTE: This constraints $s_{j,i} \leq c_i$, doesn't it? Is it worth commenting on this? If we don't want this then we need to introduce $l$ a little more formally than was done before. \emph{we do not constraint it, $s_{j, i}$ can be greater than $c_i$. if $s_{j, i}$ is greater than $c_i$ it means that some portion of $s_{j, i}$ contains false positive.}}
 
-Eqn.~\ref{eq:marginal_occurrences} shows the difficulty of estimation in the POPP model. Since no conjugate density provides an analytical solution for the posterior over $\lambda$, every sensed count $\vec{s_i}$ must be retained to calculate the posterior of $\lambda$. Therefore each of the $n$ observation periods adds a factor of a countably infinite number of elements, and therefore the posterior is a sum of countably infinite sums. Even with an upper bound $l$ on the maximum value of $c_i$, the number of elements in the posterior grows by $l$ with each observation period.
+Eqn.~\ref{eq:marginal_occurrences} shows the difficulty of estimation in the POPP model. Since no conjugate density provides an analytical solution for the posterior over $\lambda$, every sensed count $\mathbf{s_i}$ must be retained to calculate the posterior of $\lambda$. Therefore each of the $n$ observation periods adds a factor of a countably infinite number of elements, and therefore the posterior is a sum of countably infinite sums. Even with an upper bound $l$ on the maximum value of $c_i$, the number of elements in the posterior grows by $l$ with each observation period.
 % 
 \subsection*{$\lambda$ Estimators}\label{sec:estimators}
 
-To address this difficulty, in~\cite{jovan18a} we proposed three estimators, each of which offers an approximation to the true posterior $P(\lambda ; \vec{s})$. The estimators are: \\
-(1) a \textit{gamma filter}, which approximates Eqn.~\ref{eq:marginal_occurrences} with a single gamma minimising the KL-divergence $D_{KL}(P(\lambda ; \vec{s}) \mid \mid Gam(\lambda \mid \alpha, \beta))$ by gradient descent. The accuracy of this filter deteriorates as sensor reliability degrades; \\
-(2) a \textit{histogram filter}, which approximates Eqn.~\ref{eq:marginal_occurrences} with a discrete distribution $Q(\lambda ; \vec{s})$ by quantising $\lambda$ into discrete values. The advantage of this filter over the gamma filter is that it can track the posterior to an arbitrary fidelity via a finer quantisation. Its disadvantage is an increase in computation time by at least ten fold compared to the gamma filter; \\
-(3) a \textit{switching filter}, which approximates Eqn.~\ref{eq:marginal_occurrences} either by a gamma filter or by a histogram filter depending on whether $P(\lambda ; \vec{s})$  resembles a gamma distribution and can be approximated by the gamma filter via KL-divergence $D_{KL}(P(\lambda ; \vec{s}) \mid \mid Gam(\lambda \mid \alpha, \beta))$.
+To address this difficulty, in~\cite{jovan18a} we proposed three estimators, each of which offers an approximation to the true posterior $P(\lambda ; \mathbf{s})$. The estimators are: \\
+(1) a \textit{gamma filter}, which approximates Eqn.~\ref{eq:marginal_occurrences} with a single gamma minimising the KL-divergence $D_{KL}(P(\lambda ; \mathbf{s}) \mid \mid Gam(\lambda \mid \alpha, \beta))$ by gradient descent. The accuracy of this filter deteriorates as sensor reliability degrades; \\
+(2) a \textit{histogram filter}, which approximates Eqn.~\ref{eq:marginal_occurrences} with a discrete distribution $Q(\lambda ; \mathbf{s})$ by quantising $\lambda$ into discrete values. The advantage of this filter over the gamma filter is that it can track the posterior to an arbitrary fidelity via a finer quantisation. Its disadvantage is an increase in computation time by at least ten fold compared to the gamma filter; \\
+(3) a \textit{switching filter}, which approximates Eqn.~\ref{eq:marginal_occurrences} either by a gamma filter or by a histogram filter depending on whether $P(\lambda ; \mathbf{s})$  resembles a gamma distribution and can be approximated by the gamma filter via KL-divergence $D_{KL}(P(\lambda ; \mathbf{s}) \mid \mid Gam(\lambda \mid \alpha, \beta))$.
 
 \begin{figure}[t!]
 	\centering
 	\includegraphics[width=0.5\textwidth]{./figures/kl_div_tpr_tnr_var.png}
-	\caption{Average KL-divergence from the gamma and switching filters to $P(\lambda \mid \protect\vec{s})$. The horizontal axis shows the true positive rate (top) and true negative rate (bottom) of one simulated sensor. Standard error is shown.} 
+	\caption{Average KL-divergence from the gamma and switching filters to $P(\lambda \mid \protect\mathbf{s})$. The horizontal axis shows the true positive rate (top) and true negative rate (bottom) of one simulated sensor. Standard error is shown.} 
 	\label{fig:kl_div_tpr_tnr_var}
 \end{figure}
 
-In general (and in our experimental work from Section~\ref{sec:evasim} onwards) we recommend the use of the switching filter as the estimator to the true posterior $P(\lambda ; \vec{s})$ because it combines the best of both the gamma filter (fast calculation) and the histogram filter (accurate approximation) with minimum loss in similarity to the true posterior $P(\lambda ; \vec{s})$. Figure \ref{fig:kl_div_tpr_tnr_var} shows KL-divergence between the gamma and switching filters to the true posterior over different sensor reliabilities using simulated data. Note that the histogram filter was not included because it perfectly tracked $P(\lambda ; \vec{s})$, i.e., $D_{KL}(P(\lambda ; \vec{s}) \mid \mid Q(\lambda ; \vec{s})) \approx 0$. A more detailed presentation of these estimators is given in~\cite{jovan18a}.
+In general (and in our experimental work from Section~\ref{sec:evasim} onwards) we recommend the use of the switching filter as the estimator to the true posterior $P(\lambda ; \mathbf{s})$ because it combines the best of both the gamma filter (fast calculation) and the histogram filter (accurate approximation) with minimum loss in similarity to the true posterior $P(\lambda ; \mathbf{s})$. Figure \ref{fig:kl_div_tpr_tnr_var} shows KL-divergence between the gamma and switching filters to the true posterior over different sensor reliabilities using simulated data. Note that the histogram filter was not included because it perfectly tracked $P(\lambda ; \mathbf{s})$, i.e., $D_{KL}(P(\lambda ; \mathbf{s}) \mid \mid Q(\lambda ; \mathbf{s})) \approx 0$. A more detailed presentation of these estimators is given in~\cite{jovan18a}.

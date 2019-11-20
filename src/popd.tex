@@ -7,19 +7,19 @@ The C-POPP model uses a joint observation model in estimating the parameter $\la
 
 To construct a joint observation model, one needs to have both detections and the corresponding actual (non-)event as ground truth. Pre-processing involving expert interventions is typically required before the detections and their corresponding ground truth can be further used. Similar to the POPP model, the C-POPP model requires the joint observation model to be accurate to avoid the posterior over $\lambda$ drifting away from the true posterior. If attaining an accurate observation model for the POPP model is a problem, then this becomes more prominent in the case of a joint observation model. This is because the training data needed to construct a joint observation model grows by a factor of two for each sensor involved.       
 
-Similar to the extension from the POPP model to the POPP-Beta model, we can extend the C-POPP joint observation model into a Bayesian estimation problem. In this case the joint observation models ($P_{jnt}(d_{1,k}, \ldots, d_{m,k} ; e_k = 1)$ and $P_{jnt}(d_{1,k}, \ldots, d_{m,k} ; e_k = 0)$) will follow Dirichlet distributions. The Dirichlet distribution is an appropriate distribution since $P_{jnt}$ sets the probabilities of multinomial distributions in Eqn. \ref{eq:codependent_sensor_likelihood} and Dirichlet distributions provide a family of prior probability distributions for the multinomial distribution. The Dirichlet-multinomial conjugacy leads to an analytically tractable compound distribution which is called the Dirichlet-multinomial distribution, where the $\vec{p} = (p_1, \ldots, p_r)$ parameter in the multinomial distribution $Multi(\vec{d} ; c, \vec{p})$ is randomly drawn from a Dirichlet distribution $Dir(\vec{p} ; \vec{\zeta})$. 
+Similar to the extension from the POPP model to the POPP-Beta model, we can extend the C-POPP joint observation model into a Bayesian estimation problem. In this case the joint observation models ($P_{jnt}(d_{1,k}, \ldots, d_{m,k} ; e_k = 1)$ and $P_{jnt}(d_{1,k}, \ldots, d_{m,k} ; e_k = 0)$) will follow Dirichlet distributions. The Dirichlet distribution is an appropriate distribution since $P_{jnt}$ sets the probabilities of multinomial distributions in Eqn. \ref{eq:codependent_sensor_likelihood} and Dirichlet distributions provide a family of prior probability distributions for the multinomial distribution. The Dirichlet-multinomial conjugacy leads to an analytically tractable compound distribution which is called the Dirichlet-multinomial distribution, where the $\mathbf{p} = (p_1, \ldots, p_r)$ parameter in the multinomial distribution $Multi(\mathbf{d} ; c, \mathbf{p})$ is randomly drawn from a Dirichlet distribution $Dir(\mathbf{p} ; \mathbf{\zeta})$. 
 
 \begin{equation}
 	\label{eq:beta_binomial_revisit}
 	\begin{tabular}{r@{ = }l}
-        $P(\vec{d} ; c, \vec{\zeta})$ & $\displaystyle\int P(\vec{d} ; c, \vec{p}) ~ P(\vec{p} ; \vec{\zeta}) ~d\mathbb S_r$ \\ [2ex]
-        & $\displaystyle\int Multi(\vec{d} ; c, \vec{p}) ~ Dir(\vec{p} ; \vec{\zeta}) ~d\mathbb S_r$ \\ [2ex]
+        $P(\mathbf{d} ; c, \mathbf{\zeta})$ & $\displaystyle\int P(\mathbf{d} ; c, \mathbf{p}) ~ P(\mathbf{p} ; \mathbf{\zeta}) ~d\mathbb S_r$ \\ [2ex]
+        & $\displaystyle\int Multi(\mathbf{d} ; c, \mathbf{p}) ~ Dir(\mathbf{p} ; \mathbf{\zeta}) ~d\mathbb S_r$ \\ [2ex]
         & $DM((d_1, \ldots, d_r) ; c, (\zeta_1, \ldots, \zeta_r))$
 	\end{tabular}
 \end{equation}
-\noindent with $\vec{d} = (d_1, \ldots, d_r)$, $\vec{\zeta} = (\zeta_1, \ldots, \zeta_r)$, and $d\mathbb S_r$ denotes integrating $\vec{p}$ with respect to the $(r - 1)$ simplex\footnote{The support of the Dirichlet distribution is the $(r - 1)$-dimensional simplex $\mathbb S_r$; that is, all $r$ dimensional vectors which form a valid probability distribution}.
+\noindent with $\mathbf{d} = (d_1, \ldots, d_r)$, $\mathbf{\zeta} = (\zeta_1, \ldots, \zeta_r)$, and $d\mathbb S_r$ denotes integrating $\mathbf{p}$ with respect to the $(r - 1)$ simplex\footnote{The support of the Dirichlet distribution is the $(r - 1)$-dimensional simplex $\mathbb S_r$; that is, all $r$ dimensional vectors which form a valid probability distribution}.
 
-Given $m$ sensors, a joint observation model is now represented as two Dirichlet distributions: $Dir(\mathcal{E^+} ; \vec{\zeta^+})$, and $Dir(\mathcal{E^-} ; \vec{\zeta^-})$ with $\vec{\zeta^+} = (\zeta^+_0, \ldots, \zeta^+_{(m^2)-1})$ and $\vec{\zeta^-} = (\zeta^-_0, \ldots, \zeta^-_{(m^2)-1})$. $\vec{\zeta^+}$ and $\vec{\zeta^-}$ set the overall shape of the Dirichlet priors, with each $\zeta_q$ term counting the number of times that particular combination of sensor detections were produced given a positive ($\vec{\zeta^+}$, $e=1$) or negative ($\vec{\zeta^-}$, $e=0$) detection.
+Given $m$ sensors, a joint observation model is now represented as two Dirichlet distributions: $Dir(\mathcal{E^+} ; \mathbf{\zeta^+})$, and $Dir(\mathcal{E^-} ; \mathbf{\zeta^-})$ with $\mathbf{\zeta^+} = (\zeta^+_0, \ldots, \zeta^+_{(m^2)-1})$ and $\mathbf{\zeta^-} = (\zeta^-_0, \ldots, \zeta^-_{(m^2)-1})$. $\mathbf{\zeta^+}$ and $\mathbf{\zeta^-}$ set the overall shape of the Dirichlet priors, with each $\zeta_q$ term counting the number of times that particular combination of sensor detections were produced given a positive ($\mathbf{\zeta^+}$, $e=1$) or negative ($\mathbf{\zeta^-}$, $e=0$) detection.
 
 
 Given a joint sensor model where its elements follow a Dirichlet density and several Dirichlet-multinomial distributions, which provide an unconditional distribution of $(d_1, \ldots, d_r)$, we replace Eqn. \ref{eq:codependent_sensor_likelihood} with:  
@@ -27,14 +27,14 @@ Given a joint sensor model where its elements follow a Dirichlet density and sev
 \begin{equation}
 	\label{eq:joint_dirichlet_multinomial_distribution}
     \begin{tabular}{r@{=}l}
-		$P(\vec{s_i} ; c_i)$ & $\displaystyle\sum_{\vec{s} \in \mathcal{P}(\vec{s'_i})} DM(\vec{s} ; |\vec{s}|, \vec{\zeta^+}) ~ DM(\vec{s'_i}\setminus\vec{s} ; (l - |\vec{s}|), \vec{\zeta^-})$
+		$P(\mathbf{s_i} ; c_i)$ & $\displaystyle\sum_{\mathbf{s} \in \mathcal{P}(\mathbf{s'_i})} DM(\mathbf{s} ; |\mathbf{s}|, \mathbf{\zeta^+}) ~ DM(\mathbf{s'_i}\setminus\mathbf{s} ; (l - |\mathbf{s}|), \mathbf{\zeta^-})$
 	\end{tabular}
 \end{equation}
 \noindent with $s'_i$ and $\mathcal{P}$ as defined in Section~\ref{subsec:cpop}.
 
 % With a joint sensor model following the Dirichlet density, which is conjugated with multinomial distributions into a posterior predictive distribution shown in Eqn. \ref{eq:joint_dirichlet_multinomial_distribution}, a graphical model is shown in Figure \ref{fig:gm_popp_dirichlet}.
 
-The difference between the C-POPP model and the POPP-Dirichlet lies only in Eqn. \ref{eq:codependent_sensor_likelihood} being replaced by \ref{eq:joint_dirichlet_multinomial_distribution}. However, given a certain Dirichlet prior, and limited training data for the sensor model, the POPP-Dirichlet is expected to be more conservative in estimating the posterior $P(\lambda \mid \vec{s})$ over $\lambda$ than the C-POPP model.
+The difference between the C-POPP model and the POPP-Dirichlet lies only in Eqn. \ref{eq:codependent_sensor_likelihood} being replaced by \ref{eq:joint_dirichlet_multinomial_distribution}. However, given a certain Dirichlet prior, and limited training data for the sensor model, the POPP-Dirichlet is expected to be more conservative in estimating the posterior $P(\lambda \mid \mathbf{s})$ over $\lambda$ than the C-POPP model.
 
 % \begin{figure}[t!]
 % 	\centering

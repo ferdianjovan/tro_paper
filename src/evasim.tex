@@ -7,7 +7,7 @@ In this section we evaluate POPP and its extensions on synthetic data to demonst
 
 % Here, an evaluation and a comparison of the POPP models to the FOPP model are conducted with two imaginary unreliable sensors and simulated datasets. The switching filter is chosen as a filter for all POPP models for this evaluation. 
 
-In our experiments we initially generate a training set of $n=120$ counts from a Poisson process $P(c ; \lambda'=3)$ and the corresponding sensed counts $\protect\vec{s_1} \ldots \protect\vec{s_{120}}$ from two unreliable sensors (i.e. $m=2$ in our evaluation). To capture a range of possible sensor correlations and performance characteristics, the sensed counts for the training set are produced from 12 different sensor configurations. The true and sensed counts are then used to build (joint where appropriate) sensor models for the POPP extensions described above. We then generate a new set of $n=144$ true counts and the corresponding sensed counts for each of the 12 sensor configurations. These sensed counts are used as input in a filtering process to estimate the posterior of lambda according to each of the four models defined above (POPP, POPP-Beta, C-POPP, and POPP-Dirichlet), plus FOPP.
+In our experiments we initially generate a training set of $n=120$ counts from a Poisson process $P(c ; \lambda'=3)$ and the corresponding sensed counts $\protect\mathbf{s_1} \ldots \protect\mathbf{s_{120}}$ from two unreliable sensors (i.e. $m=2$ in our evaluation). To capture a range of possible sensor correlations and performance characteristics, the sensed counts for the training set are produced from 12 different sensor configurations. The true and sensed counts are then used to build (joint where appropriate) sensor models for the POPP extensions described above. We then generate a new set of $n=144$ true counts and the corresponding sensed counts for each of the 12 sensor configurations. These sensed counts are used as input in a filtering process to estimate the posterior of lambda according to each of the four models defined above (POPP, POPP-Beta, C-POPP, and POPP-Dirichlet), plus FOPP.
 % 
 We chose the training set size $n=120$ such that there is insufficient data to build an accurate sensor model. This allows the POPP-Dirichlet and the POPP-Beta models to compensate with loose Dirichlet and beta densities. 
 
@@ -60,14 +60,14 @@ The 12 sensor configurations mentioned previously represent 12 different experim
 \begin{figure}[t!]
 	\centering
 	\includegraphics[width=0.5\textwidth]{./figures/tjpr_comparison_120.png}
-    \caption{The RMSE of posterior estimates of $\lambda$ for the POPP and its variation models with 120 sample data used to build the (joint) sensor model with variation on $\mathcal{E^+}$. All models are compared to the FOPP model. Each trial consisted of a stream of $\protect\vec{s_1} \ldots \protect\vec{s_{144}}$ samples to update $P(\lambda ; \protect\vec{s_i})$. Accuracies of MAP estimates are shown in the top panel, accuracies of expectation of the posterior in the bottom panel. Each data point is an average of 30 trials. Standard errors are shown.} 
+    \caption{The RMSE of posterior estimates of $\lambda$ for the POPP and its variation models with 120 sample data used to build the (joint) sensor model with variation on $\mathcal{E^+}$. All models are compared to the FOPP model. Each trial consisted of a stream of $\protect\mathbf{s_1} \ldots \protect\mathbf{s_{144}}$ samples to update $P(\lambda ; \protect\mathbf{s_i})$. Accuracies of MAP estimates are shown in the top panel, accuracies of expectation of the posterior in the bottom panel. Each data point is an average of 30 trials. Standard errors are shown.} 
 	\label{fig:tjpr_comparison_120}
 \end{figure}
 
 \begin{figure}[t!]
 	\centering
 	\includegraphics[width=0.5\textwidth]{./figures/tjpr_comparison_120_kl.png}
-	\caption{The Jensen-Shannon distance of posterior estimates of $\lambda$ for the POPP and its variation models with 120 sample data used to build the (joint) sensor model with variation on $\mathcal{E^+}$. All models are compared to the FOPP model. Each trial consisted of a stream of $\protect\vec{s_1} \ldots \protect\vec{s_{144}}$ samples to update $P_G(\lambda \mid \protect\vec{s_i})$. Each data point is an average of 30 trials. Standard errors are shown.} 
+	\caption{The Jensen-Shannon distance of posterior estimates of $\lambda$ for the POPP and its variation models with 120 sample data used to build the (joint) sensor model with variation on $\mathcal{E^+}$. All models are compared to the FOPP model. Each trial consisted of a stream of $\protect\mathbf{s_1} \ldots \protect\mathbf{s_{144}}$ samples to update $P_G(\lambda \mid \protect\mathbf{s_i})$. Each data point is an average of 30 trials. Standard errors are shown.} 
 	\label{fig:tjpr_comparison_120_kl}
 \end{figure}
 
@@ -93,19 +93,19 @@ The 12 sensor configurations mentioned previously represent 12 different experim
 % 	\item $P_{jnt}(d_{1k}=1, d_{2k}=0 ; e_k=0) = 0.3, P_{jnt}(d_{1k}=0, d_{2k}=1 ; e_k=0) = 0.3, P_{jnt}(d_{1k}=1, d_{2k}=1 ; e_k=0) = 0.3, P_{jnt}(d_{1k}=0, d_{2k}=0 ; e_k=1) = 0.1$ ($\mathcal{E^-}$ with no correlation -- Similar to a sensor model with moderate TNR).
 % \end{itemize}
 
-The performance of all POPP models was assessed by measuring how accurate each model is in estimating the true $\lambda'$. Two options were used to measure the accuracy: (1) the RMSE of the expectation (mean) and the MAP hypothesis (mode) of each model posterior distribution over $\lambda$ to the true $\lambda'$; and (2)  the Jensen-Shannon distance between the posterior distribution $P(\lambda ; \vec{s_i})$ and the distribution of the true $\lambda'$. 
+The performance of all POPP models was assessed by measuring how accurate each model is in estimating the true $\lambda'$. Two options were used to measure the accuracy: (1) the RMSE of the expectation (mean) and the MAP hypothesis (mode) of each model posterior distribution over $\lambda$ to the true $\lambda'$; and (2)  the Jensen-Shannon distance between the posterior distribution $P(\lambda ; \mathbf{s_i})$ and the distribution of the true $\lambda'$. 
 
 \begin{figure}[t!]
 	\centering
 	\includegraphics[width=0.5\textwidth]{./figures/tjnr_comparison_120.png}
-    \caption{The RMSE of posterior estimates of $\lambda$ for the POPP and its variation models with 120 sample data used to build the (joint) sensor model with variation in $\mathcal{E^-}$. All models are compared to the FOPP model. Each trial consisted of a stream of $\protect\vec{s_1} \ldots \protect\vec{s_{144}}$ samples to update $P(\lambda ; \protect\vec{s_i})$. Accuracies of MAP estimates are  in the top panel, accuracies of the expectation of the posterior in the bottom panel. Each data point is an average of 30 trials. Standard errors are shown.} 
+    \caption{The RMSE of posterior estimates of $\lambda$ for the POPP and its variation models with 120 sample data used to build the (joint) sensor model with variation in $\mathcal{E^-}$. All models are compared to the FOPP model. Each trial consisted of a stream of $\protect\mathbf{s_1} \ldots \protect\mathbf{s_{144}}$ samples to update $P(\lambda ; \protect\mathbf{s_i})$. Accuracies of MAP estimates are  in the top panel, accuracies of the expectation of the posterior in the bottom panel. Each data point is an average of 30 trials. Standard errors are shown.} 
 	\label{fig:tjnr_comparison_120}
 \end{figure}
 
 \begin{figure}[t!]
 	\centering
 	\includegraphics[width=0.5\textwidth]{./figures/tjnr_comparison_120_kl.png}
-	\caption{The Jensen-Shannon distance of posterior estimates of $\lambda$ for the POPP and its variation models with 120 sample data used to build the (joint) sensor model with variation on $\mathcal{E^-}$. All models are compared to the FOPP model. Each trial consisted of a stream of $\protect\vec{s_1} \ldots \protect\vec{s_{144}}$ samples to update $P_G(\lambda \mid \protect\vec{s_i})$. Each data point is an average of 30 trials. Standard errors are shown.} 
+	\caption{The Jensen-Shannon distance of posterior estimates of $\lambda$ for the POPP and its variation models with 120 sample data used to build the (joint) sensor model with variation on $\mathcal{E^-}$. All models are compared to the FOPP model. Each trial consisted of a stream of $\protect\mathbf{s_1} \ldots \protect\mathbf{s_{144}}$ samples to update $P_G(\lambda \mid \protect\mathbf{s_i})$. Each data point is an average of 30 trials. Standard errors are shown.} 
 	\label{fig:tjnr_comparison_120_kl}
 \end{figure}
 
