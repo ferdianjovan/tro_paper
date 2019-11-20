@@ -1,5 +1,15 @@
 %!TEX root = ../bare_jrnl.tex
 
+\section{The POPP Extensions}
+\label{sec:popp_extensions}
+
+In~\cite{jovan18a} we demonstrated that the POPP model is able to efficiently correct miscounts made by multiple unreliable counting devices observing a single Poisson process. However, the POPP model is limited by two assumptions:
+\begin{enumerate}
+	\item the sensors are conditionally independent given the true count, and 
+	\item the degree of the unreliability of a sensor (i.e. $\tau$ and $\xi$) is precisely known.
+\end{enumerate}
+In this paper, we propose three extensions to the POPP model to tackle these assumptions. The first extension (POPP-Beta) extends the POPP model with an observation model which captures uncertainty over the sensor reliability. The second extension (C-POPP) modifies the POPP model to accommodate correlation between sensors. The third extension (POPP-Dirichlet) combines these ideas to jointly address both assumptions. 
+
 \subsection{The POPP-Beta}
 \label{subsec:popb}
 

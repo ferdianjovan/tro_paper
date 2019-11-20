@@ -3,7 +3,7 @@
 \subsection{The POPP-Dirichlet}
 \label{subsec:popd}
 
-The C-POPP model uses a joint observation model in estimating the parameter $\lambda$ of a Poisson process. A joint observation model is an extension of an observation model where the model provides a probability for a particular combination of binary detections coming from each sensor given the true event as show in Eqn. \ref{eq:joint_sensor_model}.
+The C-POPP model uses a joint observation model in estimating the parameter $\lambda$ of a Poisson process. A joint observation model is an extension of an observation model where the model provides a probability for a particular combination of binary detections coming from each sensor given the true event as show in Eqn. \ref{eq:joint_sensor_model_positive_event} and Eqn. \ref{eq:joint_sensor_model_negative_event}.
 
 To construct a joint observation model, one needs to have both detections and the corresponding actual (non-)event as ground truth. Pre-processing involving expert interventions is typically required before the detections and their corresponding ground truth can be further used. Similar to the POPP model, the C-POPP model requires the joint observation model to be accurate to avoid the posterior over $\lambda$ drifting away from the true posterior. If attaining an accurate observation model for the POPP model is a problem, then this becomes more prominent in the case of a joint observation model. This is because the training data needed to construct a joint observation model grows by a factor of two for each sensor involved.       
 
