@@ -150,8 +150,13 @@ Figure \ref{fig:exploration_percentage_region} shows the percentage of visits to
 
 % Figure \ref{fig:exploration_number_people_across_days} shows the average number of activities observed across regions on each day. 
 
-During the first few days of each phase the above models cause the robot to primarily explore since the estimates of $\lambda$ are initially highly uncertain. We use these initial days as a baseline against which later days (featuring greater exploitation) can be compared. To do this, we divide all true counts by the sum of the true counts over the first three days. Since we have 15 days of usable data for each phase we also divide the counts by 5 such that a score of 1.0 on day 15 represents continuing to observe people at the same rate as experienced in the first 3 days. A score above 1.0 on day 15 shows that exploitation has led to people being observed at a greater rate than in the first 3 days. This normalisation is necessary since there were large fluctuations in the total number of people present in the robot's environment over the 10 weeks of the deployment.
+During the first few days of each phase the above models cause the robot to primarily explore since the estimates of $\lambda$ are initially highly uncertain. We use these initial days as a baseline against which later days (featuring greater exploitation) can be compared. To do this, we divide all true counts by the sum of the true counts over the first three days. Since we have 15 days of usable data for each phase we also divide the counts by 5 such that a score of 1.0 on day 15 represents continuing to observe people at the same rate as experienced in the first 3 days. Formally, the normalised number of persons observed on day $n$ can be calculated as:
 
+\begin{equation*}
+\hat{s}(n) = \frac{\displaystyle\sum_{i=1}^{n} s(i)}{\displaystyle\sum_{i=1}^{3} s(i) * 5}
+\end{equation*}
+
+\noindent with $s(n)$ be the number of persons observed on day $n$. A score above 1.0 on day 15 shows that exploitation has led to people being observed at a greater rate than in the first 3 days. This normalisation is necessary since there were large fluctuations in the total number of people present in the robot's environment over the 10 weeks of the deployment.
 
 % 
 Figure \ref{fig:exploration_improvement_ratio} presents the cumulative normalised true counts of people observed by the robot across the three phases. This shows that exploration driven by the POPP and the POPP-Beta models improves the number of people observed during these phases. By the end of each of these two phases, the ratio is around 1.7. On the other hand, the FOPP showed a stable ratio around the baseline (1.0 at day 15), this means that the FOPP is not be able to improve the number of people observed over time. 
