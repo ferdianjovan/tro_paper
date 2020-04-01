@@ -106,9 +106,9 @@ To tie the estimate of a particular Poisson process over a time interval to data
 
 \subsection*{Exploration Evaluation}
 
-The dataset used in the previous section was collected by a mobile robot over 69 days of a real world deployment. This robot was controlled by the exploration models described above. Due to hardware failures, sensor malfunctions and other external issues, only 48 days from the dataset were usable.
+The dataset used in the previous section was collected by a mobile robot over 69 days of a real world trial. This robot was controlled by the exploration models described above. Due to hardware failures, sensor malfunctions and other external issues, only 48 days from the dataset were usable.
 
-Three different exploration models were applied separately during three phases of the 69 days of the deployment. All of these models used Eq.~\ref{eq:choosing_place} to create their exploration policies. For the first 27 day phase of the deployment, the robot followed an exploration policy based on the FOPP model. This resulted in 18 days of data. From day 28 to day 47, the robot followed an exploration policy according to the POPP model. This resulted in 15 days of data. Finally, from day 48 onwards, the robot followed an exploration policy according to the POPP-Beta model. This resulted in 15 days of data. For the FOPP model, we used the first 15 days to follow the POPP and the POPP-Beta model.
+Three different exploration models were applied separately during three phases of the 69 days of the trial. All of these models used Eq.~\ref{eq:choosing_place} to create their exploration policies. For the first 27 day phase of the trial, the robot followed an exploration policy based on the FOPP model. This resulted in 18 days of data. From day 28 to day 47, the robot followed an exploration policy according to the POPP model. This resulted in 15 days of data. Finally, from day 48 onwards, the robot followed an exploration policy according to the POPP-Beta model. This resulted in 15 days of data. For the FOPP model, we used the first 15 days to follow the POPP and the POPP-Beta model.
 % From this 18 days of data, the last 3 days were used to train the sensor model needed for both the POPP and the POPP-Beta models.
 %For this comparison, the last 3 days which are part of the 18 days worth of data collected by following the FOPP exploration model are included in the POPP and the POPP-Beta exploration models. This is necessary to avoid the POPP and the POPP-Beta exploration models having an advantage over the FOPP exploration model since the POPP and the POPP-Beta need a training period to construct their sensor model. Moreover,
 % 
@@ -140,7 +140,7 @@ We can compare the different exploration policies on the observations the robot 
 \begin{figure}[t!]
 	\centering
 	\includegraphics[width=0.5\textwidth]{./figures/exploration_number_people_across_days_normalised.png}
-	\caption{The improvement ratio of activity observations during each phase of the deployment. A ratio of 1.0 means that the exploration model gives no improvement over time in finding more people.}
+	\caption{The improvement ratio of activity observations during each phase of the trial. A ratio of 1.0 means that the exploration model gives no improvement over time in finding more people.}
 	\label{fig:exploration_improvement_ratio}
 \end{figure}
 
@@ -154,7 +154,7 @@ During the first few days of each phase the above models cause the robot to prim
 \hat{s}(n) = \frac{\displaystyle\sum_{i=1}^{n} s(i)}{\displaystyle\sum_{i=1}^{3} s(i) * 5}
 \end{equation*}
 
-\noindent with $s(n)$ being the number of persons observed on day $n$. A score above 1.0 on day 15 shows that exploitation has led to people being observed at a greater rate than in the first 3 days. This normalisation is necessary since there were large fluctuations in the total number of people present in the robot's environment over the 10 weeks of the deployment.
+\noindent with $s(n)$ being the number of persons observed on day $n$. A score above 1.0 on day 15 shows that exploitation has led to people being observed at a greater rate than in the first 3 days. This normalisation is necessary since there were large fluctuations in the total number of people present in the robot's environment over the 10 weeks of the trial.
 
 % 
 Figure \ref{fig:exploration_improvement_ratio} presents the cumulative normalised true counts of people observed by the robot across the three phases. This shows that exploration driven by the POPP and the POPP-Beta models improves the number of people observed during these phases. By the end of each of these two phases, the ratio is around 1.7. On the other hand, the FOPP showed a stable ratio around the baseline (1.0 at day 15), this means that the FOPP is not be able to improve the number of people observed over time. 
