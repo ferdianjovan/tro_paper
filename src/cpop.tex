@@ -1,17 +1,17 @@
 %!TEX root = ../bare_jrnl.tex
 
-\subsection{The Correlated POPP}
+\subsection{Correlated POPP}
 \label{subsec:cpop}
 
-Recall that Eqn.~\ref{eq:occurrences_likelihood} is defined under the assumption that each sensor count is conditionally independent from all the others given the true count. This assumption ignores the correlations between sensors. 
+Recall that Eq.~\ref{eq:occurrences_likelihood} is defined under the assumption that each sensor count is conditionally independent from all the others given the true count. This assumption ignores the correlations between sensors. 
 % 
-To introduce correlations between sensors we must alter Eqn.~\ref{eq:independent_sensor_likelihood} and
-Eqn.~\ref{eq:joint_binomial_distribution} from the POPP model.
+To introduce correlations between sensors we must alter Eq.~\ref{eq:independent_sensor_likelihood} and
+Eq.~\ref{eq:joint_binomial_distribution} from the POPP model.
 
 
-Recall that the probability of a particular sensed count given the true count $P(\mathbf{s_i} \mid c_i)$ was defined from the Poisson limit theorem as a sequence of Bernoulli trials over $l$ subintervals. With correlated sensors, the observation of an event $e_k$ in the $k^{th}$ trial no longer follows the Bernoulli distribution. Instead it follows the categorical distribution, where the $k^{th}$ trial corresponds to whether a particular combination of binary detections $d_{1,k}, \ldots, d_{m,k}$ happens in subinterval $I_k$. Therefore, to replace Eqn.~\ref{eq:joint_binomial_distribution}, we propose to define the probability of a series of detection outcomes given the true count $c_i$ at interval $i$ as the following.
+Recall that the probability of a particular sensed count given the true count $P(\mathbf{s_i} \mid c_i)$ was defined from the Poisson limit theorem as a sequence of Bernoulli trials over $l$ subintervals. With correlated sensors, the observation of an event $e_k$ in the $k^{th}$ trial no longer follows the Bernoulli distribution. Instead it follows the categorical distribution, where the $k^{th}$ trial corresponds to whether a particular combination of binary detections $d_{1,k}, \ldots, d_{m,k}$ happens in subinterval $I_k$. Therefore, we move our notation from using $s_{j, i}$ representing sensed counts for particular sensor $j$ independently at time interval $i$ to a matrix representing $m$ sensor detections together at time interval $i$. Formally, we replace Eq.~\ref{eq:joint_binomial_distribution} and propose to define the probability of a series of detection outcomes given the true count $c_i$ at interval $i$ as the following.
 
-We first define for some interval $i$, $l$ subintervals, and $m$ sensors, there is a binary matrix of detections $\mathbf{D^i}$ (We drop the ($i$) for all notations in this subsection as we will consider a single interval). $\mathbf{D} \in \mathcal{D}^{m , l}$ the set of binary matrices of dimension $m \times l$. Each column $k$ of $\mathbf{D}$, we denote $\mathbf{D}_{:k} = \mathbf{d} = \{0, 1\}^m$ with $k = 1, \ldots, l$. Therefore, $\mathbf{D}$ is a series of $m$ sensor detections for $l$ subintervals, and $\mathbf{D_{:k}}$ is a vector of detections from $m$ different sensors at particular subinterval $k$. It should be clear by now that we move our notation from using $s_{j, i}$ representing sensed counts for particular sensor $j$ independently at time interval $i$ to $\mathbf D^{i}$ representing a series of $m$ sensor detections together at time interval $i$.
+We first define for some interval $i$, $l$ subintervals, and $m$ sensors, there is a binary matrix of detections $\mathbf{D^i}$. $\mathbf{D} \in \mathcal{D}^{m , l}$ the set of binary matrices of dimension $m \times l$\footnote{We drop the ($i$) for all notations in this subsection as we will consider a single interval}. Each column $k$ of $\mathbf{D}$, we denote $\mathbf{D}_{:k} = \mathbf{d} = \{0, 1\}^m$ with $k = 1, \ldots, l$. $\mathbf{D_{:k}}$ is a vector of detections from $m$ different sensors at particular subinterval $k$. 
 
 We further define $e_k \in \{0, 1\}$ as the variable indicating whether or not an event is hypothesized to have occurred in sub-interval $k$. $e_k = 1$ means that an event occurred. We define $P^{+}$ as the categorical distribution of $\mathbf{d}$, conditioned on $e = 1$, i.e.
 \begin{equation}
@@ -23,7 +23,7 @@ We further define $e_k \in \{0, 1\}$ as the variable indicating whether or not a
 	\label{eq:joint_sensor_model_negative_event}
 	P^-(\mathbf{d}) = P(\mathbf{d} \mid e = 0) ~~~~~ \forall \mathbf{d} \in \{0, 1\}^m
 \end{equation}
-\noindent Both $P^+$ and $P^-$\footnote{$\mathbf d$ is dropped in the representation unless the context is not clear.} have $2^m$ elements. These two probabilities represent \textit{true positive rates} and \textit{true negative rates}  as $\tau$ and $\xi$ for the POPP model. Similar to $\tau$ and $\xi$, $P^+$ and $P^-$ are estimated from both detections of each sensor and the corresponding actual (non-)event as ground truth. However, unlike $\tau$ and $\xi$ which are sensor specific, $P^+$ and $P^-$ consider all combinations of binary detections coming from each sensor given the true event. This means that $P^+$ and $P^-$ are typically larger in the number of elements than $\tau$ and $\xi$ and the gaps grow as the number of sensors increase. For example, with three sensors there are $\tau_1, \tau_2, \tau_3$ for true positive rates and $\xi_1, \xi_2, \xi_3$ for true negative rates in the POPP model. In comparison, there will be eight elements for $P^+$ and eight elements for $P^-$ in the C-POPP model. While $\tau_1, \tau_2, \tau_3, \xi_1, \xi_2, \xi_3$ can be roughly estimated from less than a hundred detections and their corresponding events, $P^+$ and $P^-$ may need more than a few hundreds of detections together with their corresponding events.
+\noindent Both $P^+$ and $P^-$ have $2^m$ elements\footnote{$\mathbf d$ is dropped in the representation unless the context is not clear.}. These two probabilities represent \textit{true positive rates} and \textit{true negative rates}  as $\tau$ and $\xi$ for the POPP model. Similar to $\tau$ and $\xi$, $P^+$ and $P^-$ are estimated from both detections of each sensor and the corresponding actual (non-)event as ground truth. However, unlike $\tau$ and $\xi$ which are sensor specific, $P^+$ and $P^-$ consider all combinations of binary detections from sensors given the true event. This means the number of elements in $P^+$ and $P^-$ grows by a factor of two for each sensor added. Due to the size of $P^+$ and $P^-$, they may need more than a few hundred of detections together with their corresponding events to be estimated.
 
 We can partition the subintervals $1, \ldots, l$ into two sets. $\mathbf{e}^+$ is the set of subintervals $k$ where $e_k = 1$, and $\mathbf{e}^-$ is the set of subintervals $k$ where $e_k = 0$. We can define a partition of the subintervals by a pair $(\mathbf{e}^+, \mathbf{e}^-)$. The set of possible partitions such that $\mathbf{e}^+$ has a fixed size $c$, i.e. $\mid \mathbf{e}^+ \mid = c$, is denoted $\Sigma_c$, so that $(\mathbf{e}^+, \mathbf{e}^-) \in \Sigma_c$.
 
@@ -39,29 +39,28 @@ As there may be duplicate columns in either or both $\mathbf{D}_{\mathbf{e}^+}$ 
 \end{equation*}
 \noindent such that $\sum\limits_{q=1}^{2^m} g_q^+ + \sum\limits_{r=1}^{2^m} g_r^- = l$ where each of $\mathbf{g}^+, \mathbf{g}^-$ are of length $2^m$, having one element for every possible detection vector $\mathbf{d} \in \{0, 1\}^m$.
 
-In order to define the joint probability of a particular count being yielded by a particular sequence of detection outcomes, we must consider all possible combinations of true positives and false positives that could be generated by that sequence by exploring all elements of $\Sigma_c$. We do this in the following definition of $P(\mathbf{D} \mid c)$, and define the probability of a given sequence of detection groups yielding count $c$ using the multinomial distribution.
-
+In order to define the joint probability of a particular count being yielded by a particular sequence of detection outcomes, we must consider all possible combinations of true positives and false positives that could be generated by that sequence by exploring all elements of $\Sigma_c$. We do this in the following definition of $P(\mathbf{D} | c)$, and define the probability of a given sequence of detection groups yielding count $c$ using the multinomial distribution.
 \begin{equation}
 \label{eq:codependent_sensor_likelihood}
 P(\mathbf{D} \mid c) = \sum\limits_{(\mathbf{e}^+, \mathbf{e}^-) \in \Sigma_c} Mult(\mathbf{g}^+ \mid c, P^+) ~ Mult(\mathbf{g}^- \mid \delta_l c, P^-)
 \end{equation}
-\noindent with $\delta_l c = (l - c))$.
+\noindent with $\delta_l c = (l - c)$.
 
-Eqn.~\ref{eq:codependent_sensor_likelihood} can be understood by analogy to Eqn.~\ref{eq:joint_binomial_distribution}. In both equations all possible ways pairs of true and false positives counts which sum to $c$ are considered. In the conditionally independent case the binomial distribution is used to determine the probability of each count from the available trials given the true and false positive rates. In the correlated case the multinomial distribution is used to determine the probability of each count from a possible sequence of joint observations and their probability of yielding a count.
+Eq.~\ref{eq:codependent_sensor_likelihood} can be understood by analogy to Eq.~\ref{eq:joint_binomial_distribution}. In both equations all possible ways pairs of true and false positives counts which sum to $c$ are considered. In the conditionally independent case the binomial distribution is used to determine the probability of each count from the available trials given the true and false positive rates. In the correlated case the multinomial distribution is used to determine the probability of each count from a possible sequence of joint observations and their probability of yielding a count.
 
-One should note that the benefit of C-POPP is that it exploits correlations among multiple sensors contributing to detection counts. If there is only one sensor counting events, then the POPP model is more computationally efficient.
+One should note that the benefit of C-POPP is that it exploits correlations among multiple sensors contributing to detection counts. If there is only one sensor counting events, then C-POPP collapses to POPP.
 
 
 %\subsection{The Correlated POPP}
 %\label{subsec:cpop}
 %
-%Recall that Eqn.~\ref{eq:occurrences_likelihood} is defined under the assumption that each sensor count is conditionally independent from all the others given the true count. This assumption ignores the correlations between sensors. 
+%Recall that Eq.~\ref{eq:occurrences_likelihood} is defined under the assumption that each sensor count is conditionally independent from all the others given the true count. This assumption ignores the correlations between sensors. 
 %% 
-%To introduce correlations between sensors we must alter Eqn.~\ref{eq:independent_sensor_likelihood} and
-%Eqn.~\ref{eq:joint_binomial_distribution} from the POPP model.
+%To introduce correlations between sensors we must alter Eq.~\ref{eq:independent_sensor_likelihood} and
+%Eq.~\ref{eq:joint_binomial_distribution} from the POPP model.
 %
 %
-%To replace Eqn.~\ref{eq:joint_binomial_distribution}, recall that the probability of a particular sensed count was defined from the Poisson limit theorem as a sequence of Bernoulli trials over $l$ subintervals.
+%To replace Eq.~\ref{eq:joint_binomial_distribution}, recall that the probability of a particular sensed count was defined from the Poisson limit theorem as a sequence of Bernoulli trials over $l$ subintervals.
 %% 
 %With correlated sensors, the observation of an event $e_k$ in the 
 %$k^{th}$ trial no longer follows the Bernoulli distribution. Instead it follows the categorical distribution, where the $k^{th}$ trial corresponds to whether a particular combination of binary detections $d_{1,k}, \ldots, d_{m,k}$ happens in subinterval $I_k$. Therefore, instead of having independent sensor models for the detection of event $e_k$ we propose the joint observation model:
@@ -106,6 +105,6 @@ One should note that the benefit of C-POPP is that it exploits correlations amon
 %
 %% \textbf{NOTE: \emph{Is using powerset correct? How do we distinguish the total number of each $(d_{1,1}, \ldots, d_{m,1}$?}}
 %
-%Eqn.~\ref{eq:codependent_sensor_likelihood} can be understood by analogy to Eqn.~\ref{eq:joint_binomial_distribution}. In both equations all possible ways pairs of true and false positives counts which sum to $c_i$ are considered. In the conditionally independent case the binomial distribution is used to determine the probability of each count from the available trials given the true and false positive rates. In the correlated case the multinomial distribution is used to determine the probability of each count from a possible sequence of joint observations and their probability of yielding a count.
+%Eq.~\ref{eq:codependent_sensor_likelihood} can be understood by analogy to Eq.~\ref{eq:joint_binomial_distribution}. In both equations all possible ways pairs of true and false positives counts which sum to $c_i$ are considered. In the conditionally independent case the binomial distribution is used to determine the probability of each count from the available trials given the true and false positive rates. In the correlated case the multinomial distribution is used to determine the probability of each count from a possible sequence of joint observations and their probability of yielding a count.
 %
 %One should note that the benefit of C-POPP is that it exploits correlations among multiple sensors contributing to detection counts. If there is only one sensor counting events, then the POPP model is more computationally efficient.

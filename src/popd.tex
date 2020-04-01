@@ -3,12 +3,11 @@
 \subsection{The POPP-Dirichlet}
 \label{subsec:popd}
 
-The C-POPP model requires the true positive rate $P^+$ and false positive rate $P^-$ to be specified in advanced in estimating the parameter $\lambda$ of a Poisson process. These are an extension of $\tau$ and $\xi$ where the rates provide a probability for a particular combination of binary detections coming from each sensor given the true event as shown in Eqn. \ref{eq:joint_sensor_model_positive_event} and Eqn. \ref{eq:joint_sensor_model_negative_event}.
+The C-POPP model requires the true positive rate $P^+$ and false positive rate $P^-$ to be specified in advanced in estimating the parameter $\lambda$ of a Poisson process. These are an extension of $\tau$ and $\xi$ where the rates provide a probability for a particular combination of binary detections coming from each sensor given the true event as shown in Eq. \ref{eq:joint_sensor_model_positive_event} and Eq. \ref{eq:joint_sensor_model_negative_event}.
 
-To construct an observation model of $P^+$ and $P^-$, one needs to have both detections and the corresponding actual (non-)event as ground truth. Pre-processing involving expert interventions is typically required before the detections and their corresponding ground truth can be further used. Similar to the POPP model, the C-POPP model requires the observation model to be accurate to avoid the posterior over $\lambda$ drifting away from the true posterior. If attaining an accurate observation model for the POPP model is a problem, then this becomes more prominent in the case of C-POPP model. This is because the training data needed to construct an observation model grows by a factor of two for each sensor involved.       
+To construct an observation model of $P^+$ and $P^-$, one needs to have both detections and the corresponding actual (non-)events as ground truth. Pre-processing involving expert interventions is typically required before the detections and their corresponding ground truth can be further used. Similarly to the POPP model, the C-POPP model requires the observation model to be accurate to avoid the posterior over $\lambda$ drifting away from the true posterior. If attaining an accurate observation model for the POPP model is a problem, then this becomes more challenging in the case of C-POPP model. This is because the training data needed to construct an observation model grows by a factor of two for each sensor involved.       
 
-Similar to the extension from the POPP model to the POPP-Beta model, we can extend the C-POPP observation model into a Bayesian estimation problem. In this case the observation models ($P^+$ and $P^-$) will follow Dirichlet distributions. The Dirichlet distribution is an appropriate distribution since $P^+$ and $P^-$ are the probabilities of categorical distributions which set the probabilities of multinomial distributions in Eqn. \ref{eq:codependent_sensor_likelihood} and Dirichlet distributions provide a family of prior probability distributions for the multinomial distribution. The Dirichlet-multinomial conjugacy leads to an analytically tractable compound distribution which is called the Dirichlet-multinomial distribution, where the $\mathbf{p} = (p_1, \ldots, p_r)$ parameter in the multinomial distribution $Mult(\mathbf{d} \mid c, \mathbf{p})$ is randomly drawn from a Dirichlet distribution $Dir(\mathbf{p} \mid \mathbf{\zeta})$. 
-
+Analogously to the extension from the POPP model to the POPP-Beta model, we can expand the C-POPP observation model. In this case the observation models ($P^+$ and $P^-$) will follow Dirichlet distributions. The Dirichlet distribution is an appropriate distribution since $P^+$ and $P^-$ are the probabilities of categorical distributions which set the probabilities of multinomial distributions in Eq. \ref{eq:codependent_sensor_likelihood} and Dirichlet distributions provide a family of conjugate prior probability distributions for the multinomial distribution. The Dirichlet-multinomial conjugacy leads to an analytically tractable compound distribution which is called the Dirichlet-multinomial distribution, where the $\mathbf{p} = (p_1, \ldots, p_r)$ parameter in the multinomial distribution $Mult(\mathbf{d} \mid c, \mathbf{p})$ is randomly drawn from a Dirichlet distribution $Dir(\mathbf{p} \mid \mathbf{\zeta})$. 
 \begin{equation}
 	\label{eq:beta_binomial_revisit}
 	\begin{tabular}{r@{ = }l}
@@ -21,20 +20,17 @@ Similar to the extension from the POPP model to the POPP-Beta model, we can exte
 
 Given $m$ sensors, an observation model is now represented as two Dirichlet distributions: $Dir(P^+ \mid \mathbf{\zeta^+})$, and $Dir(P^- \mid \mathbf{\zeta^-})$ with $\mathbf{\zeta^+} = (\zeta^+_0, \ldots, \zeta^+_{(m^2)-1})$ and $\mathbf{\zeta^-} = (\zeta^-_0, \ldots, \zeta^-_{(m^2)-1})$. $\mathbf{\zeta^+}$ and $\mathbf{\zeta^-}$ set the overall shape of the Dirichlet priors, with each $\zeta_q$ term counting the number of times that particular combination of sensor detections were produced given a positive ($\mathbf{\zeta^+}$, $e=1$) or negative ($\mathbf{\zeta^-}$, $e=0$) detection.
 
-
-Given a joint sensor model where its elements follow a Dirichlet density and several Dirichlet-multinomial distributions, which provide an unconditional distribution of $\mathbf{d}$, we replace Eqn. \ref{eq:codependent_sensor_likelihood} with:  
-
+Given a joint sensor model where its elements follow a Dirichlet density and several Dirichlet-multinomial distributions, which provide an unconditional distribution of $\mathbf{d}$, we replace Eq. \ref{eq:codependent_sensor_likelihood} with:  
 \begin{equation}
 	\label{eq:joint_dirichlet_multinomial_distribution}
     \begin{tabular}{r@{=}l}
-		$P(\mathbf{D} \mid c)$ & $\sum\limits_{(\mathbf{e}^+, \mathbf{e}^-) \in \Sigma_c} DM(\mathbf{g}^+ \mid c, \mathbf{\zeta^+}) ~ Mult(\mathbf{g}^- \mid (l - c), \mathbf{\zeta^-})$
+		$P(\mathbf{D} \mid c)$ & $\sum\limits_{(\mathbf{e}^+, \mathbf{e}^-) \in \Sigma_c} DM(\mathbf{g}^+ \mid c, \mathbf{\zeta^+}) ~ DM(\mathbf{g}^- \mid (l - c), \mathbf{\zeta^-})$
 	\end{tabular}
 \end{equation}
 \noindent with $\Sigma_c$ and $\mathbf{D}$ as defined in Section~\ref{subsec:cpop}.
+% With a joint sensor model following the Dirichlet density, which is conjugated with multinomial distributions into a posterior predictive distribution shown in Eq. \ref{eq:joint_dirichlet_multinomial_distribution}, a graphical model is shown in Figure \ref{fig:gm_popp_dirichlet}.
 
-% With a joint sensor model following the Dirichlet density, which is conjugated with multinomial distributions into a posterior predictive distribution shown in Eqn. \ref{eq:joint_dirichlet_multinomial_distribution}, a graphical model is shown in Figure \ref{fig:gm_popp_dirichlet}.
-
-The difference between the C-POPP model and the POPP-Dirichlet lies only in Eqn. \ref{eq:codependent_sensor_likelihood} being replaced by \ref{eq:joint_dirichlet_multinomial_distribution}. However, given a certain Dirichlet prior, and limited training data for the sensor model, the POPP-Dirichlet is expected to be more conservative in estimating the posterior $P(\lambda \mid \mathbf{s})$ over $\lambda$ than the C-POPP model.
+The difference between the C-POPP model and the POPP-Dirichlet lies only in Eq. \ref{eq:codependent_sensor_likelihood} being replaced by \ref{eq:joint_dirichlet_multinomial_distribution}. However, given a certain Dirichlet prior, and limited training data for the sensor model, the POPP-Dirichlet is expected to be more conservative in estimating the posterior $P(\lambda \mid \mathbf{s})$ over $\lambda$ than the C-POPP model.
 
 % \begin{figure}[t!]
 % 	\centering

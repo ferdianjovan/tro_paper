@@ -4,7 +4,7 @@
 \label{sec:supplementary}
 \section{Sensor Model}
 
-Here we provide detailed sensor models for each region. The sensor model was built from the first 15 days of data to give a general idea how each sensor performs across days. For the experiment itself, we used 48 days of data, and as we performed four fold cross validation, we only used 12 days of data to build the sensor model.
+Here we provide detailed sensor models for each region. The sensor model was built from the first 15 days of data to give a general idea how each sensor performs across days. For the experiment in Section \ref{sec:evareal}, we used 48 days of data, and as we performed four fold cross validation, we only used 12 days of data to build the sensor model. During the exploration setting, only the first 3 days from 15 days of exploration for each exploration model were used to build the sensor model.
 
 \begin{table}[h]
 	\centering
@@ -52,25 +52,25 @@ Here we provide detailed sensor models for each region. The sensor model was bui
 
 \section{Discrete Probability Distribution}
 
-\begin{definition2}
-	A random variable $X$ is a Bernoulli random variable with parameter $p$, i.e. $X \sim Ber(x ; p)$, if its probability mass function is given by
-	\[
-	Ber(x ; p) = \left\{ \begin{matrix}
-	p & \textrm{if } x = 1 \\
-	1-p & \textrm{if } x = 0 % \\
-	% 0 & \textrm{otherwise}
-	\end{matrix} \right.
-	\]
-	\noindent where $0 \leq p \leq 1$ and $x \in \{0, 1\}$.
-\end{definition2}
-
-\begin{definition2}
-	A random variable $X$ is a binomial random variable with parameter $n$ and $p$, i.e. $X \sim B(x ; n, p)$, if its probability mass function is given by
-	\[
-	B(x ; n, p) = \begin{pmatrix} n \\ x \end{pmatrix} p^x (1-p)^{n-x}
-	\]
-	\noindent where $0 \leq p \leq 1$ and $x \in \{0, \ldots, n\}$.
-\end{definition2}
+%\begin{definition2}
+%	A random variable $X$ is a Bernoulli random variable with parameter $p$, i.e. $X \sim Ber(x ; p)$, if its probability mass function is given by
+%	\[
+%	Ber(x ; p) = \left\{ \begin{matrix}
+%	p & \textrm{if } x = 1 \\
+%	1-p & \textrm{if } x = 0 % \\
+%	% 0 & \textrm{otherwise}
+%	\end{matrix} \right.
+%	\]
+%	\noindent where $0 \leq p \leq 1$ and $x \in \{0, 1\}$.
+%\end{definition2}
+%
+%\begin{definition2}
+%	A random variable $X$ is a binomial random variable with parameter $n$ and $p$, i.e. $X \sim B(x ; n, p)$, if its probability mass function is given by
+%	\[
+%	B(x ; n, p) = \begin{pmatrix} n \\ x \end{pmatrix} p^x (1-p)^{n-x}
+%	\]
+%	\noindent where $0 \leq p \leq 1$ and $x \in \{0, \ldots, n\}$.
+%\end{definition2}
 
 \begin{definition2}
 	A random variable $X$ is a negative binomial random variable with parameter $n$ and $p$, i.e. $X \sim NB(x ; n, p)$, if its probability mass function is given by
