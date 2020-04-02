@@ -157,10 +157,10 @@ To allow us to produce a metric for a fair comparison across three models (FOPP,
 % 
 To create the baseline total for each model we take the true counts experienced for its first three days then multiply these by five to give an expected total over 15 days (the number of days of data available to every model). This is the denominator in Eqn.~\ref{eq:metric}, where $s(n)$ is the (true) number of people observed on day $n$. This is used to divide the cumulative number of observations up to the current day:
 
-\begin{equation*}
+\begin{equation}
 	\label{eq:metric}
 \hat{s}(n) = \frac{\displaystyle\sum_{i=1}^{n} s(i)}{\displaystyle\sum_{i=1}^{3} s(i) * 5}
-\end{equation*}
+\end{equation}
 
 \noindent Given this, a $\hat{s}$ score of 1.0 on day 15 shows that people have been observed people at the rate of the baseline, i.e.\ the underlying model has failed to exploit additional data correctly. A result over 1.0 shows that the model has exploited the available data to observe people at a greater rate than in the first 3 days. 
 % 
