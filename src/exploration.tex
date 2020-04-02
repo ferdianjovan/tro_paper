@@ -108,7 +108,10 @@ To tie the estimate of a particular Poisson process over a time interval to data
 
 The dataset used in the previous section was collected by a mobile robot over 69 days of a real world trial. This robot was controlled by the exploration models described above. Due to hardware failures, sensor malfunctions and other external issues, only 48 days from the dataset were usable.
 
-Three different exploration models were applied separately during three phases of the 69 days of the trial. All of these models used Eq.~\ref{eq:choosing_place} to create their exploration policies. For the first 27 day phase of the trial, the robot followed an exploration policy based on the FOPP model. This resulted in 18 days of data. From day 28 to day 47, the robot followed an exploration policy according to the POPP model. This resulted in 15 days of data. Finally, from day 48 onwards, the robot followed an exploration policy according to the POPP-Beta model. This resulted in 15 days of data. For the FOPP model, we used the first 15 days to follow the POPP and the POPP-Beta model.
+Three different exploration models were applied separately during three phases of the 69 days of the trial. All of these models used Eq.~\ref{eq:choosing_place} to create their exploration policies. For the first 27 day phase of the trial, the robot followed an exploration policy based on the FOPP model. This resulted in 18 days of data. From day 28 to day 47, the robot followed an exploration policy according to the POPP model. This resulted in 15 days of data. Finally, from day 48 onwards, the robot followed an exploration policy according to the POPP-Beta model. This also resulted in 15 days of data. 
+% 
+Such that all three models can be compared equally, in the following we also constrain the data available for for the FOPP model to the first 15 of its 18 days.
+% 
 % From this 18 days of data, the last 3 days were used to train the sensor model needed for both the POPP and the POPP-Beta models.
 %For this comparison, the last 3 days which are part of the 18 days worth of data collected by following the FOPP exploration model are included in the POPP and the POPP-Beta exploration models. This is necessary to avoid the POPP and the POPP-Beta exploration models having an advantage over the FOPP exploration model since the POPP and the POPP-Beta need a training period to construct their sensor model. Moreover,
 % 
@@ -148,18 +151,22 @@ Figure \ref{fig:exploration_percentage_region} shows the percentage of visits to
 
 % Figure \ref{fig:exploration_number_people_across_days} shows the average number of activities observed across regions on each day. 
 
-During the first few days of each phase the above models cause the robot to primarily explore since the estimates of $\lambda$ are initially highly uncertain. We use these initial days as a baseline against which later days (featuring greater exploitation) can be compared. To do this, we divide all true counts by the sum of the true counts over the first three days. Since we have 15 days of usable data for each phase we also divide the counts by 5 such that a score of 1.0 on day 15 represents continuing to observe people at the same rate as experienced in the whole of the first 3 days. Formally, the normalised number of persons observed on day $n$ can be calculated as:
+During the first few days of each 15 day phase the robot primarily explores since each model initially has a highly uncertain estimate of $\lambda$. As more days of data are experienced the estimates increase in confidence and the robot starts to exploit this increased confidence by visiting locations which are likely to provide higher counts\footnote{Note that this change from exploration to exploitation occurs naturally and gradually in an upper bound-based model, and therefore the characterisation of the behaviour as exploring or exploiting is a \emph{post-hoc} justification.}.
+% 
+To allow us to produce a metric for a fair comparison across three models (FOPP, POPP, and POPP-Beta) deployed at different times (and thus experiencing different population dynamics), we look at the ratio between the expected observations made by a baseline policy and those made by our exploration policy in the same period. 
+% 
+To create the baseline total for each model we take the true counts experienced for its first three days then multiply these by five to give an expected total over 15 days (the number of days of data available to every model). This is the denominator in Eqn.~\ref{eq:metric}, where $s(n)$ is the (true) number of people observed on day $n$. This is used to divide the cumulative number of observations up to the current day:
 
 \begin{equation*}
+	\label{eq:metric}
 \hat{s}(n) = \frac{\displaystyle\sum_{i=1}^{n} s(i)}{\displaystyle\sum_{i=1}^{3} s(i) * 5}
 \end{equation*}
 
-\noindent with $s(n)$ being the number of persons observed on day $n$. A score above 1.0 on day 15 shows that exploitation has led to people being observed at a greater rate than in the first 3 days. This normalisation is necessary since there were large fluctuations in the total number of people present in the robot's environment over the 10 weeks of the trial.
-
+\noindent Given this, a $\hat{s}$ score of 1.0 on day 15 shows that people have been observed people at the rate of the baseline, i.e.\ the underlying model has failed to exploit additional data correctly. A result over 1.0 shows that the model has exploited the available data to observe people at a greater rate than in the first 3 days. 
 % 
 Figure \ref{fig:exploration_improvement_ratio} presents the cumulative normalised true counts of people observed by the robot across the three phases. This shows that exploration driven by the POPP and the POPP-Beta models improves the number of people observed during these phases. By the end of each of these two phases, the ratio is around 1.7. On the other hand, the FOPP showed a stable ratio around the baseline (1.0 at day 15), this means that the FOPP is not be able to improve the number of people observed over time. 
 % 
-Also note the general trend observed earlier that the approaches which represent the uncertainty in the sensor models (POPP-Beta) initially out-perform less informed approaches (POPP) until the latter have observed enough of the underlying process to compensate for training inaccuracies. 
+Also note the general trend observed earlier that the approach which represents the uncertainty in the sensor models (POPP-Beta) initially out-perform less informed approach (POPP) until the latter has observed enough of the underlying process to compensate for training inaccuracies. 
 
 %Unfortunately for the POPP-Beta, by looking at figure \ref{fig:exploration_improvement_ratio}, we can not conclude whether the POPP-Beta can improve the number of activities observed over time.
 %We argue that this is because the exploration policy produced by the Specctral-POPP-Beta was running through several weekends. We assumed of daily periodicities for the non-homogeneous Poisson processes across regions, and the assumption was broken by running the exploration throughout weekends. This is because weekdays and weekend have different arrival rate $\lambda$. Figure \ref{fig:exploration_number_people_across_days} clearly shows how small the total activities observed during weekend compared to weekdays.
