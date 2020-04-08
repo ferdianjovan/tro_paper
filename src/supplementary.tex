@@ -4,9 +4,8 @@
 \label{sec:supplementary}
 \section{Sensor Model}
 
-Here we provide detailed sensor models for each region. The sensor model was built from the first 15 days of data to give a general idea how each sensor performs across days. For the experiment in Section \ref{sec:evareal}, we used 48 days of data, and as we performed four fold cross validation, we only used 12 days of data to build the sensor model. During the exploration setting, only the first 3 days from 15 days of exploration for each exploration model were used to build the sensor model.
 
-\begin{table}[h]
+\begin{table}[ht]
 	\centering
 	\caption{Averaged sensor model for each region trained from 15 days of data.}
 	\label{table:full_region_sensor_model}
@@ -50,6 +49,8 @@ Here we provide detailed sensor models for each region. The sensor model was bui
 	\end{tabular}
 \end{table}
 
+Here we provide detailed sensor models for each region. The sensor model was built from the first 15 days of data to give a general idea how each sensor performs across days. For the experiment in Section \ref{sec:evareal}, we used 48 days of data, and as we performed four fold cross validation, we only used 12 days of data to build the sensor model. During the exploration setting, only the first 3 days from 15 days of exploration for each exploration model were used to build the sensor model.
+
 \section{Discrete Probability Distribution}
 
 %\begin{definition2}
@@ -87,7 +88,7 @@ Here we provide detailed sensor models for each region. The sensor model was bui
 	$P(x ; n, \zeta, \eta)$ & $\displaystyle\int_{p=0}^{1} P(x ; n, p) ~ P(p ; \zeta, \eta) ~dp$ \\ [2ex]
 	& $\displaystyle\int_{p=0}^{1} B(x ; n, p) ~ Be(p ; \zeta, \eta) ~dp$ \\ [2ex]
 	& $\displaystyle\int_{p=0}^{1} \binom{n}{x} p^x (1-p)^{(n-x)} ~ \displaystyle\frac{p^{(\zeta - 1)} (1-p)^{(\eta-1)}}{\pi(\zeta, \eta)}$ \\ [2ex]
-	& $\displaystyle\binom nx \displaystyle\frac{1}{\pi(\zeta, \eta)} ~ \displaystyle\int_{p=0}^{1} p^{(x+\zeta-1)} (1-p)^{(n-x+\eta-1)} ~dp$ \\ [2ex]
+	& $\displaystyle\binom nx \displaystyle\frac{1}{\pi(\zeta, \eta)} ~ \displaystyle\int_{p=0}^{1} p^{(x+\zeta-1)} (1-p)^{(n-x+\eta-1)}$ \\ [2ex]
 	& $\displaystyle\binom nx \displaystyle\frac{\pi(x+\zeta, n-x+\eta)}{\pi(\zeta, \eta)}$ \\ [2ex]
 	& $BB(x ; n, \zeta, \eta)$
 	\end{tabular}
