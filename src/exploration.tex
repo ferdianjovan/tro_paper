@@ -1,23 +1,14 @@
 %!TEX root = ../bare_jrnl.tex
 
-\section{Exploration on Human Occupancy Behaviour}
+\section{Exploring for Human Activities}
 \label{sec:exploration}
 
-Up to this point, this paper has been concerned with Bayesian methods for estimating counts from unreliable sensors. We demonstrated the power of these methods by estimating human occupancy counts given unreliable robot sensors. In this section, we use the predictions made by our methods to drive robotic \emph{exploration} to detect humans. In particular, our aim is to create a policy which takes the robot to the regions where there are the most people present in the long run, i.e.\ where the aggregate level of human occupancy is highest. 
+So far, the paper has focused on Bayesian methods for inferring a belief state about the spatio-temporal patterns of human occupancy from unreliable sensors. Given such a belief state a robot may plan how to actively explore to acquire new information so as to complete a task~\cite{hanheide2017robot, sridharan2019reba}. Here, the robot uses predicted counts from the belief state to \emph{explore} so as to detect human activities with increasing efficiency. 
 
-\subsection*{Exploration Models}
-
-Planning to explore to a value estimated with a learnt model (e.g.~the expected number of people present estimated with a POPP filter), where the model is built from data gathered online, is an instance of an \emph{exploration-exploitation} problem.
-% 
-Exploration-exploitation problems arise when an agent, in this scenario a mobile robot, does not fully understand the process it is trying to control. At any time, the agent can choose to explore or to exploit its model of the process.
-Exploration allows the agent to better understand the process by gathering more data, leading to a better action later on, but sacrificing short-term reward.
-Exploitation allows the agent to  leverage what it already understands about the process to gain reward immediately, but risks following a policy that might be suboptimal. 
-% 
-Our decision problem is a choice between which regions to visit next, as each region will offer the robot different exploration-exploitation opportunities.
-
+Specifically, the robot's choice is whether to explore new region-time combinations or to exploit region-time combinations that are known to yield a high number of activities. This an instance of an \emph{exploration-exploitation} problem. Exploration-exploitation problems arise whenever an agent lacks an adequate model of the process it must control. At each moment, the agent chooses either to explore so as to improve the model or to exploit the existing model so as to maximise immediate performance. 
 % In each time the robot has a choice between many actions, each of which both explores and exploits a certain place, but to varying degrees. As its goal is to maximise the reward gathered–as in getting as much data on human activities (by seeing as many humans) as possible–given its limited operational life, it is preferable to have a policy that is as near optimal as possible.
 
-While exploration-exploitation problems in reinforcement learning are typically intractable, there are well known approximate approaches that are quick to compute~\cite{wyatt1998exploration, 1413255, AUDIBERT20091876}. One such approach is to use the upper bound of a probability distribution over the quantity being maximised. This causes the decision-making agent to exploit high-scoring, certain estimates, and explore highly uncertain estimates. In our robot exploration, for example, when the robot visits a place, it can be because the place either actually has high number of people (\textit{exploitation}) or potentially has high number of people (\textit{exploration}). In our case we use an upper bound on the arrival rate ($\lambda$) of a Poisson process ($\lambda_{UB}$) to choose the region for the robot to visit next. The upper bound of the probability interval of the arrival rate of a Poisson process is calculated as follows:
+While exploration-exploitation problems in reinforcement learning, are typically intractable, there are well known, fast to compute, approximations~\cite{wyatt1998exploration, 1413255, AUDIBERT20091876}. One such approach is to use the upper bound of a probability distribution over the quantity being maximised. This causes the decision-making agent to exploit high-scoring, certain estimates, and explore highly uncertain estimates. In our robot exploration, for example, when the robot visits a place, it can be because the place either actually has high number of people (\textit{exploitation}) or potentially has high number of people (\textit{exploration}). In our case we use an upper bound on the arrival rate ($\lambda$) of a Poisson process ($\lambda_{UB}$) to choose the region for the robot to visit next. The upper bound of the probability interval of the arrival rate of a Poisson process is calculated as follows:
 
 \begin{equation}
 	\label{eq:upper_bound_exploration}
@@ -122,7 +113,8 @@ We can compare the different exploration policies on the observations the robot 
 \begin{figure}[t!]
 	\centering
 	\includegraphics[width=0.5\textwidth]{./figures/exploration_percentage_region.png}
-	\caption{The activity exploration percentage across areas of the environment using three different exploration models (FOPP, POPP, POPP-Beta). The percentage shows the portion of time that the robot was observing activities.}
+	\caption{This graph shows the percentage of time that the robot observed activities when it was present in a region. It is a measure of how successful the robot's visit policy (choice of visit time and visit location) was in finding people. It presents results for for the FOPP, POPP and POPP-algorithms. %The activity exploration percentage across areas of the environment using three different exploration models (FOPP, POPP, POPP-Beta). The percentage shows the portion of time that the robot was observing activities.
+	}
 	\label{fig:exploration_percentage_region}
 \end{figure}
 
