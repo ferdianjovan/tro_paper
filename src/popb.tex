@@ -48,7 +48,7 @@ Given these parameters, we form the POPP-Beta model from POPP by replacing Eq. \
     P(s_{j,i} \mid c_i) \! = \! \! \! \displaystyle\sum_{r = 0}^{c_{i}} \! \! ~ BB\Big(r \Bigm| c_i, \zeta_{\tau}, \eta_{\tau} \Big) BB\Big( \delta_s r \Bigm| \delta_c r, \zeta_{\xi}, \eta_{\xi} \Big)
 \end{equation}
 
-\noindent with $\delta_s r = (s_{j,i} - r)$, and $\delta_c r = (c_i - r)$.
+\noindent with $\delta_s r = (s_{j,i} - r)$, and $\delta_c r = (l - c_i)$.
 
 % With a sensor model which follows beta densities and is fully integrated, as a distribution, in the sensed count likelihood $P(s_{ji} ; c_i)$ as shown in Equation \ref{eq:joint_beta_binomial_distribution}, we obtain a graphical model with the structure shown in Figure \ref{fig:gm_popp_beta}.
 One should note that the difference between the POPP and POPP-Beta model, lies only in the change from Eq. \ref{eq:joint_binomial_distribution} to \ref{eq:joint_beta_binomial_distribution}. However, given little training data for the observation model, the POPP-Beta model is expected to be more conservative in estimating the posterior $P(\lambda \mid \mathbf{s})$ over $\lambda$ than the POPP model. 
