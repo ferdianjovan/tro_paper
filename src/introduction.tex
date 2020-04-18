@@ -10,7 +10,14 @@ Our mobile robot has multiple sensors and perception algorithms used to detect h
 
 This paper makes the following contributions. First, we extend the POPP model to create the correlated POPP (C-POPP) model. This supports inference when the robot has multiple detectors with correlated outputs. Second, the observation model used to correct counts in the POPP model is itself constructed from data and so has both epistemic and aleatoric uncertainties. The POPP and C-POPP models only take account of the aleatoric uncertainty in the observation model. We extend the POPP model to include the epistemic uncertainty, resulting in the POPP-Beta model. The third contribution is to combine the benefits of C-POPP and POPP-Beta. This results in the POPP-Dirichlet model, which works for correlated sensors and epistemic uncertainty in the observation model. We demonstrate the inferential properties of POPP and these three extensions in both numerical simulations and on a real-world dataset of counts of human activities gathered by our robot.
 
-Finally, we show how these models can be used to improve the robot's exploration strategy. We desire that the robot correctly observe as many human activities as possible during its deployment. A good exploration heuristic is to select a location to visit at each time which maximises a simple upper-bound on the posterior distribution of the mean of the underlying Poisson process. We compare the exploration performance of the FOPP, POPP and POPP-Beta models in a series of three deployments. This shows that the POPP and POPP-Beta models are able to explore more efficiently, encountering more people than the baseline FOPP model.
+Finally, we show how these models can be used to improve the robot's exploration strategy. We desire that the robot correctly observe as many human activities as possible during its deployment (see Figure \ref{fig:robot_in_human_environment}). A good exploration heuristic is to select a location to visit at each time which maximises a simple upper-bound on the posterior distribution of the mean of the underlying Poisson process. We compare the exploration performance of the FOPP, POPP and POPP-Beta models in a series of three deployments. This shows that the POPP and POPP-Beta models are able to explore more efficiently, encountering more people than the baseline FOPP model.
+
+\begin{figure}[t!]
+	\centering
+	\includegraphics[width=0.5\textwidth]{./figures/robot_in_human_environment.jpeg}
+	\caption{A mobile robot observes people at an event in an indoor environment.} 
+	\label{fig:robot_in_human_environment}
+\end{figure}
 
 %The rest of the paper is organized as follows. We start by describing the  \textit{fully observable Poisson process} as the baseline. We then discuss related works on correcting miscounts. We then review the POPP model and present the three extensions to it. We evaluate all our extensions against both the FOPP and POPP models, doing so on both simulated and real world data. Finally, we present the results of the exploration control study on the robot and summarize our findings.
 % 
