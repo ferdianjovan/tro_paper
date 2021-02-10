@@ -8,7 +8,6 @@ Recall that Eq.~\ref{eq:occurrences_likelihood} is defined under the assumption 
 To introduce correlations between sensors we must alter Eq.~\ref{eq:independent_sensor_likelihood} and
 Eq.~\ref{eq:joint_binomial_distribution} from the POPP model.
 
-
 Recall that the probability of a particular sensed count given the true count $P(\mathbf{s_i} \mid c_i)$ was defined from the Poisson limit theorem as a sequence of Bernoulli trials over $l$ subintervals. With correlated sensors, the observation of an event $e_k$ in the $k^{th}$ trial no longer follows the Bernoulli distribution. Instead it follows the categorical distribution, where the $k^{th}$ trial corresponds to whether a particular combination of binary detections $d_{1,k}, \ldots, d_{m,k}$ happens in subinterval $I_k$. Therefore, we move our notation from using $s_{j, i}$ representing sensed counts for particular sensor $j$ independently at time interval $i$ to a matrix representing $m$ sensor detections together at time interval $i$. Formally, we replace Eq.~\ref{eq:joint_binomial_distribution} and propose to define the probability of a series of detection outcomes given the true count $c_i$ at interval $i$ as the following.
 
 We first define for some interval $i$, $l$ subintervals, and $m$ sensors, there is a binary matrix of detections $\mathbf{D^i}$ \footnote{We drop the ($i$) for all notations in this subsection as we will consider a single interval}. $\mathbf{D} \in \mathcal{D}^{m , l}$ the set of binary matrices of dimension $m \times l$. Each column $k$ of $\mathbf{D}$, we denote $\mathbf{D}_{:k} = \mathbf{d} = \{0, 1\}^m$ with $k = 1, \ldots, l$. $\mathbf{D_{:k}}$ is a vector of detections from $m$ different sensors at particular subinterval $k$. 
@@ -46,7 +45,46 @@ P(\mathbf{D} \mid c) = \sum\limits_{(\mathbf{e}^+, \mathbf{e}^-) \in \Sigma_c} M
 \end{equation}
 \noindent with $\delta_l c = (l - c)$.
 
-Eq.~\ref{eq:codependent_sensor_likelihood} can be understood by analogy to Eq.~\ref{eq:joint_binomial_distribution}. In both equations all possible ways pairs of true and false positives counts which sum to $c$ are considered. In the conditionally independent case the binomial distribution is used to determine the probability of each count from the available trials given the true and false positive rates. In the correlated case the multinomial distribution is used to determine the probability of each count from a possible sequence of joint observations and their probability of yielding a count.
+Eq.~\ref{eq:codependent_sensor_likelihood} can be understood by analogy to Eq.~\ref{eq:joint_binomial_distribution}. In both equations all possible ways pairs of true and false positives counts which sum to $c$ are considered. In the conditionally independent case the binomial distribution is used to determine the probability of each count from the available trials given the true and false positive rates. In the correlated case the multinomial distribution is used to determine the probability of each count from a possible sequence of joint observations and their probability of yielding a count. A graphical representation for C-POPP can be seen in Figure \ref{fig:gm_cpopp}.
+
+\begin{figure}[t!]
+	\centering
+	\psfrag{textpplus}[cc][cc]{$P^+$}
+	\psfrag{textpminus}[cc][cc]{$P^-$}
+	\psfrag{textc}[cc][cc]{$c$}
+	\psfrag{texts1}[cc][cc]{$s_{1}$}
+	\psfrag{texts2}[cc][cc]{$s_{2}$}
+	\psfrag{textsm1}[cc][cc]{$s_{(m-1)}$}
+	\psfrag{textsm}[cc][cc]{$s_{m}$}
+	\psfrag{textlambda}[cc][cc]{$\lambda$}
+	\digraph[scale=0.65]{bcd}{
+		subgraph cluster_2 {
+			ordering=out;
+			color=blue;
+			ci[label=textc];
+			s1i[label=texts1, style=filled, fillcolor=grey];
+			s2i[label=texts2, style=filled, fillcolor=grey];
+			dot[label="...", shape=plaintext];
+			smi[label=textsm, style=filled, fillcolor=grey];
+			ci -> s1i;
+			ci -> s2i;
+			ci -> dot;
+			ci -> smi;
+		}
+		textlambda -> ci;
+		s1i -> textpplus [dir=back];
+		s2i -> textpplus [dir=back];
+		dot -> textpplus [dir=back];
+		smi -> textpplus [dir=back];
+		
+		s1i -> textpminus [dir=back];
+		s2i -> textpminus [dir=back];
+		dot -> textpminus [dir=back];
+		smi -> textpminus [dir=back];
+	}
+	\caption{Graphical representation of C-POPP. Unlike the POPP model, the sensed count in the C-POPP representation is affected by the value of the true count $c$, the true positive rates $P^+$, the the true negative rates $P^-$.}
+	\label{fig:gm_cpopp}
+\end{figure}
 
 One should note that the benefit of C-POPP is that it exploits correlations among multiple sensors contributing to detection counts. If there is only one sensor counting events, then C-POPP collapses to POPP.
 

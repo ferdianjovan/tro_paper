@@ -7,8 +7,7 @@ This article has presented Bayesian estimators for count data observed by unreli
 % 
 First, we presented variations of our previous POPP formulation: POPP-Beta extends POPP by accounting for the unreliability of the observation model; C-POPP extends POPP  by modelling the case when sensors are uncorrelated; and POPP-Dirichlet combines POPP-Beta and C-POPP to provide the benefits of each correction. Evaluations on synthetic data and observations taken by a robot show that each extension provides progressively more accurate estimates than the POPP filter.  
 % 
-Second, posteriors from FOPP, POPP and POPP-Beta were used to drive exploration by a mobile robot for a series of three exploration experiments. An upper bound interval exploration method in combination with Fourier transformation was used to solve the exploration-exploitation problem. This resulted in a labelled data set of of human presence counts. Our evaluation demonstrated that POPP and POPP-Beta were able to drive the robot to observe more people over time than the FOPP-based method.
-
+Second, posteriors from FOPP, POPP and POPP-Beta were used to drive exploration by a mobile robot for a series of three exploration experiments. An upper bound interval exploration method in combination with Fourier transformation was used to solve the exploration-exploitation problem. This resulted in a labelled data set of of human presence counts. Our initial evaluation demonstrated that POPP and POPP-Beta were able to drive the robot to observe more people over time than the FOPP-based method. Our future work includes utilizing C-POPP and POPP-Dirichlet to drive the robot observation in an extended time period. 
         
         % Finally, the various POPP filters are compared to one another and to a FOPP estimator on this data set.
 

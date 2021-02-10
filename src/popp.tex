@@ -9,21 +9,28 @@ The definition brings a distinction between the \emph{true count} (or simply \em
 
 \begin{figure}[t!]
 	\centering
-%	\begin{tikzpicture}
-%	\tikzstyle{place}=[circle,draw=blue,thick,minimum size=15 mm]
-%	\tikzstyle{small}=[circle,draw=blue,thick,minimum size=8 mm]
-%	\tikzstyle{every label}=[black]
-%	\begin{scope}
-%	\node[place](31)[xshift=0mm]{$\lambda$};
-%	\node[place](21)[below of=31, yshift=-10mm]{$c_i$} edge[pre](31);
-%	\node[small](11)[below of=21, yshift=-10mm]{$\ldots$} edge[pre](21);
-%	\node[place](12)[left of=11, xshift=-5mm]{$s_{2,i}$} edge[pre](21);
-%	\node[place](13)[left of=12, xshift=-10mm]{$s_{1,i}$} edge[pre](21);
-%	\node[place](14)[right of=11, xshift=5mm]{$s_{(m-1),i}$} edge[pre](21);
-%	\node[place](15)[right of=14, xshift=10mm]{$s_{m,i}$} edge[pre](21);
-%	\draw[thick]($(13.north west)+(-0.5,2.45)$) rectangle ($(15.south east)+(0.5,-0.5)$);
-%	\end{scope}
-%	\end{tikzpicture}
+	\psfrag{textc}[cc][cc]{$c$}
+	\psfrag{texts1}[cc][cc]{$s_{1}$}
+	\psfrag{texts2}[cc][cc]{$s_{2}$}
+	\psfrag{textsm1}[cc][cc]{$s_{(m-1)}$}
+	\psfrag{textsm}[cc][cc]{$s_{m}$}
+	\psfrag{textlambda}[cc][cc]{$\lambda$}
+	\digraph[scale=0.65]{abc}{	    	
+		subgraph cluster_1 {
+			color=blue;
+			ci[label=textc];
+			s1i[label=texts1, style=filled, fillcolor=grey];
+			s2i[label=texts2, style=filled, fillcolor=grey];
+			dot[label="...", shape=plaintext];
+			smi[label=textsm, style=filled, fillcolor=grey];
+			ci -> s1i;
+			ci -> s2i;
+			ci -> dot;
+			ci -> smi;
+		}
+		
+		textlambda -> ci
+	}
 %    \digraph[scale=0.5]{abc}{
 %    	
 %    	subgraph cluster_1 {
@@ -43,7 +50,7 @@ The definition brings a distinction between the \emph{true count} (or simply \em
     	
 %    	"$\lambda$" -> ci
 %    }
-    \includegraphics[width=0.5\textwidth]{./figures/gm_popp.png}
+%    \includegraphics[width=0.5\textwidth]{./figures/gm_popp.png}
 	\caption{Graphical representation of the partially observable Poisson process.}
 	\label{fig:gm_popp}
 \end{figure}
