@@ -1,0 +1,29 @@
+%!TEX root = ../bare_jrnl.tex
+
+\section{Fully Observable Poisson Process}
+\label{sec:preliminaries}
+
+A \emph{fully observable} Poisson process (FOPP) models the distribution of $N(t)$, the number of events appearing in time interval $[0, t)$, parameterised by an \textit{arrival rate}, $\lambda$:
+\begin{equation}
+    \label{eq:pmf_poisson}
+	Poi(N(t) = c \mid \lambda) = \frac{e ^{-\lambda} \lambda ^{c}}{c!}
+\end{equation}
+We use $N(t) = c_i$ to refer to a count recorded during the $i$-th observation of the process.
+Given a Gamma density
+\begin{equation}
+    \label{eq:pdf_gamma}
+    \begin{tabular}{rcl}
+        $Gam(\lambda \mid \alpha, \beta)$ & = & $\displaystyle\frac{\beta ^{\alpha}}{\Gamma (\alpha)} \lambda ^{\alpha - 1} e^{-\beta \lambda}$ \\ [1ex]
+    \end{tabular}
+\end{equation}
+as a prior distribution over the parameter $\lambda$, where $\alpha, \beta$ are the shape and the rate parameters, the posterior over $\lambda$ for a FOPP can be  calculated via Bayesian inference with
+\begin{equation}
+    \label{eq:posterior_fopp}
+    \begin{array}{lll}
+        P(\lambda \mid c_1, \ldots, c_n) & \varpropto Poi(c_1, \ldots, c_n \mid \lambda) ~ Gam(\lambda \mid \alpha, \beta) \\
+         & = Gam \Bigg(\lambda \Bigm| \displaystyle\sum_{i=1}^{n} \alpha + c_i, \beta + n \Bigg)
+    \end{array}
+\end{equation}
+This adds the sample counts $\sum_{i=1}^{n} c_i$ to the hyper-parameter $\alpha$ of the gamma prior, and adds the number of observations $n$ to the hyper-parameter $\beta$ of the gamma prior.
+
+The FOPP model requires a single reliable sensor. With an unreliable sensor, FOPP inferences will be incorrect.

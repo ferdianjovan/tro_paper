@@ -1,0 +1,25 @@
+digraph bcd {
+subgraph cluster_2 {
+ordering=out;
+color=blue;
+ci[label=textc];
+s1i[label=texts1, style=filled, fillcolor=grey];
+s2i[label=texts2, style=filled, fillcolor=grey];
+dot[label="...", shape=plaintext];
+smi[label=textsm, style=filled, fillcolor=grey];
+ci -> s1i;
+ci -> s2i;
+ci -> dot;
+ci -> smi;
+}
+textlambda -> ci;
+s1i -> textpplus [dir=back];
+s2i -> textpplus [dir=back];
+dot -> textpplus [dir=back];
+smi -> textpplus [dir=back];
+
+s1i -> textpminus [dir=back];
+s2i -> textpminus [dir=back];
+dot -> textpminus [dir=back];
+smi -> textpminus [dir=back];
+}

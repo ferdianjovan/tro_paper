@@ -1,0 +1,116 @@
+%!TEX root = ../sample.tex
+
+\appendix
+
+\label{sec:supplementary}
+\section{Sensor Model}
+
+\begin{table}[ht]
+	\centering
+	\caption{Averaged sensor model for each region trained from 15 days of data.}
+	\label{table:full_region_sensor_model}
+	\begin{tabular}{llccc}
+		\noalign{\hrule height 1.1pt}\noalign{\smallskip}
+		Region & Sensor & True Negative & True Positive \\
+		\noalign{\smallskip}\hline\noalign{\smallskip}
+		1   & Leg               & 0.820 & 0.102 \\
+		& Upper body        & 0.749 & 0.244 \\
+		& Scenery change    & 0.760 & 0.612 \\ 
+		2   & Leg               & 0.991 & 0.655 \\
+		& Upper body        & 0.862 & 0.691 \\
+		& Scenery change    & 0.826 & 0.778 \\
+		3   & Leg               & 0.854 & 0.116 \\
+		& Upper body        & 0.833 & 0.130 \\
+		& Scenery change    & 0.780 & 0.687 \\
+		4   & Leg               & 0.896 & 0.180 \\
+		& Upper body        & 0.967 & 0.227 \\
+		& Scenery change    & 0.897 & 0.592 \\
+		5   & Leg               & 0.918 & 0.086 \\
+		& Upper body        & 0.881 & 0.200 \\
+		& Scenery change    & 0.877 & 0.957 \\
+		6   & Leg               & 0.964 & 0.351 \\
+		& Upper body        & 0.929 & 0.143 \\
+		& Scenery change    & 0.803 & 0.541 \\
+		7   & Leg               & 0.949 & 0.264 \\
+		& Upper body        & 0.829 & 0.071 \\
+		& Scenery change    & 0.939 & 0.090 \\
+		8   & Leg               & 0.889 & 0.473 \\
+		& Upper body        & 0.791 & 0.360 \\
+		& Scenery change    & 0.900 & 0.591 \\
+		9   & Leg               & 0.702 & 0.383 \\
+		& Upper body        & 0.711 & 0.172 \\
+		& Scenery change    & 0.591 & 0.673 \\
+		10  & Leg               & 0.956 & 0.537 \\
+		& Upper body        & 0.973 & 0.423 \\
+		& Scenery change    & 0.823 & 0.584 \\
+		%\multirow{2}{*}{Method} & \multicolumn{3}{c}{Average updating time (std. deviation)} \\
+		%& 100 & 1000  & 10000 \\
+		\noalign{\hrule height 1.1pt}\noalign{\smallskip}
+	\end{tabular}
+\end{table}
+
+Here we provide detailed sensor models for each region. The sensor model was built from the first 15 days of data to give a general idea how each sensor performs across days. For the experiment in Section \ref{sec:evareal}, we used 48 days of data, and as we performed four fold cross validation, we only used 12 days of data to build the sensor model. During the exploration setting, only the first 3 days from 15 days of exploration for each exploration model were used to build the sensor model.
+
+\section{Discrete Probability Distribution}
+
+%\begin{definition2}
+%	A random variable $X$ is a Bernoulli random variable with parameter $p$, i.e. $X \sim Ber(x ; p)$, if its probability mass function is given by
+%	\[
+%	Ber(x ; p) = \left\{ \begin{matrix}
+%	p & \textrm{if } x = 1 \\
+%	1-p & \textrm{if } x = 0 % \\
+%	% 0 & \textrm{otherwise}
+%	\end{matrix} \right.
+%	\]
+%	\noindent where $0 \leq p \leq 1$ and $x \in \{0, 1\}$.
+%\end{definition2}
+%
+%\begin{definition2}
+%	A random variable $X$ is a binomial random variable with parameter $n$ and $p$, i.e. $X \sim B(x ; n, p)$, if its probability mass function is given by
+%	\[
+%	B(x ; n, p) = \begin{pmatrix} n \\ x \end{pmatrix} p^x (1-p)^{n-x}
+%	\]
+%	\noindent where $0 \leq p \leq 1$ and $x \in \{0, \ldots, n\}$.
+%\end{definition2}
+
+\begin{definition2}
+	A random variable $X$ is a negative binomial random variable with parameter $n$ and $p$, i.e. $X \sim NB(x ; n, p)$, if its probability mass function is given by
+	\[
+	NB(x ; n, p) = \begin{pmatrix} x - 1 \\ n - 1 \end{pmatrix} p^n (1 - p)^{x-n}
+	\]
+	\noindent where $0 \leq p \leq 1$ and $x \geq n$.
+\end{definition2}
+
+\begin{definition2}
+	A random variable $X$ is a beta-binomial random variable with parameter $n, \zeta, \eta$, i.e. $X \sim BB(x ; n, \zeta, \eta)$ where the $p$ parameter in the binomial distribution $B(x ; n, p)$ is randomly drawn from a beta distribution $Be(p ; \zeta, \eta)$ 
+	\begin{equation*}
+	\begin{tabular}{r@{ = }l}
+	$P(x ; n, \zeta, \eta)$ & $\displaystyle\int_{p=0}^{1} P(x ; n, p) ~ P(p ; \zeta, \eta) ~dp$ \\ [2ex]
+	& $\displaystyle\int_{p=0}^{1} B(x ; n, p) ~ Be(p ; \zeta, \eta) ~dp$ \\ [2ex]
+	& $\displaystyle\int_{p=0}^{1} \binom{n}{x} p^x (1-p)^{(n-x)} ~ \displaystyle\frac{p^{(\zeta - 1)} (1-p)^{(\eta-1)}}{\pi(\zeta, \eta)}$ \\ [2ex]
+	& $\displaystyle\binom nx \displaystyle\frac{1}{\pi(\zeta, \eta)} ~ \displaystyle\int_{p=0}^{1} p^{(x+\zeta-1)} (1-p)^{(n-x+\eta-1)}$ \\ [2ex]
+	& $\displaystyle\binom nx \displaystyle\frac{\pi(x+\zeta, n-x+\eta)}{\pi(\zeta, \eta)}$ \\ [2ex]
+	& $BB(x ; n, \zeta, \eta)$
+	\end{tabular}
+	\end{equation*}
+\end{definition2}
+
+\begin{definition2}
+	Let $\mathbf{x}$ be a vector of $x_1, \ldots, x_m$, and $\mathbf p$ be a vector of $p_1, \ldots, p_m$. A random variable $X$ is a categorical random variable with parameter $\mathbf p$, i.e. $X \sim Cat(\mathbf x ; \mathbf p)$, if its probability mass function is given by
+	\[
+	Cat(\mathbf x ; \mathbf p) = \begin{matrix}
+	p_i & \textrm{if } x_i = 1 \\
+	\end{matrix}.
+	\]
+	\noindent where $x_i = \{0, 1\}$ and $\displaystyle\sum_{i=1}^{m} p_i = 1$.
+\end{definition2}
+
+\begin{definition2}
+	Let $\mathbf{x}$ be a vector of $x_1, \ldots, x_m$, and $\mathbf p$ be a vector of $p_1, \ldots, p_m$. A random variable $X$ is a multinomial random variable with parameter $n$ and $\mathbf p$, i.e. $X \sim Multi(\mathbf x ; n, \mathbf p)$, if its probability mass function is given by
+	\[
+	Multi(\mathbf x ; n, \mathbf p) = \begin{array}{lll}
+	\displaystyle \frac{n!}{x_1!, \ldots, x_m!} p^{x_1}_1 \times \ldots \times p^{x_m}_m, \\ 
+	\end{array}
+	\]
+	\noindent where $x_i = 0, 1, \ldots$, $\displaystyle\sum_{i=1}^{m} x_i = n$, $0 \leq p_i \leq 1$, $i = 1, \ldots, m$ and $\displaystyle\sum_{i=1}^{m} p_i = 1$.
+\end{definition2}

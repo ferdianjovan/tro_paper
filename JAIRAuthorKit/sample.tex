@@ -1,0 +1,89 @@
+\documentclass[twoside,11pt]{article}
+\usepackage{jair, theapa, rawfonts}
+
+\usepackage[pdftex]{graphicx}
+\DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+
+\usepackage{amsmath,amsfonts,amssymb,amscd,amsthm,xspace}
+\usepackage{array}
+
+\usepackage[psfrag]{graphviz} %psfrag option
+\usepackage{auto-pst-pdf} %to process .ps into .pdf
+\usepackage{psfrag} %provides \psfrag
+
+\usepackage{multirow}
+\usepackage{times}
+\usepackage{breqn}
+\usepackage{hyperref}
+
+\hyphenation{spe-ci-fi-cal-ly re-gu-la-ted ge-ne-ra-li-sa-ti-on fun-ding dif-fe-rent pa-ra-me-ter a-ve-ra-ging ha-ving bia-ses va-lu-es in-fe-ren-ce theo-rem pro-ba-bi-li-ty ap-pro-xi-ma-ti-on ma-xi-mi-sing u-sing e-le-ments de-fi-ni-ti-on}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+
+\jairheading{1}{1993}{1-15}{6/91}{9/91}
+\ShortHeadings{Counting Reliably with Unreliable Sensors: POPP for Robot Exploration}
+{Jovan, Mariya, Hawes \& Wyatt}
+\firstpageno{25}
+
+\begin{document}
+	
+\newcommand{\tp}{\textrm{\textit{tp}}}
+\newcommand{\fp}{\textrm{\textit{fp}}}
+\newcommand{\tpr}{\textrm{\textit{tpr}}}
+\newcommand{\fnr}{\textrm{\textit{fnr}}}
+\newcommand{\fpr}{\textrm{\textit{fpr}}}
+\newcommand{\tnr}{\textrm{\textit{tnr}}}
+\newtheorem{definition2}[subsection]{Definition}	
+
+\title{Counting Reliably with Unreliable Sensors: Partially Observable Poisson Processes for Robot Exploration}
+
+\author{\name Steven Minton \email minton@ptolemy.arc.nasa.gov \\
+       \name Andy Philips \email philips@ptolemy.arc.nasa.gov \\
+       \addr NASA Ames Research Center, Mail Stop: 244-7,\\
+       Moffett Field, CA  94035 USA
+       \AND
+       \name Mark D. Johnston \email johnston@stsci.edu \\
+       \addr Space Telescope Science Institute,
+       3700 San Martin Drive,\\
+       Baltimore, MD 21218 USA
+       \AND
+       \name Philip Laird \email laird@ptolemy.arc.nasa.gov \\
+       \addr NASA Ames Research Center,
+       AI Research Branch, Mail Stop: 269-2,\\
+       Moffett Field, CA  94035 USA}
+
+% For research notes, remove the comment character in the line below.
+% \researchnote
+
+\maketitle
+
+
+\input{src/abstract.tex}
+
+\input{src/introduction.tex}
+\input{src/related.tex}
+\input{src/preliminaries.tex}
+\input{src/popp.tex}
+% \input{src/filter.tex}
+\input{src/popb.tex}
+\input{src/cpop.tex}
+\input{src/popd.tex}
+\input{src/evasim.tex}
+\input{src/evareal.tex}
+\input{src/exploration.tex}
+\input{src/conclusion.tex}
+\input{src/acknowledgement.tex}
+\input{src/supplementary.tex}
+
+\vskip 0.2in
+\bibliography{biblio}
+\bibliographystyle{theapa}
+
+\end{document}
+
+
+
+
+
+
